@@ -1,0 +1,453 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Linux/CentOS_setup_JDK.html">
+    
+    
+    <title>CentOS 安装JDK常用的两种方法 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Linux,JDK">
+    <meta name="description" content="本文主要记录在CentOS6.x中JDK的安装方法和详细步骤。JDK的安装方式一般有两种RPM包安装和tar包安装使用JDK1.7.79做示例">
+<meta name="keywords" content="Linux,JDK">
+<meta property="og:type" content="article">
+<meta property="og:title" content="CentOS 安装JDK常用的两种方法">
+<meta property="og:url" content="http://xiejm.com/Linux/CentOS_setup_JDK.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="本文主要记录在CentOS6.x中JDK的安装方法和详细步骤。JDK的安装方式一般有两种RPM包安装和tar包安装使用JDK1.7.79做示例">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-17T04:43:52.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="CentOS 安装JDK常用的两种方法">
+<meta name="twitter:description" content="本文主要记录在CentOS6.x中JDK的安装方法和详细步骤。JDK的安装方式一般有两种RPM包安装和tar包安装使用JDK1.7.79做示例">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">CentOS 安装JDK常用的两种方法</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">CentOS 安装JDK常用的两种方法</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-12T00:17:16.000Z" itemprop="datePublished" class="page-time">
+  2017-09-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#一-tar包安装"><span class="post-toc-text">一.tar包安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#二-RPM包安装"><span class="post-toc-text">二.RPM包安装</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Linux/CentOS_setup_JDK"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">CentOS 安装JDK常用的两种方法</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-12 08:17:16" datetime="2017-09-12T00:17:16.000Z"  itemprop="datePublished">2017-09-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文主要记录在CentOS6.x中JDK的安装方法和详细步骤。<br>JDK的安装方式一般有两种RPM包安装和tar包安装<br>使用JDK1.7.79做示例<br><a id="more"></a></p>
+<h2 id="一-tar包安装"><a href="#一-tar包安装" class="headerlink" title="一.tar包安装"></a>一.tar包安装</h2><p>通过rz命令上传JDK的tar包，或者使用wget命令下载</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.在/usr/目录下创建java目录</span></span><br><span class="line">[root@localhost ~]<span class="comment"># mkdir -p /usr/java</span></span><br><span class="line">[root@localhost ~]<span class="comment"># cd /usr/java</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#2.下载jdk,然后解压</span></span><br><span class="line">[root@localhost java]<span class="comment"># wget http://download.Oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-linux-x64.tar.gz </span></span><br><span class="line">[root@localhost java]<span class="comment"># tar -zxvf jdk-7u79-linux-x64.tar.gz</span></span><br><span class="line">[root@localhost java]<span class="comment">#chown -R root:root jdk1.7.0_79</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#3.设置JDK环境变量</span></span><br><span class="line">[root@localhost java]<span class="comment"># vi /etc/profile</span></span><br><span class="line">    <span class="comment">#SET JDK</span></span><br><span class="line">    <span class="built_in">export</span> JAVA_HOME=/usr/java/jdk1.7.0_79</span><br><span class="line">    <span class="built_in">export</span> JRE_HOME=<span class="variable">$JAVA_HOME</span>/jre</span><br><span class="line">    <span class="built_in">export</span> CLASS_PATH=.:<span class="variable">$JAVA_HOME</span>/lib:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line">    <span class="built_in">export</span> PATH=<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin:<span class="variable">$&#123;JRE_HOME&#125;</span>/bin:<span class="variable">$PATH</span></span><br><span class="line">    </span><br><span class="line"><span class="comment">#4.添加完成后  :wq 保存</span></span><br><span class="line"><span class="comment">#5.使修改生效：</span></span><br><span class="line">[root@localhost java]<span class="comment">#source !$</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#6.验证JDK有效性</span></span><br><span class="line">[root@localhost java]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">"1.7.0_79"</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.7.0_79-b15)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)</span><br></pre></td></tr></table></figure>
+<h2 id="二-RPM包安装"><a href="#二-RPM包安装" class="headerlink" title="二.RPM包安装"></a>二.RPM包安装</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#1.下载rpm安装文件</span></span><br><span class="line"></span><br><span class="line">[root@localhost ~]$ wget http://download.oracle.com/otn-pub/java/jdk/7u79-b15/jdk-7u79-linux-x64.rpm</span><br><span class="line"></span><br><span class="line"><span class="comment">#2.使用rpm命令安装</span></span><br><span class="line"></span><br><span class="line">[root@localhost  ~]<span class="comment"># rpm -ivh jdk-7u79-linux-x64.rpm</span></span><br><span class="line"></span><br><span class="line">接下来的设置与tar包安装的第3-6步骤一样</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:43:52.000Z" itemprop="dateUpdated">2018-04-17 12:43:52</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Linux/CentOS_setup_JDK.html" target="_blank" rel="external">http://xiejm.com/Linux/CentOS_setup_JDK.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/JDK/">JDK</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Linux/CentOS_setup_JDK.html&title=《CentOS 安装JDK常用的两种方法》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Linux/CentOS_setup_JDK.html&title=《CentOS 安装JDK常用的两种方法》 — 云筑小站&source=本文主要记录在CentOS6.x中JDK的安装方法和详细步骤。JDK的安装方式一般有两种RPM包安装和tar包安装使用JDK1.7.79做示例" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Linux/CentOS_setup_JDK.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CentOS 安装JDK常用的两种方法》 — 云筑小站&url=http://xiejm.com/Linux/CentOS_setup_JDK.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Linux/CentOS_setup_JDK.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/Spark/SparkBuildOnCentOS.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Spark2.2基于CentOS编译</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/Linux/Change_CentOS_yum_repo_to_aliyun.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">将CentOS的yum源更换为国内的阿里云源</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Linux/CentOS_setup_JDK.html&title=《CentOS 安装JDK常用的两种方法》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Linux/CentOS_setup_JDK.html&title=《CentOS 安装JDK常用的两种方法》 — 云筑小站&source=本文主要记录在CentOS6.x中JDK的安装方法和详细步骤。JDK的安装方式一般有两种RPM包安装和tar包安装使用JDK1.7.79做示例" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Linux/CentOS_setup_JDK.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《CentOS 安装JDK常用的两种方法》 — 云筑小站&url=http://xiejm.com/Linux/CentOS_setup_JDK.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Linux/CentOS_setup_JDK.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJ0lEQVR42u3ay26DUAwFQP7/p9NtpRZybJNI3DusIkqBYWH5dRzx8fp1/D1/ds0rOM6uPD5xYGBgPJaRPyZ/5Bk4uT7/EBgYGLsx8ltX414vQOfvhoGBgZEH0NfgqH4+DAwMjCQ4JiGyisfAwMC4ZkzaYXnQ7H2Im2txDAyMBzLy0vT7vz8y38DAwHgUo1dqVltpvfOFt8LAwFiaMR9h9sYG+X8VBqUYGBhLM+aNtl7r//olciQGBsbajKRx1qsfewsWvTEDBgbGDoxqSK2GyB6vkDJiYGAszcgXIKrl613nrz/rUd3jwMDAeCwjT9ry8DcpXEcJKwYGxnKMyZpXdXmreodCmMbAwNiA0RsAJEnbZLWiMNnAwMBYmnGNyRcseu3+e5t3GBgYOzB6R5JK5qGzB8bAwFib0Vt6uL7DvJFXXeDAwMDYgVEtL6+DYPWvNwRrDAyMDRjV2/XK0cI09TKU//MbAwNjaUa1Hpw015JgmqeDbz4NBgbGcoxewpeE42q7v3pnDAyM3RiTNlneMusF8SjdxMDAWJpRDbt5vllo7o+HnRgYGKsy5qsVk2QxCb7RszAwMJZmVINdntLlCV/SVpsPOzEwMJ7OqBaZvdI0X9qolsoYGBj7MKq1b57wjWaq+ZgTAwMDo5UC5o28vPX/pl+IgYGBEbf4k8f37nn6ITAwMDZg9JYh8qbYhFrYGcHAwFiUUV10qC6QVQeQk7COgYGxHOMHhrTMUns5u4wAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

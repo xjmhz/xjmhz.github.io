@@ -1,0 +1,437 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Hive/HIve--JDBC API.html">
+    
+    
+    <title>Hive的JDBC使用Java API编程 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Hive">
+    <meta name="description" content="在之前的UDF函数编程的项目中再新建一个class下面只是一个简单的模板，实际应用的话还可以再加工下，比如执行语句作为一个参数传入进来，封装成一个类。">
+<meta name="keywords" content="Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive的JDBC使用Java API编程">
+<meta property="og:url" content="http://xiejm.com/Hive/HIve--JDBC API.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="在之前的UDF函数编程的项目中再新建一个class下面只是一个简单的模板，实际应用的话还可以再加工下，比如执行语句作为一个参数传入进来，封装成一个类。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-17T04:45:23.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive的JDBC使用Java API编程">
+<meta name="twitter:description" content="在之前的UDF函数编程的项目中再新建一个class下面只是一个简单的模板，实际应用的话还可以再加工下，比如执行语句作为一个参数传入进来，封装成一个类。">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Hive的JDBC使用Java API编程</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Hive的JDBC使用Java API编程</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-11T03:02:00.000Z" itemprop="datePublished" class="page-time">
+  2017-10-11
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-Hive/HIve--JDBC API"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Hive的JDBC使用Java API编程</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-11 11:02:00" datetime="2017-10-11T03:02:00.000Z"  itemprop="datePublished">2017-10-11</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>在之前的UDF函数编程的项目中再新建一个class<br>下面只是一个简单的模板，实际应用的话还可以再加工下，比如执行语句作为一个参数传入进来，封装成一个类。<br><a id="more"></a></p>
+<figure class="highlight java"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">package</span> com.xiejm.bigdata.hive;</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> java.sql.SQLException;</span><br><span class="line"><span class="keyword">import</span> java.sql.Connection;</span><br><span class="line"><span class="keyword">import</span> java.sql.ResultSet;</span><br><span class="line"><span class="keyword">import</span> java.sql.Statement;</span><br><span class="line"><span class="keyword">import</span> java.sql.DriverManager;</span><br><span class="line"></span><br><span class="line"><span class="keyword">public</span> <span class="class"><span class="keyword">class</span> <span class="title">HiveJDBC</span> </span>&#123;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String driverName=<span class="string">"org.apache.hive.jdbc.HiveDriver"</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String url=<span class="string">"jdbc:hive2://192.168.2.10:10000/default"</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String username=<span class="string">"hadoop"</span>;</span><br><span class="line">    <span class="keyword">public</span> <span class="keyword">static</span> String password=<span class="string">""</span>;</span><br><span class="line"></span><br><span class="line">    <span class="function"><span class="keyword">public</span> <span class="keyword">static</span> <span class="keyword">void</span> <span class="title">main</span><span class="params">(String[] args)</span> <span class="keyword">throws</span> Exception </span>&#123;</span><br><span class="line">       <span class="keyword">try</span>&#123;</span><br><span class="line">        Class.forName(driverName);</span><br><span class="line">        Connection connection = DriverManager.getConnection(url,username,password);</span><br><span class="line">        Statement stms = connection.createStatement();</span><br><span class="line">        ResultSet rs = stms.executeQuery(<span class="string">"select * from emp"</span>);</span><br><span class="line"></span><br><span class="line">        <span class="keyword">while</span>(rs.next()) &#123;</span><br><span class="line">            System.out.println(rs.getInt(<span class="number">1</span>) + <span class="string">" , "</span> + rs.getString(<span class="number">2</span>));</span><br><span class="line">        &#125;</span><br><span class="line"></span><br><span class="line">        System.out.println(<span class="string">"Table emp select successfully."</span>);</span><br><span class="line">       &#125;<span class="keyword">catch</span>(Exception e) &#123;</span><br><span class="line">            <span class="comment">//将可能抛出的Exception异常捕获</span></span><br><span class="line"></span><br><span class="line">            System.out.println(<span class="string">"Got a Exception："</span> + e.getMessage());</span><br><span class="line">            <span class="comment">//打印捕获的异常的堆栈信息，从堆栈信息中可以发现异常发生的位置和原因</span></span><br><span class="line"></span><br><span class="line">            e.printStackTrace();</span><br><span class="line">            <span class="keyword">throw</span> e;    <span class="comment">//不做进一步处理，将异常向外抛出</span></span><br><span class="line">        &#125;<span class="keyword">finally</span>&#123;</span><br><span class="line">            rs.close();</span><br><span class="line">            stms.close();</span><br><span class="line">            connection.close();</span><br><span class="line">        &#125;</span><br><span class="line">    &#125;</span><br><span class="line">&#125;</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:45:23.000Z" itemprop="dateUpdated">2018-04-17 12:45:23</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Hive/HIve--JDBC API.html" target="_blank" rel="external">http://xiejm.com/Hive/HIve--JDBC API.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hive/">Hive</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/HIve--JDBC API.html&title=《Hive的JDBC使用Java API编程》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/HIve--JDBC API.html&title=《Hive的JDBC使用Java API编程》 — 云筑小站&source=在之前的UDF函数编程的项目中再新建一个class下面只是一个简单的模板，实际应用的话还可以再加工下，比如执行语句作为一个参数传入进来，封装成一个类。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/HIve--JDBC API.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive的JDBC使用Java API编程》 — 云筑小站&url=http://xiejm.com/Hive/HIve--JDBC API.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/HIve--JDBC API.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between flex-row-reverse">
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/Hive/Hive--metastore.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Hive的元数据管理</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/HIve--JDBC API.html&title=《Hive的JDBC使用Java API编程》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/HIve--JDBC API.html&title=《Hive的JDBC使用Java API编程》 — 云筑小站&source=在之前的UDF函数编程的项目中再新建一个class下面只是一个简单的模板，实际应用的话还可以再加工下，比如执行语句作为一个参数传入进来，封装成一个类。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/HIve--JDBC API.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive的JDBC使用Java API编程》 — 云筑小站&url=http://xiejm.com/Hive/HIve--JDBC API.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/HIve--JDBC API.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABvklEQVR42u3aS2oEMQwFwLn/pSeQVSDpzpNkOx0or5oZsMsboY9fr3i9P9fX7+/r6t/7fV47Fi4u7pj7vl0TbnJKbsDFxT3PnQSvK9Z9aEuCGi4u7vO50XatYIeLi/t/uXnpkic9uLi4T+b2Spr8Ygl3ca2Gi4s74PYapmu/t/d3cXFxF00lqkORSds0Oh0XF/cI9yqg9Bol1ZSoWVzh4uIe4SalSLUEusf1TsfFxT3DraY1q15JJfv8cBlcXNwj3GoAmhdCkzQIFxf3DDcKHIOmZ/Ua920UXFzcM9wqLo+O82DX7OLg4uIu4lbbpr3maXWHwtQXFxd3MzdKMuLhR952yRsruLi4u7m9JCNPenq74eLiPoebB6P8mN6Ti18mP7i4uJu51eJkPhSZDHFxcXHPcCfHlANQ6/kFLi7uX3HzYFQdiuQJUCGQ4eLiHuHmqzpiqaZNBTsuLu427qoRbI7IH3htnBjj4uIG3GrwmpRAk31wcXHPcyfpSPL7slQGFxf3YdzJdzW5ubweLi7uI7l5COs9v/gl0cHFxT3IzceovSdZ1d7MgrYILi7ugFutOJJjJg8yqsMbXFzcpdwP4vdN1OEmfsgAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

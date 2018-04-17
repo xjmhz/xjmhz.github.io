@@ -1,0 +1,503 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html">
+    
+    
+    <title>Hadoop--HDFS读写流程 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Hadoop,HDFS">
+    <meta name="description" content="本文主要记录Hadoop–HDFS读写流程的详细步骤：">
+<meta name="keywords" content="Hadoop,HDFS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop--HDFS读写流程">
+<meta property="og:url" content="http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="本文主要记录Hadoop–HDFS读写流程的详细步骤：">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/20160412195903.png">
+<meta property="og:image" content="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/201709061619.png">
+<meta property="og:image" content="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/201709061633.png">
+<meta property="og:updated_time" content="2018-04-17T04:46:15.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop--HDFS读写流程">
+<meta name="twitter:description" content="本文主要记录Hadoop–HDFS读写流程的详细步骤：">
+<meta name="twitter:image" content="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/20160412195903.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Hadoop--HDFS读写流程</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Hadoop--HDFS读写流程</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-13T13:57:06.000Z" itemprop="datePublished" class="page-time">
+  2017-09-13
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-文件写入流程"><span class="post-toc-text">1. 文件写入流程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-读取文件流程"><span class="post-toc-text">2. 读取文件流程</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Hadoop/Hadoop--HDFSReadAndWrite"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Hadoop--HDFS读写流程</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-13 21:57:06" datetime="2017-09-13T13:57:06.000Z"  itemprop="datePublished">2017-09-13</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文主要记录Hadoop–HDFS读写流程的详细步骤：<br><a id="more"></a><br>HDFS的设计是一次写入，多次读取，并且不支持文件修改，所以文件的读写就变的相当重要，下面我们就来一起看看HDFS文件的读写流程！</p>
+<h2 id="1-文件写入流程"><a href="#1-文件写入流程" class="headerlink" title="1. 文件写入流程"></a>1. 文件写入流程</h2><ul>
+<li><strong>HDFS的文件写入流程</strong>可以分为两个部分：</li>
+</ul>
+<ol>
+<li>准备工作，包括与NameNode的通信等；</li>
+<li>真正的写入操作。</li>
+</ol>
+<p><strong>我们先来看看第一部分的流程：建立连接</strong><br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/20160412195903.png" alt="写流程的第一阶段" title="">
+                </div>
+                <div class="image-caption">写流程的第一阶段</div>
+            </figure></p>
+<ol>
+<li>首先<strong>HDFS Client会去询问NameNode</strong>有哪些DataNode可以存储文件。</li>
+<li><strong>HDFS Client会把文件拆分</strong>，如果上图中文件被拆分成<code>A</code>、<code>B</code>、<code>C</code>三个Block</li>
+<li><strong>NameNode通过查询它的元数据信息</strong>，发现DataNode<code>1</code>、<code>2</code>、<code>7</code>上有空间可以存储Block A，于是将此信息告诉HDFS Client。</li>
+<li><strong>HDFS Client接到NameNode返回的DataNode列表信息后</strong>，会直接与列表中的<strong>第一个DataNode联系</strong>，让它准备好接收<strong>Block A</strong>（建立TCP连接）<strong>并把NameNode返回的DataNode List信息发送给DataNode1</strong></li>
+<li>DataNode1与Client建立好TCP连接后，它会把HDFS Client要写入<strong>Block A</strong>的请求按顺序发送给DataNode2。同理，传递给DataNode7。</li>
+<li>当DataNode7准备好后，会依次<strong>回传准备好接收Block A的反馈信息</strong>。</li>
+<li><strong>HDFS Client接收到反馈信息后，表示都准备好了</strong>，就可以写数据了。</li>
+</ol>
+<br>
+
+<p><strong>写入数据</strong><br>下图展示了HDFS Client如何写入数据的流程<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/201709061619.png" alt="写流程的第二阶段" title="">
+                </div>
+                <div class="image-caption">写流程的第二阶段</div>
+            </figure></p>
+<ol>
+<li><strong>HDFS Client开始往DataNode1写入Block A数据</strong>。与第一部分的建立连接一样，当DataNode1接收完Block A数据后，它会按顺序将Block A数据传输给DataNode2，然后DataNode2再传输给DataNode7。</li>
+<li>每个<strong>DataNode</strong>在接收完Block A数据后，会发消息给<strong>NameNode</strong>，告诉它Block数据已经接收完毕。</li>
+<li><strong>NameNode</strong>同时会根据它接收到的消息更新它保存的文件系统元数据信息。</li>
+<li>当<strong>Block A成功写入3个DataNode之后，DataNode1会发送一个成功信息给HDFS Client</strong>，同时<strong>HDFS Client也会发一个Block A成功写入的信息给NameNode</strong>。之后，HDFS Client才能开始继续处理下一个Block-Block B。</li>
+</ol>
+<h2 id="2-读取文件流程"><a href="#2-读取文件流程" class="headerlink" title="2. 读取文件流程"></a>2. 读取文件流程</h2><p>现在，我们来看看HDFS Client是如何从DataNode读取数据的。</p>
+<p><img src="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/201709061633.png" alt=""></p>
+<p>如上图所示：</p>
+<ol>
+<li>首先<strong>HDFS Client会去联系NameNode</strong>，询问file.txt总共有<strong>几个Block</strong>，这些Block<strong>存放在哪些DataNode上</strong>。</li>
+<li>。由于每个Block都会存在几个<strong>副本</strong>，所以NameNode会把file.txt文件组成的Block所对应的<strong>所有DataNode列表</strong>都返回给HDFS Client。</li>
+<li>然后<strong>HDFS Client会选择DataNode列表里的第一个DataNode去读取对应的Block</strong>，比如由于Block A存储在DataNode<code>1</code>，<code>2</code>，<code>7</code>，那么HDFS Client会到DataNode1去读取Block A；Block C存储在DataNode<code>7</code>，<code>8</code>，<code>9</code>，那么HDFS Client就回到DataNode7去读取Block C。</li>
+<li>全部读完后关闭连接</li>
+</ol>
+<p>参考资料：</p>
+<p><a href="http://www.jianshu.com/p/7e52a7f8d16d" target="_blank" rel="noopener">http://www.jianshu.com/p/7e52a7f8d16d</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:46:15.000Z" itemprop="dateUpdated">2018-04-17 12:46:15</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Hadoop/Hadoop--HDFSReadAndWrite.html" target="_blank" rel="external">http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HDFS/">HDFS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html&title=《Hadoop--HDFS读写流程》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html&title=《Hadoop--HDFS读写流程》 — 云筑小站&source=本文主要记录Hadoop–HDFS读写流程的详细步骤：" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hadoop--HDFS读写流程》 — 云筑小站&url=http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/Hadoop/Hadoop--HDFSreplication.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hadoop--HDFS之机架感知和副本策略</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/Hadoop/Hadoop-2.6.0-cdh5.7.0-native.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Hadoop-2.6.0-cdh5.7.0-native库缺失的问题</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html&title=《Hadoop--HDFS读写流程》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html&title=《Hadoop--HDFS读写流程》 — 云筑小站&source=本文主要记录Hadoop–HDFS读写流程的详细步骤：" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hadoop--HDFS读写流程》 — 云筑小站&url=http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hadoop/Hadoop--HDFSReadAndWrite.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACK0lEQVR42u3aS47DIBAFwNz/0hlptpHJe+D5BIqVZVs2xaJF0/14xOP5PcbXV3den76O16ePnxgYGBgfy3gOx9U74x+P35l7ejUHDAyMcxhJkE1+mUxuJaBf3sfAwMAog28egvOlwcDAwMgZyaZw/M18o4mBgYHRJrHtEVu7iUyC+A25OAYGxgcy7ioM/MT1H9Q3MDAw/hnjWY4kvOap7Hg7WMwKAwNja0Z+6J/HuryQmbdoREkyBgbGpoz1Fq68nStfrHpBMTAwDmDMfbpdiBXwm3QXAwPjGEZ+ZD/XSNEuxGQujoGBsTXjN7d6bYB+U6LAwMDYmpGkteNp5eGybSZbWhoMDIwDGO0hft5CkSSotwVcDAyMTRn5q3nRsT2wS5DRdhMDA2MLxlyRcqUtrF24KPhiYGBszchbu+YOy/IN4tzCFbtaDAyM7Rhz27i7kHnh4U3AxcDA2IixcmS/UlSYa63AwMA4jdH+pk0+26+1xUsMDIwTGG2S2TZVtG+2RQgMDIwTGHlTRd4kkR+iJU8xMDAw8sasNuy2KfFcAoyBgXECY/2Ivy1DtgltkuhiYGDszZg7jl+ZRH7cnyfGGBgYezPmAlxbYpy7UxcGMDAwtmasBMG5H+ew4l8YGBgHMNqmh7mJ5u0dbdEUAwMDo01o28JA3mp2+X0MDAyMeGO3kvouLRMGBsYBjHZ7127y8vv53zEwMM5hLPVo3FQAaJPnuRYNDAyMD2R8ASVUMwidq0p/AAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

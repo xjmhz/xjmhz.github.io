@@ -1,0 +1,499 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html">
+    
+    
+    <title>Hadoop--HDFS架构 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Hadoop">
+    <meta name="description" content="本文主要介绍HDFS架构概要">
+<meta name="keywords" content="Hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop--HDFS架构">
+<meta property="og:url" content="http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="本文主要介绍HDFS架构概要">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/images/hdfsarchitecture.png">
+<meta property="og:updated_time" content="2018-04-17T04:46:09.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop--HDFS架构">
+<meta name="twitter:description" content="本文主要介绍HDFS架构概要">
+<meta name="twitter:image" content="http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/images/hdfsarchitecture.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Hadoop--HDFS架构</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Hadoop--HDFS架构</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-02T15:42:22.000Z" itemprop="datePublished" class="page-time">
+  2017-10-02
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-设计前提和目标"><span class="post-toc-text">1.设计前提和目标</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-不适合的场景"><span class="post-toc-text">2.不适合的场景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-HDFS架构和设计："><span class="post-toc-text">3. HDFS架构和设计：</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Hadoop/Hadoop--HDFSdesign"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Hadoop--HDFS架构</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-02 23:42:22" datetime="2017-10-02T15:42:22.000Z"  itemprop="datePublished">2017-10-02</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文主要介绍HDFS架构概要<br><a id="more"></a><br><strong>Hadoop分布式文件系统</strong>(<code>HDFS</code>)是一个高度容错性的系统，适合部署在廉价的机器上。HDFS提供了高吞吐量的数据访问，适合大规模数据集的应用。<strong>HDFS采用master/slave的主从架构</strong>，HDFS集群是由<strong>一个NameNode</strong>()和<strong>一定数目的DataNode</strong>组成。</p>
+<h2 id="1-设计前提和目标"><a href="#1-设计前提和目标" class="headerlink" title="1.设计前提和目标"></a>1.设计前提和目标</h2><ol>
+<li><strong>专为存储超大文件而设计</strong>：hdfs应该能够支持GB级别大小的文件；它应该能够提供很大的数据带宽并且能够在集群中拓展到成百上千个节点；它的一个实例应该能够支持千万数量级别的文件</li>
+<li><strong>适用于流式的数据访问</strong>：hdfs适用于批处理的情况而不是交互式处理；它的重点是保证高吞吐量而不是低延迟的用户响应</li>
+<li><strong>容错性</strong>：完善的冗余备份机制</li>
+<li><strong>支持简单的一致性模型</strong>：HDFS需要支持<code>一次写入多次读取</code>的模型，而且写入过程文件不会经常变化</li>
+<li><strong>移动计算优于移动数据</strong>：HDFS提供了使应用计算移动到离它最近数据位置的接口</li>
+<li><strong>兼容各种硬件和软件平台</strong></li>
+</ol>
+<h2 id="2-不适合的场景"><a href="#2-不适合的场景" class="headerlink" title="2.不适合的场景"></a>2.不适合的场景</h2><ol>
+<li><strong>大量小文件</strong>：文件的元数据都存储在NameNode内存中，大量小文件会占用大量内存。</li>
+<li><strong>低延迟数据访问</strong>：hdfs是专门针对高数据吞吐量而设计的</li>
+<li><strong>多用户写入，任意修改文件</strong></li>
+</ol>
+<h2 id="3-HDFS架构和设计："><a href="#3-HDFS架构和设计：" class="headerlink" title="3. HDFS架构和设计："></a>3. HDFS架构和设计：</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-hdfs/images/hdfsarchitecture.png" alt="HDFS架构" title="">
+                </div>
+                <div class="image-caption">HDFS架构</div>
+            </figure>  
+<p>HDFS主要由3个组件构成，分别是NameNode、SecondaryNameNode和DataNode：</p>
+<ol>
+<li>NameNode<ul>
+<li>NameNode是整个文件系统的管理节点；</li>
+<li>它维护着整个文件系统的文件及目录，以及接收HDFS Client的操作请求；</li>
+<li>NameNode 只有三种交互。<ul>
+<li>client访问NameNode获取相关DataNode信息。</li>
+<li>DataNode心跳汇报当前block情况。</li>
+<li>SecondaryNameNode做checkpoint交互。</li>
+</ul>
+</li>
+</ul>
+</li>
+<li>DataNode</li>
+</ol>
+<ul>
+<li>提供真实文件数据的存储服务</li>
+<li>文件块（block）：最基本的存储单位。<strong>HDFS默认Block大小是64MB(1.0版本),128(2.0版本)</strong>，如果一个文件小于一个数据块的大小，HDFS并不占用整个数据块存储空间。<br>Replication：多复本，默认是三个。</li>
+</ul>
+<ol>
+<li>SecondaryNameNode</li>
+</ol>
+<ul>
+<li>HA的一个解决方案。但不支持热备。</li>
+<li><strong>执行过程</strong>：<strong>从NameNode上下载元数据信息（fsimage,edits），然后把二者合并，生成新的fsimage，在本地保存，并将其推送到NameNode，同时重置NameNode的edits.</strong>（默认在安装在NameNode节点上，但这样…不安全！）</li>
+</ul>
+<p>参考资料：<br><a href="hadoop.apache.org">Hadoop官网</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:46:09.000Z" itemprop="dateUpdated">2018-04-17 12:46:09</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Hadoop/Hadoop--HDFSdesign.html" target="_blank" rel="external">http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html&title=《Hadoop--HDFS架构》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html&title=《Hadoop--HDFS架构》 — 云筑小站&source=本文主要介绍HDFS架构概要" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hadoop--HDFS架构》 — 云筑小站&url=http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/Hive/Hive--install.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hive--安装</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/Python/Python-Base.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Python 基础</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html&title=《Hadoop--HDFS架构》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html&title=《Hadoop--HDFS架构》 — 云筑小站&source=本文主要介绍HDFS架构概要" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hadoop--HDFS架构》 — 云筑小站&url=http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hadoop/Hadoop--HDFSdesign.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKElEQVR42u3aQW7DMAwF0dz/0u62XVidT9otRI1WQWBLfSlAUCQ/H7yub2v9zPozeWv9fGvJkCFjW8a1XOsD1m9x0vonIKfIkCHjBEZna/58GnDJWzJkyJCRfuYhmHwvQ4YMGTXGOjVMr8H/FnBlyJCxIYNcYteH1XaoPSlDhozTGLzq/vefX+lvyJAhYyvGFS6S0vGmQrrb7SkyZMgYzeABrtPU7LQKgiuxDBkyRjN4OawTXnl7oNZCkCFDxlQGD5edP4XvzMtwP76RIUPGaEYaUjuDFLwVWnxehgwZBzDItfOphiW5rLZyWxkyZIxj1A5+diwjLeoFvVYZMmQMYvA2QDoY0R+8SBNHGTJkTGKQC2caQGuNT5503jYGZMiQMZrBQycJo2n7k+z/y4kyZMgYzeBFt06I7AT0uHUqQ4aMwxhp4Z5/07/o3u4mQ4aM0Qy+aTpO8VQ45qMbMmTImMfgQTZtKz4VgtF/QIYMGaMZbwfczpW12IOVIUPGOEa/xJamgGnRH6WVMmTIOIARl+DxAWkqWUtYZciQcQ6Db8rLaukwWXHJkCFjKOMKF78Hp8U4gkS5rQwZMsYxajGtVqbnwxx88CLGyJAhY1tGGmQ7Y1u1FBPtL0OGjAMYnUYmL8l1Ukk0MyJDhgwZ+PlOwK21OWXIkCGjNlTxxs9x+xPIkCHjAAZvOq7TvvVbtX1QuilDhozRjNrVkf9xTw1Y1JqpMmTI2JzxBWZ92xme5KLcAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

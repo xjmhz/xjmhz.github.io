@@ -1,0 +1,504 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Hive/Hive--partition.html">
+    
+    
+    <title>Hive的分区表 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Hive">
+    <meta name="description" content="本文主要是对Hive分区表的总结，Hive分区表有三种类型：静态单级分区表、静态多级分区表、动态分区表在实际工作中Hive的分区表应用非常多，特别是动态分区表。 直接上干货！ 静态分区表的使用单级分区表创建新建一个分区表，并导入数据。 12345678910111213create table order_partition(order_number string,event_time strin">
+<meta name="keywords" content="Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive的分区表">
+<meta property="og:url" content="http://xiejm.com/Hive/Hive--partition.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="本文主要是对Hive分区表的总结，Hive分区表有三种类型：静态单级分区表、静态多级分区表、动态分区表在实际工作中Hive的分区表应用非常多，特别是动态分区表。 直接上干货！ 静态分区表的使用单级分区表创建新建一个分区表，并导入数据。 12345678910111213create table order_partition(order_number string,event_time strin">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-17T04:45:27.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive的分区表">
+<meta name="twitter:description" content="本文主要是对Hive分区表的总结，Hive分区表有三种类型：静态单级分区表、静态多级分区表、动态分区表在实际工作中Hive的分区表应用非常多，特别是动态分区表。 直接上干货！ 静态分区表的使用单级分区表创建新建一个分区表，并导入数据。 12345678910111213create table order_partition(order_number string,event_time strin">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Hive的分区表</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Hive的分区表</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-09T07:53:44.000Z" itemprop="datePublished" class="page-time">
+  2017-10-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#静态分区表的使用"><span class="post-toc-text">静态分区表的使用</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#单级分区表创建"><span class="post-toc-text">单级分区表创建</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用ALTER-TABLE修改分区"><span class="post-toc-text">使用ALTER TABLE修改分区</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用INSERT添加分区"><span class="post-toc-text">使用INSERT添加分区</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查询分区表信息"><span class="post-toc-text">查询分区表信息</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#静态多级分区表"><span class="post-toc-text">静态多级分区表</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#动态分区表"><span class="post-toc-text">动态分区表</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#创建分区表"><span class="post-toc-text">创建分区表</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#使用动态方式导入数据"><span class="post-toc-text">使用动态方式导入数据</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#查询已导入数据"><span class="post-toc-text">查询已导入数据</span></a></li></ol></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Hive/Hive--partition"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Hive的分区表</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-09 15:53:44" datetime="2017-10-09T07:53:44.000Z"  itemprop="datePublished">2017-10-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文主要是对Hive分区表的总结，Hive分区表有三种类型：静态单级分区表、静态多级分区表、动态分区表<br>在实际工作中Hive的分区表应用非常多，特别是动态分区表。</p>
+<p>直接上干货！</p>
+<h2 id="静态分区表的使用"><a href="#静态分区表的使用" class="headerlink" title="静态分区表的使用"></a>静态分区表的使用</h2><h3 id="单级分区表创建"><a href="#单级分区表创建" class="headerlink" title="单级分区表创建"></a>单级分区表创建</h3><p>新建一个分区表，并导入数据。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> order_partition(</span><br><span class="line">order_number <span class="keyword">string</span>,</span><br><span class="line">event_time <span class="keyword">string</span></span><br><span class="line">)</span><br><span class="line">PARTITIONED <span class="keyword">BY</span>(event_month <span class="keyword">string</span>,<span class="keyword">day</span> <span class="keyword">STRING</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/root/order_created.txt'</span> overwrite <span class="keyword">into</span> <span class="keyword">table</span> order_partition <span class="keyword">PARTITION</span>(event_month=<span class="string">'201709'</span>);</span><br><span class="line"></span><br><span class="line">Loading data to table default.order_partition partition (event_month=201709)</span><br><span class="line">Partition default.order_partition&#123;event_month=201709&#125; stats: [numFiles=1, numRows=0, totalSize=208, rawDataSize=0]</span><br><span class="line">OK</span><br><span class="line">Time taken: 1.121 seconds</span><br></pre></td></tr></table></figure>
+<p>从上面的语句可以看出与创建普通表的区别是多了<code>PARTITIONED BY</code></p>
+<p>在创建表时候，使用<code>PARTITIONED BY</code>关键字来指定该表为分区表，后面括号中指定了分区的字段和类型，分区字段可以有多个，在HDFS中对应多级目录。</p>
+<p>以上语句如果报错显示乱码，解决办法：<br>在MySQL中修改Hive的元数据 数据库中的分区表的编码</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">alter</span> <span class="keyword">database</span> hive3 <span class="built_in">character</span> <span class="keyword">set</span> latin1;</span><br><span class="line"><span class="keyword">use</span> hive3;</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> <span class="keyword">PARTITIONS</span> <span class="keyword">convert</span> <span class="keyword">to</span> <span class="built_in">character</span> <span class="keyword">set</span> latin1;</span><br><span class="line"><span class="keyword">alter</span> <span class="keyword">table</span> PARTITION_KEYS <span class="keyword">convert</span> <span class="keyword">to</span> <span class="built_in">character</span> <span class="keyword">set</span> latin1;</span><br></pre></td></tr></table></figure>
+<p>用beeline查询分区表记录</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">0: jdbc:hive2://hadoop001:10000/default&gt; select * from order_partition;</span><br><span class="line"></span><br><span class="line">INFO  : OK</span><br><span class="line">+-------------------------------+-----------------------------+------------------------------+--+</span><br><span class="line">| order_partition.order_number  | order_partition.event_time  | order_partition.event_month  |</span><br><span class="line">+-------------------------------+-----------------------------+------------------------------+--+</span><br><span class="line">| 10703007267488                | 2014-05-01 06:01:12.334+01  | 201709                       |</span><br><span class="line">| 10101043505096                | 2014-05-01 07:28:12.342+01  | 201709                       |</span><br><span class="line">| 10103043509747                | 2014-05-01 07:50:12.33+01   | 201709                       |</span><br><span class="line">| 10103043501575                | 2014-05-01 09:27:12.33+01   | 201709                       |</span><br><span class="line">| 10104043514061                | 2014-05-01 09:03:12.324+01  | 201709                       |</span><br><span class="line">+-------------------------------+-----------------------------+------------------------------+--+</span><br><span class="line">5 rows selected (0.141 seconds)</span><br></pre></td></tr></table></figure>
+<p>查看下order_partition.txt ，用来与表做对比</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 ~]$ cat data/order_created.txt</span><br><span class="line">10703007267488	2014-05-01 06:01:12.334+01</span><br><span class="line">10101043505096	2014-05-01 07:28:12.342+01</span><br><span class="line">10103043509747	2014-05-01 07:50:12.33+01</span><br><span class="line">10103043501575	2014-05-01 09:27:12.33+01</span><br><span class="line">10104043514061	2014-05-01 09:03:12.324+01</span><br></pre></td></tr></table></figure>
+<p>从<code>select * from order_partition;</code> 和 <code>cat data/order_created.txt</code>的结果对比得出一个结果：<br>分区列不是表中的一个实际的列，其实是一个伪列</p>
+<h3 id="使用ALTER-TABLE修改分区"><a href="#使用ALTER-TABLE修改分区" class="headerlink" title="使用ALTER TABLE修改分区"></a>使用ALTER TABLE修改分区</h3><p>如果我们在HDFS中创建了分区表目录，并通过HDFS导入数据到该目录，那么在Hive端是查询不到该分区表的数据的<br>我们需要关联该数据</p>
+<p>使用下列语句,具体语法看官网wiki</p>
+<p>方法一：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">ALTER</span> <span class="keyword">TABLE</span> order_partition <span class="keyword">ADD</span> <span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span> <span class="keyword">PARTITION</span>(event_month=<span class="string">'201709'</span>)</span><br></pre></td></tr></table></figure>
+<p>方法二：</p>
+<p>作用：将没有metastore中的分区表信息，添加到metastore中</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">MSCK <span class="keyword">REPAIR</span> order_partition; 不推荐使用，太暴力了</span><br></pre></td></tr></table></figure>
+<p>为什么暴力：<br>MSCK的操作是表级别的，<br>假设metastore数据存了一年，一天1个分区，一年就是365分区，这样MSCK一执行很可能把其他不需要刷新元数据信息的表也给刷新了，所以存在风险。</p>
+<h3 id="使用INSERT添加分区"><a href="#使用INSERT添加分区" class="headerlink" title="使用INSERT添加分区"></a>使用INSERT添加分区</h3><p>往分区中追加数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> <span class="keyword">INTO</span> <span class="keyword">TABLE</span> order_partition <span class="keyword">PARTITION</span> (<span class="keyword">month</span> = <span class="string">'2017-10'</span>,<span class="keyword">day</span> = <span class="string">'2017-10-01'</span>)</span><br></pre></td></tr></table></figure>
+<p>覆盖分区数据：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> overwrite <span class="keyword">TABLE</span> order_partition <span class="keyword">PARTITION</span> (<span class="keyword">month</span> = <span class="string">'2017-10'</span>,<span class="keyword">day</span> = <span class="string">'2017-10-01'</span>)</span><br></pre></td></tr></table></figure>
+<h3 id="查询分区表信息"><a href="#查询分区表信息" class="headerlink" title="查询分区表信息"></a>查询分区表信息</h3><p>查看一个分区对应的HDFS路径信息</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">partitions</span> order_partition;</span><br><span class="line"></span><br><span class="line">OK</span><br><span class="line">event_month=201709</span><br><span class="line">Time taken: 0.041 seconds, Fetched: 1 row(s)</span><br></pre></td></tr></table></figure>
+<h3 id="静态多级分区表"><a href="#静态多级分区表" class="headerlink" title="静态多级分区表"></a>静态多级分区表</h3><p>上面已经说了静态分区表的一些使用方法，这里在补充一个多级分区表的创建</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> order_mulit_partition(</span><br><span class="line">order_number <span class="keyword">string</span>,</span><br><span class="line">event_time <span class="keyword">string</span></span><br><span class="line">)</span><br><span class="line">PARTITIONED <span class="keyword">BY</span>(event_month <span class="keyword">string</span>,<span class="keyword">day</span> <span class="keyword">STRING</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span>;</span><br><span class="line"></span><br><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/root/order_created.txt'</span> overwrite <span class="keyword">into</span> <span class="keyword">table</span> order_partition <span class="keyword">PARTITION</span>(event_month=<span class="string">'201709'</span>,<span class="keyword">day</span>=<span class="string">'2017-09-15'</span>);</span><br></pre></td></tr></table></figure>
+<p>创建分区表返回信息</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">Loading data to table default.order_mulit_partition partition (event_month=201709, day=2017-09-15)</span><br><span class="line">Partition default.order_mulit_partition&#123;event_month=201709, day=2017-09-15&#125; stats: [numFiles=1, numRows=0, totalSize=208, rawDataSize=0]</span><br><span class="line">OK</span><br><span class="line">Time taken: 1.121 seconds</span><br><span class="line">`</span><br></pre></td></tr></table></figure>
+<p>说明：上面的表order_mulit_partition分区event_month=’201709’,day=’2017-09-15’对应HDFS上的路径为：/user/hive/warehouse/default.db/order_partition/event_month=201709/day=2017-09-15/，当查询中指定了event_month=’201709’ AND dday=’2017-09-15’,MapReduce直接从该目录中读取数据，如果只指定了event_month=’201709’，那么MapReduce将/month=2015-06/下所有的子目录都作为Input。</p>
+<p>查看表</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hive (default)&gt; select * from order_mulit_partition;</span><br><span class="line">OK</span><br><span class="line">10703007267488	2014-05-01 06:01:12.334+01	201709	2017-09-15</span><br><span class="line">10101043505096	2014-05-01 07:28:12.342+01	201709	2017-09-15</span><br><span class="line">10103043509747	2014-05-01 07:50:12.33+01	201709	2017-09-15</span><br><span class="line">10103043501575	2014-05-01 09:27:12.33+01	201709	2017-09-15</span><br><span class="line">10104043514061	2014-05-01 09:03:12.324+01	201709	2017-09-15</span><br><span class="line">Time taken: 0.325 seconds, Fetched: 5 row(s)</span><br></pre></td></tr></table></figure>
+<p>可以看到有两个字段,再执行一次载入数据</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/root/order_created.txt'</span> overwrite <span class="keyword">into</span> <span class="keyword">table</span> order_mulit_partition <span class="keyword">PARTITION</span>(event_month=<span class="string">'201709'</span>,<span class="keyword">day</span>=<span class="string">'2017-09-16'</span>);</span><br></pre></td></tr></table></figure>
+<p>查看表</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">hive (default)&gt; select * from order_mulit_partition;</span><br><span class="line">OK</span><br><span class="line">10703007267488	2014-05-01 06:01:12.334+01	201709	2017-09-15</span><br><span class="line">10101043505096	2014-05-01 07:28:12.342+01	201709	2017-09-15</span><br><span class="line">10103043509747	2014-05-01 07:50:12.33+01	201709	2017-09-15</span><br><span class="line">10103043501575	2014-05-01 09:27:12.33+01	201709	2017-09-15</span><br><span class="line">10104043514061	2014-05-01 09:03:12.324+01	201709	2017-09-15</span><br><span class="line">10703007267488	2014-05-01 06:01:12.334+01	201709	2017-09-16</span><br><span class="line">10101043505096	2014-05-01 07:28:12.342+01	201709	2017-09-16</span><br><span class="line">10103043509747	2014-05-01 07:50:12.33+01	201709	2017-09-16</span><br><span class="line">10103043501575	2014-05-01 09:27:12.33+01	201709	2017-09-16</span><br><span class="line">10104043514061	2014-05-01 09:03:12.324+01	201709	2017-09-16</span><br></pre></td></tr></table></figure>
+<p>再来查下order_mulit_partition分区表信息</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">show</span> <span class="keyword">partitions</span> order_mulit_partition;</span><br><span class="line">OK</span><br><span class="line">event_month=201709/day=2017-09-15</span><br><span class="line">event_month=201709/day=2017-09-16</span><br><span class="line">Time taken: 0.033 seconds, Fetched: 2 row(s)</span><br></pre></td></tr></table></figure>
+<p>在多分区使用的时候注意：每个分区字段要写明，顺序等等</p>
+<h2 id="动态分区表"><a href="#动态分区表" class="headerlink" title="动态分区表"></a>动态分区表</h2><p><strong>这种方式在工作中才是常用的</strong>,<br>动态分区无需手工指定数据导入的具体分区，<br>而由select语句中的字段自行决定导出到哪一个分区中，<br>并自动创建相应的分区，使用上更加方便便捷。</p>
+<p>假设有一个需求：按照不同部门作为分区导入数据到目标表</p>
+<p>如果这张表有很多列，全部这样写SQL 语句效率太差,那么我们就可以使用动态分区表</p>
+<h3 id="创建分区表"><a href="#创建分区表" class="headerlink" title="创建分区表"></a>创建分区表</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> emp_dynamic_partition(</span><br><span class="line">empno <span class="built_in">int</span>, </span><br><span class="line">ename <span class="keyword">string</span>, </span><br><span class="line">job <span class="keyword">string</span>, </span><br><span class="line">mgr <span class="built_in">int</span>, </span><br><span class="line">hiredate <span class="keyword">string</span>, </span><br><span class="line">sal <span class="keyword">double</span>, </span><br><span class="line">comm <span class="keyword">double</span>)</span><br><span class="line">PARTITIONED <span class="keyword">BY</span>(deptno <span class="built_in">int</span>)</span><br><span class="line"><span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span>;</span><br></pre></td></tr></table></figure>
+<h3 id="使用动态方式导入数据"><a href="#使用动态方式导入数据" class="headerlink" title="使用动态方式导入数据"></a>使用动态方式导入数据</h3><p>导入数据前先设置动态分区的模式：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive (default)&gt; <span class="built_in">set</span> hive.exec.dynamic.partition.mode=nonstrict;</span><br></pre></td></tr></table></figure>
+<p>开始导入数据</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br></pre></td><td class="code"><pre><span class="line">hive (default)&gt; insert into table emp_dynamic_partition partition(deptno)</span><br><span class="line">              &gt; select empno , ename , job , mgr , hiredate , sal , comm, deptno from emp;</span><br><span class="line">Query ID = hadoop_20170925072626_d98526f6-67aa-4593-b723-5a5bd4e422a8</span><br><span class="line">Total <span class="built_in">jobs</span> = 3</span><br><span class="line">Launching Job 1 out of 3</span><br><span class="line">Number of reduce tasks is <span class="built_in">set</span> to 0 since there<span class="string">'s no reduce operator</span></span><br><span class="line"><span class="string">Starting Job = job_1506263819287_0002, Tracking URL = http://hadoop001:8088/proxy/application_1506263819287_0002/</span></span><br><span class="line"><span class="string">Kill Command = /home/hadoop/app/hadoop//bin/hadoop job  -kill job_1506263819287_0002</span></span><br><span class="line"><span class="string">Hadoop job information for Stage-1: number of mappers: 1; number of reducers: 0</span></span><br><span class="line"><span class="string">2017-09-25 07:28:03,866 Stage-1 map = 0%,  reduce = 0%</span></span><br><span class="line"><span class="string">2017-09-25 07:28:10,214 Stage-1 map = 100%,  reduce = 0%, Cumulative CPU 2.37 sec</span></span><br><span class="line"><span class="string">MapReduce Total cumulative CPU time: 2 seconds 370 msec</span></span><br><span class="line"><span class="string">Ended Job = job_1506263819287_0002</span></span><br><span class="line"><span class="string">Stage-4 is selected by condition resolver.</span></span><br><span class="line"><span class="string">Stage-3 is filtered out by condition resolver.</span></span><br><span class="line"><span class="string">Stage-5 is filtered out by condition resolver.</span></span><br><span class="line"><span class="string">Moving data to: hdfs://hadoop001:9000/user/hive/warehouse/emp_dynamic_partition/.hive-staging_hive_2017-09-25_07-27-57_012_6944175324299480316-1/-ext-10000</span></span><br><span class="line"><span class="string">Loading data to table default.emp_dynamic_partition partition (deptno=null)</span></span><br><span class="line"><span class="string">	 Time taken for load dynamic partitions : 542</span></span><br><span class="line"><span class="string">	Loading partition &#123;deptno=20&#125;</span></span><br><span class="line"><span class="string">	Loading partition &#123;deptno=__HIVE_DEFAULT_PARTITION__&#125;</span></span><br><span class="line"><span class="string">	Loading partition &#123;deptno=10&#125;</span></span><br><span class="line"><span class="string">	Loading partition &#123;deptno=30&#125;</span></span><br><span class="line"><span class="string">	 Time taken for adding to write entity : 3</span></span><br><span class="line"><span class="string">Partition default.emp_dynamic_partition&#123;deptno=10&#125; stats: [numFiles=1, numRows=3, totalSize=130, rawDataSize=127]</span></span><br><span class="line"><span class="string">Partition default.emp_dynamic_partition&#123;deptno=20&#125; stats: [numFiles=1, numRows=5, totalSize=214, rawDataSize=209]</span></span><br><span class="line"><span class="string">Partition default.emp_dynamic_partition&#123;deptno=30&#125; stats: [numFiles=1, numRows=6, totalSize=275, rawDataSize=269]</span></span><br><span class="line"><span class="string">Partition default.emp_dynamic_partition&#123;deptno=__HIVE_DEFAULT_PARTITION__&#125; stats: [numFiles=1, numRows=1, totalSize=44, rawDataSize=43]</span></span><br><span class="line"><span class="string">MapReduce Jobs Launched: </span></span><br><span class="line"><span class="string">Stage-Stage-1: Map: 1   Cumulative CPU: 2.37 sec   HDFS Read: 4705 HDFS Write: 961 SUCCESS</span></span><br><span class="line"><span class="string">Total MapReduce CPU Time Spent: 2 seconds 370 msec</span></span><br><span class="line"><span class="string">OK</span></span><br><span class="line"><span class="string">empno	ename	job	mgr	hiredate	sal	comm	deptno</span></span><br><span class="line"><span class="string">Time taken: 16.388 seconds</span></span><br></pre></td></tr></table></figure>
+<p>从上面的mapreduce运行输出结果可以看出，已经根据deptno 动态分区了</p>
+<h3 id="查询已导入数据"><a href="#查询已导入数据" class="headerlink" title="查询已导入数据"></a>查询已导入数据</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line">0: jdbc:hive2://hadoop001:10000/default&gt; select * from emp_dynamic_partition ;</span><br><span class="line"></span><br><span class="line">+------------------------------+------------------------------+----------------------------+----------------------------+---------------------------------+----------------------------+-----------------------------+-------------------------------+--+</span><br><span class="line">| emp_dynamic_partition.empno  | emp_dynamic_partition.ename  | emp_dynamic_partition.job  | emp_dynamic_partition.mgr  | emp_dynamic_partition.hiredate  | emp_dynamic_partition.sal  | emp_dynamic_partition.comm  | emp_dynamic_partition.deptno  |</span><br><span class="line">+------------------------------+------------------------------+----------------------------+----------------------------+---------------------------------+----------------------------+-----------------------------+-------------------------------+--+</span><br><span class="line">| 7782                         | CLARK                        | MANAGER                    | 7839                       | 1981-6-9                        | 2450.0                     | NULL                        | 10                            |</span><br><span class="line">| 7839                         | KING                         | PRESIDENT                  | NULL                       | 1981-11-17                      | 5000.0                     | NULL                        | 10                            |</span><br><span class="line">| 7934                         | MILLER                       | CLERK                      | 7782                       | 1982-1-23                       | 1300.0                     | NULL                        | 10                            |</span><br><span class="line">| 7369                         | SMITH                        | CLERK                      | 7902                       | 1980-12-17                      | 800.0                      | NULL                        | 20                            |</span><br><span class="line">| 7566                         | JONES                        | MANAGER                    | 7839                       | 1981-4-2                        | 2975.0                     | NULL                        | 20                            |</span><br><span class="line">| 7788                         | SCOTT                        | ANALYST                    | 7566                       | 1987-4-19                       | 3000.0                     | NULL                        | 20                            |</span><br><span class="line">| 7876                         | ADAMS                        | CLERK                      | 7788                       | 1987-5-23                       | 1100.0                     | NULL                        | 20                            |</span><br><span class="line">| 7902                         | FORD                         | ANALYST                    | 7566                       | 1981-12-3                       | 3000.0                     | NULL                        | 20                            |</span><br><span class="line">| 7499                         | ALLEN                        | SALESMAN                   | 7698                       | 1981-2-20                       | 1600.0                     | 300.0                       | 30                            |</span><br><span class="line">| 7521                         | WARD                         | SALESMAN                   | 7698                       | 1981-2-22                       | 1250.0                     | 500.0                       | 30                            |</span><br><span class="line">| 7654                         | MARTIN                       | SALESMAN                   | 7698                       | 1981-9-28                       | 1250.0                     | 1400.0                      | 30                            |</span><br><span class="line">| 7698                         | BLAKE                        | MANAGER                    | 7839                       | 1981-5-1                        | 2850.0                     | NULL                        | 30                            |</span><br><span class="line">| 7844                         | TURNER                       | SALESMAN                   | 7698                       | 1981-9-8                        | 1500.0                     | 0.0                         | 30                            |</span><br><span class="line">| 7900                         | JAMES                        | CLERK                      | 7698                       | 1981-12-3                       | 950.0                      | NULL                        | 30                            |</span><br><span class="line">| 8888                         | HIVE                         | PROGRAM                    | 7839                       | 1988-1-23                       | 10300.0                    | NULL                        | NULL                          |</span><br><span class="line">+------------------------------+------------------------------+----------------------------+----------------------------+---------------------------------+----------------------------+-----------------------------+-------------------------------+--+</span><br></pre></td></tr></table></figure>
+<p>再来看下HDFS上的文件，就更加清楚了</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 ~]$ hadoop dfs -ls /user/hive/warehouse/emp_dynamic_partition</span><br><span class="line">DEPRECATED: Use of this script to execute hdfs <span class="built_in">command</span> is deprecated.</span><br><span class="line">Instead use the hdfs <span class="built_in">command</span> <span class="keyword">for</span> it.</span><br><span class="line"></span><br><span class="line">Found 4 items</span><br><span class="line">drwxr-xr-x   - hadoop supergroup          0 2017-09-25 07:28 /user/hive/warehouse/emp_dynamic_partition/deptno=10</span><br><span class="line">drwxr-xr-x   - hadoop supergroup          0 2017-09-25 07:28 /user/hive/warehouse/emp_dynamic_partition/deptno=20</span><br><span class="line">drwxr-xr-x   - hadoop supergroup          0 2017-09-25 07:28 /user/hive/warehouse/emp_dynamic_partition/deptno=30</span><br><span class="line">drwxr-xr-x   - hadoop supergroup          0 2017-09-25 07:28 /user/hive/warehouse/emp_dynamic_partition/deptno=__HIVE_DEFAULT_PARTITION__</span><br></pre></td></tr></table></figure>
+<p>到此，我们看到了动态分区的好处了</p>
+<p>更多关于分区的介绍，可参考官方文档：<br><a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL#LanguageManualDDL-AddPartitions" target="_blank" rel="noopener">https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL#LanguageManualDDL-AddPartitions</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:45:27.000Z" itemprop="dateUpdated">2018-04-17 12:45:27</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Hive/Hive--partition.html" target="_blank" rel="external">http://xiejm.com/Hive/Hive--partition.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hive/">Hive</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--partition.html&title=《Hive的分区表》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--partition.html&title=《Hive的分区表》 — 云筑小站&source=脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--partition.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive的分区表》 — 云筑小站&url=http://xiejm.com/Hive/Hive--partition.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--partition.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/Hive/Hive--metastore.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hive的元数据管理</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/Hive/Hive--DDL.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Hive--数据库和表</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--partition.html&title=《Hive的分区表》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--partition.html&title=《Hive的分区表》 — 云筑小站&source=脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--partition.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive的分区表》 — 云筑小站&url=http://xiejm.com/Hive/Hive--partition.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--partition.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABwUlEQVR42u3aS2oDMRAFQN//0pNtIBnRT61pBlNaGYOlkheif59PeV2/Vvqru33S3T64uLiD3Gu5/h58d8z6+Dt63YCLizvPXR9wd4H11vXvg78AFxf3xdxO7IGLi/tN3Eoosxf04OLivpO79wClz9xoroaLi9vgpk/SE58fqe/i4uJuca/G6gQue6fj4uLOcNNHp1IoWacx9RLJ7bVxcXHHufXBi73RivQRDKo4uLi4h7hpY6N+gbThWroSLi7uIDe9Rmdsq/7A/bMnLi7uCDdtpfSv1B/VwsXFneSu6emQRNqIDYosuLi449x0VOJU9zNo2ODi4j7MTUONNBjaS4SCXA0XF/dhbr0wUf9Vf+YqmOzAxcU9yq2PQXRSpnryE5dKcXFxj3L3hq76iU29c1rq8eLi4h7l1kGVFGUvoKknXbi4uDPc/pGVcOdwIoSLi/sw92zIkiZRaSsXFxd3htsJStLSRtp0aaFxcXHb3FOPV1oE2SvU4uLiTnI76U16jb0UCBcX953cvRCns2frIcPFxR3hpuMXaUGkci4uLu4ktzOkFTdKyxe+bbLi4uI+zO3EFfXApRL69Bu0uLi4be4Pvvu+VSvhNk8AAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

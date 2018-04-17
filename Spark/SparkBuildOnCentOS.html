@@ -1,0 +1,490 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Spark/SparkBuildOnCentOS.html">
+    
+    
+    <title>Spark2.2基于CentOS编译 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Spark">
+    <meta name="description" content="本文主要介绍Spark2.2的源码编译详细步骤。我们在生产环境中，Spark的版本并一定和Hadoop集群匹配，这样我们就需要编译Spark">
+<meta name="keywords" content="Spark">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Spark2.2基于CentOS编译">
+<meta property="og:url" content="http://xiejm.com/Spark/SparkBuildOnCentOS.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="本文主要介绍Spark2.2的源码编译详细步骤。我们在生产环境中，Spark的版本并一定和Hadoop集群匹配，这样我们就需要编译Spark">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/spark/20170912101958.png">
+<meta property="og:updated_time" content="2018-04-17T04:45:11.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Spark2.2基于CentOS编译">
+<meta name="twitter:description" content="本文主要介绍Spark2.2的源码编译详细步骤。我们在生产环境中，Spark的版本并一定和Hadoop集群匹配，这样我们就需要编译Spark">
+<meta name="twitter:image" content="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/spark/20170912101958.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Spark2.2基于CentOS编译</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Spark2.2基于CentOS编译</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-12T03:04:36.000Z" itemprop="datePublished" class="page-time">
+  2017-09-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-基本环境要求"><span class="post-toc-text">1.基本环境要求</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-编译环境安装"><span class="post-toc-text">2.编译环境安装</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#JDK安装"><span class="post-toc-text">JDK安装</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Maven安装"><span class="post-toc-text">Maven安装</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Scala安装"><span class="post-toc-text">Scala安装</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#Git安装"><span class="post-toc-text">Git安装</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-源码包下载"><span class="post-toc-text">3.源码包下载</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-Maven相关配置"><span class="post-toc-text">4.Maven相关配置</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-开始编译"><span class="post-toc-text">4.开始编译</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Spark/SparkBuildOnCentOS"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Spark2.2基于CentOS编译</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-12 11:04:36" datetime="2017-09-12T03:04:36.000Z"  itemprop="datePublished">2017-09-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文主要介绍Spark2.2的源码编译详细步骤。<br>我们在生产环境中，Spark的版本并一定和Hadoop集群匹配，这样我们就需要编译Spark<br><a id="more"></a></p>
+<h2 id="1-基本环境要求"><a href="#1-基本环境要求" class="headerlink" title="1.基本环境要求"></a>1.基本环境要求</h2><p><a href="http://spark.apache.org/docs/2.1.0/building-spark.html" target="_blank" rel="noopener"> Spar编译的官方文档 </a> 中介绍可知Spark2.2需要JDK1.8+,Maven 3.3.9</p>
+<figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">The Maven-based build is the build of reference for Apache Spark. Building Spark using Maven requires Maven 3.3.9 or newer and Java 8+. Note that support for Java 7 was removed as of Spark 2.2.0.</span><br></pre></td></tr></table></figure>
+<p>编译所需环境如下：</p>
+<ul>
+<li>CentOS 6.7</li>
+<li>JDK1.8+</li>
+<li>Maven 3.3.9</li>
+<li>Scala 2.11</li>
+<li>Git</li>
+</ul>
+<h2 id="2-编译环境安装"><a href="#2-编译环境安装" class="headerlink" title="2.编译环境安装"></a>2.编译环境安装</h2><h4 id="JDK安装"><a href="#JDK安装" class="headerlink" title="JDK安装"></a>JDK安装</h4><p>参考本博客的JDK安装的文章:<a href="http://xiejm.com/2017/08/31/CentOS_setup_JDK.html">JDK安装</a></p>
+<h4 id="Maven安装"><a href="#Maven安装" class="headerlink" title="Maven安装"></a>Maven安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 software]<span class="comment"># mkdir -p /opt/software</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># cd /opt/software</span></span><br><span class="line"><span class="comment">#上传apache-maven-3.3.9-bin.zip</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># unzip apache-maven-3.3.9-bin.zip</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#添加maven环境变量</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># echo '#SET MAVEN'&gt;&gt;/etc/profile</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># echo 'export MAVEN_HOME=/opt/software/apache-maven-3.3.9' &gt;&gt;/etc/profile</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># echo 'export MAVEN_OPTS="-Xmx2g -XX:ReservedCodeCacheSize=512m"'&gt;&gt;/etc/profile</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># echo 'export PATH=$MAVEN_HOME/bin:$PATH'&gt;&gt;/etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 让配置文件生效</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># source /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#执行mvn 查看版本，如果安装成功会输出Maven版本号</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># mvn --version</span></span><br></pre></td></tr></table></figure>
+<h4 id="Scala安装"><a href="#Scala安装" class="headerlink" title="Scala安装"></a>Scala安装</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#解压scala-2.11.11</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># tar -zxvf scala-2.11.11.tgz</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#添加Scala环境变量</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># echo '#SET SCALA'&gt;&gt;/etc/profile</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># echo 'export SCALA_HOME=/opt/software/scala-2.11.11' &gt;&gt;/etc/profile</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># echo 'export PATH=$SCALA_HOME/bin:$PATH'&gt;&gt;/etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># 让配置文件生效</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># source /etc/profile</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证Scala</span></span><br><span class="line"></span><br><span class="line">[root@hadoop001 software]<span class="comment"># scala -version</span></span><br><span class="line">Scala code runner version 2.11.11 -- Copyright 2002-2017, LAMP/EPFL</span><br></pre></td></tr></table></figure>
+<h4 id="Git安装"><a href="#Git安装" class="headerlink" title="Git安装"></a>Git安装</h4><p>使用YUM命令安装git<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 software]<span class="comment"># yum install -y git</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="3-源码包下载"><a href="#3-源码包下载" class="headerlink" title="3.源码包下载"></a>3.源码包下载</h2><p>从Spark官网下载源码包：<a href="http://spark.apache.org/downloads.html" target="_blank" rel="noopener">http://spark.apache.org/downloads.html</a></p>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/spark/20170912101958.png" alt="image" title="">
+                </div>
+                <div class="image-caption">image</div>
+            </figure>
+<p>下载后将源码包上传至CentOS的<code>/opt/sourcecode</code><br>解压源码包<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 sourcecode]<span class="comment"># tar -zxvf spark-2.2.0.tgz</span></span><br></pre></td></tr></table></figure></p>
+<h2 id="4-Maven相关配置"><a href="#4-Maven相关配置" class="headerlink" title="4.Maven相关配置"></a>4.Maven相关配置</h2><p>我们采用CDH版本Hadoop，所以需要修改Spark源码目录下的pom.xml文件，在<code>&lt;repositories&gt;&lt;/repositories&gt;</code>标签对内添加以下内容<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>cdh<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>cloudera repository<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>https://repository.cloudera.com/artifactory/cloudera-repos/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p>因Maven中心库在墙外，下载依赖包时会出现地址解析失败的情况，这里加上一个阿里云的Maven仓库来解决此问题<br><figure class="highlight xml"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="tag">&lt;<span class="name">repository</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">id</span>&gt;</span>alimaven<span class="tag">&lt;/<span class="name">id</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">name</span>&gt;</span>aliyun maven<span class="tag">&lt;/<span class="name">name</span>&gt;</span></span><br><span class="line">    <span class="tag">&lt;<span class="name">url</span>&gt;</span>http://maven.aliyun.com/nexus/content/groups/public/<span class="tag">&lt;/<span class="name">url</span>&gt;</span></span><br><span class="line"><span class="tag">&lt;/<span class="name">repository</span>&gt;</span></span><br></pre></td></tr></table></figure></p>
+<p><code>make-distribution.sh</code>编译脚本执行时会检查系统Scala的版本，这个过程非常占时间，用vim命令把该脚本的120-133行注释掉，再添加以下内容：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">VERSION=2.2.0</span><br><span class="line">134 SCALA_VERSION=2.11</span><br><span class="line">135 SPARK_HADOOP_VERSION=2.6.0-cdh5.7.0</span><br><span class="line">136 SPARK_HIVE=1</span><br></pre></td></tr></table></figure></p>
+<h2 id="4-开始编译"><a href="#4-开始编译" class="headerlink" title="4.开始编译"></a>4.开始编译</h2><p>执行以下脚本：<br><figure class="highlight plain"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">./dev/make-distribution.sh --name 2.6.0-cdh5.7.0 --tgz  -Pyarn -Phadoop-2.6 -Phive -Phive-thriftserver -Dhadoop.version=2.6.0-cdh5.7.0</span><br></pre></td></tr></table></figure></p>
+<p><strong>参数说明</strong></p>
+<ul>
+<li>-name:指定Spark编译成功后的安装包名称</li>
+<li>-tgz:指定tgz压缩方式</li>
+<li>-Pyarn：Spark on yarn</li>
+<li>-Phadoop-2.6:指定Hadoop版本</li>
+<li>-Phive 和 -Phive-thriftserver：使支持Hive</li>
+<li>-Dhadoop.version=2.6.0-cdh5.7.0：指定Hadoop版本号</li>
+</ul>
+<p>编译过程耗时很长，等编译成功后会在Spark源码目录下生成一个<code>spark-2.2.0-bin-2.6.0-cdh5.7.0.tgz</code>文件</p>
+<p>参考资料： <a href="http://spark.apache.org/docs/latest/building-spark.html" target="_blank" rel="noopener">Spark官网文档</a></p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:45:11.000Z" itemprop="dateUpdated">2018-04-17 12:45:11</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Spark/SparkBuildOnCentOS.html" target="_blank" rel="external">http://xiejm.com/Spark/SparkBuildOnCentOS.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Spark/">Spark</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Spark/SparkBuildOnCentOS.html&title=《Spark2.2基于CentOS编译》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Spark/SparkBuildOnCentOS.html&title=《Spark2.2基于CentOS编译》 — 云筑小站&source=本文主要介绍Spark2.2的源码编译详细步骤。我们在生产环境中，Spark的版本并一定和Hadoop集群匹配，这样我们就需要编译Spark" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Spark/SparkBuildOnCentOS.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Spark2.2基于CentOS编译》 — 云筑小站&url=http://xiejm.com/Spark/SparkBuildOnCentOS.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Spark/SparkBuildOnCentOS.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/Hadoop/Hadoop-2.6.0-cdh5.7.0-native.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hadoop-2.6.0-cdh5.7.0-native库缺失的问题</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/Linux/CentOS_setup_JDK.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">CentOS 安装JDK常用的两种方法</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Spark/SparkBuildOnCentOS.html&title=《Spark2.2基于CentOS编译》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Spark/SparkBuildOnCentOS.html&title=《Spark2.2基于CentOS编译》 — 云筑小站&source=本文主要介绍Spark2.2的源码编译详细步骤。我们在生产环境中，Spark的版本并一定和Hadoop集群匹配，这样我们就需要编译Spark" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Spark/SparkBuildOnCentOS.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Spark2.2基于CentOS编译》 — 云筑小站&url=http://xiejm.com/Spark/SparkBuildOnCentOS.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Spark/SparkBuildOnCentOS.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJUlEQVR42u3aS2rDQBAFwNz/0g5kayzem5YDmqlZGcXIKi06/fv5ic/r7yRX3q9ff+f98/UdRgcDA+OxjNfl+fSdtTt8ehEJ7PoZMDAwTmBcB9mE117J/5r8A8DAwMBYu3USZNswjYGBgZEz8mSxLWgxMDAwJkVsG0aT5l2eON5Wi2NgYDyQ0Q4G/vPzF+cbGBgYD2G8yjMJsnnyVz8VBgbG1oyk6d+uXyQJXNKYy18EBgbGCYy2dJwvUuQBt04WMTAwtmPctba1tlSRtP6jxh8GBsZhjHxhImdPRptFLY6BgbE1Iy872yFifs/JigYGBsbejMmPtUOCyfDyusDGwMDYm3FdKE4epR1SJr/78XkwMDCOYeTDxbYE/cZA4mPAxcDA2JSRTzvbceak9C1COQYGxjGMvLl2/Vg3jCTjwI2BgXEmYzIeyEvfhJQvcGBgYJzDGM0W4ibapNE2KmIxMDAezlhrsbWlZr5UUQ8VMDAwtmYU6ddNyV8e0NvRKQYGxq6MtmWfB8Sc1C5qFDsjGBgYWzOSsnPtrJWvRVKIgYGxHWNt0aFt0hVZ6tICGQYGxt6MV3nydYq2ub/2yjAwME5gtCldvhLRRvo8HK8FawwMjKcz1pYhJiVue2cMDAyMSRBs075obWIt9GNgYGCUw4MbBpNlmoiBgYGRDxonSxhtoYuBgXEaY17E3jvsrJc/MDAwtma0pWNegubtuckLwsDA2JrxC13UUfc6DZFZAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

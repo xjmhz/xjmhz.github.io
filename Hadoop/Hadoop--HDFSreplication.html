@@ -1,0 +1,470 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html">
+    
+    
+    <title>Hadoop--HDFS之机架感知和副本策略 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Hadoop,HDFS">
+    <meta name="description" content="本文主要介绍Hadoop HDFS的机架感知和副本策略">
+<meta name="keywords" content="Hadoop,HDFS">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop--HDFS之机架感知和副本策略">
+<meta property="og:url" content="http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="本文主要介绍Hadoop HDFS的机架感知和副本策略">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/201709062251.png">
+<meta property="og:updated_time" content="2018-04-17T04:46:12.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop--HDFS之机架感知和副本策略">
+<meta name="twitter:description" content="本文主要介绍Hadoop HDFS的机架感知和副本策略">
+<meta name="twitter:image" content="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/201709062251.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Hadoop--HDFS之机架感知和副本策略</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Hadoop--HDFS之机架感知和副本策略</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-14T02:02:32.000Z" itemprop="datePublished" class="page-time">
+  2017-09-14
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-Hadoop/Hadoop--HDFSreplication"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Hadoop--HDFS之机架感知和副本策略</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-14 10:02:32" datetime="2017-09-14T02:02:32.000Z"  itemprop="datePublished">2017-09-14</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文主要介绍Hadoop HDFS的机架感知和副本策略<br><a id="more"></a></p>
+<p>其实NameNode在挑选合适的DataNode去存储Block的时候，不仅仅考虑了DataNode的存储空间够不够，还会考虑这些DataNode在不在同一个机架上。</p>
+<p>这就需要NameNode必须知道所有的DataNode分别位于哪个机架上(所以也称为机架感知)。</p>
+<p>当然，默认情况下NameNode是不会知道机架的存在的，也就是说，默认情况下，NameNode会认为所有的DataNode都在同一个机架上(/defaultRack)。</p>
+<p>除非我们在hdfs-site.xml里面配置topology.script.file.name选项，这个选项的值是一个可执行文件的位置，而该只执行文件的作用是将输入的DataNode的ip地址按照一定规则计算，然后输出它所在的机架的名字，如/rack1, /rack2之类。借助这个文件，NameNode就具备了机架感知了。当它在挑选DataNode去存储Block的时候，它会遵循以下原则：</p>
+<ol>
+<li><p>首先挑选跟HDFS Client所在的DataNode作为存放第一个Block副本的位置，如果HDFS Client不在任何一个DataNode上，比如说Hadoop集群外你自己的电脑，那么就任意选取一个DataNode。</p>
+</li>
+<li><p>其次，会借助NameNode的机架感知特性，选取跟第一个Block副本所在DataNode不同的机架上的任意一个DataNode来存放Block的第二个副本，比如说/rack2。Block的第三个副本也会存在这个/rack2上，但是是另外一个DataNode。</p>
+</li>
+<li><p>最后，如果我们设置的副本的数量大于3，那么剩下的副本则随意存储在集群中。</p>
+</li>
+</ol>
+<p>我们把上面的描述简单说下：</p>
+<ul>
+<li><strong>1st replica</strong>. 如果写请求方所在机器是其中一个个DataNode,则直接存放在本地,否则随机在集群中选择一个DataNode。</li>
+<li><strong>2nd replica</strong>. 第二个副本存放于不同第一个副本的所在的机架。</li>
+<li><strong>3rd replica</strong>.第三个副本存放于第二个副本所在的机架,但是属于不同的节点。<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/201709062251.png" alt="" title="">
+                </div>
+                <div class="image-caption"></div>
+            </figure>
+</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:46:12.000Z" itemprop="dateUpdated">2018-04-17 12:46:12</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Hadoop/Hadoop--HDFSreplication.html" target="_blank" rel="external">http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/HDFS/">HDFS</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html&title=《Hadoop--HDFS之机架感知和副本策略》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html&title=《Hadoop--HDFS之机架感知和副本策略》 — 云筑小站&source=本文主要介绍Hadoop HDFS的机架感知和副本策略" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hadoop--HDFS之机架感知和副本策略》 — 云筑小站&url=http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/Python/Python-Base.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Python 基础</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/Hadoop/Hadoop--HDFSReadAndWrite.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Hadoop--HDFS读写流程</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html&title=《Hadoop--HDFS之机架感知和副本策略》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html&title=《Hadoop--HDFS之机架感知和副本策略》 — 云筑小站&source=本文主要介绍Hadoop HDFS的机架感知和副本策略" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hadoop--HDFS之机架感知和副本策略》 — 云筑小站&url=http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hadoop/Hadoop--HDFSreplication.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACLElEQVR42u3aS27DMAxF0ex/0860QGL1PlIOIOl6FBh266MBwd/rha/r4/p7/+6Zu+f5/cmXDBkylmXwfz9+9/P++MlZRyNDhoxzGHefOP49/sedmMm/TYYMGTLGz/QTPnIoMmTIkMEZtTs8pP4o4MqQIWNZBm+TkbfGAP7pj9TiMmTIWJDBy8vf/35kviFDhoylGFd48dZ/Omy4GpcMGTL2ZnRGmP2Q2hmRfnlLhgwZxzA6A8u0cOXJaNxukyFDxkaMftWbJpF82BkEfRkyZBzG6Dfu01UMfhy33ylDhoxjGEG5GKaPtX4+4cmQIeMEBmlv1UJt7YD4ECLIWGXIkLERg7fDakVp7VDSMaoMGTJ2ZfDmfpquzWqrxfMNGTJkHMCIp6D4UPiyRVo2y5AhY1cGb+XX1sVqVScva/+ZxMqQIWMjBq90+epYmlx2FjhkyJCxN4O3wFJGGsrHbJSkypAhY2sGCZG1YjVNNPlBFOexMmTIWJbRCazpakUajoODliFDxgGMWnnJw3TnL6NxggwZMg5g8NSNjAr6SxXxkcmQIWNrBt/L6Kd9c4edxUdlyJCxFOMKr7TFP3fAKUOGjDMZabAja1tkRYOz+XhVhgwZezN4wckL0f67adErQ4aMExjpYDLFt2prvmwhQ4YMGSBRGxe9tcWLxwOuDBkytmZ02mEpOxhbypAhY1NGbYWilgLOKpIntNtkyJCxCKO/r/FcOJ5V+sqQIWNZxhuiP/UbCJ/zdwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

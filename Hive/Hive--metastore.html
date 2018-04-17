@@ -1,0 +1,531 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Hive/Hive--metastore.html">
+    
+    
+    <title>Hive的元数据管理 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Hive">
+    <meta name="description" content="我们知道，Hive的元数据并不存放在HDFS上，而是存放在传统的RDBMS中，典型的如MySQL，这里我们以MySQL为元数据库，结合1.1.0版本的Hive为例进行说明。连接上MySQL后可以看到Hive元数据对应的表有36个，以下是部分主要表的简要说明。    表名 说明 关联键     BUCKETING_COLS 存储bucket字段信息，通过SD_ID与其他表关联   CDS 一个字段C">
+<meta name="keywords" content="Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive的元数据管理">
+<meta property="og:url" content="http://xiejm.com/Hive/Hive--metastore.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="我们知道，Hive的元数据并不存放在HDFS上，而是存放在传统的RDBMS中，典型的如MySQL，这里我们以MySQL为元数据库，结合1.1.0版本的Hive为例进行说明。连接上MySQL后可以看到Hive元数据对应的表有36个，以下是部分主要表的简要说明。    表名 说明 关联键     BUCKETING_COLS 存储bucket字段信息，通过SD_ID与其他表关联   CDS 一个字段C">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-17T04:45:25.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive的元数据管理">
+<meta name="twitter:description" content="我们知道，Hive的元数据并不存放在HDFS上，而是存放在传统的RDBMS中，典型的如MySQL，这里我们以MySQL为元数据库，结合1.1.0版本的Hive为例进行说明。连接上MySQL后可以看到Hive元数据对应的表有36个，以下是部分主要表的简要说明。    表名 说明 关联键     BUCKETING_COLS 存储bucket字段信息，通过SD_ID与其他表关联   CDS 一个字段C">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Hive的元数据管理</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Hive的元数据管理</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-09T09:38:12.000Z" itemprop="datePublished" class="page-time">
+  2017-10-09
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+<article id="post-Hive/Hive--metastore"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Hive的元数据管理</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-09 17:38:12" datetime="2017-10-09T09:38:12.000Z"  itemprop="datePublished">2017-10-09</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>我们知道，Hive的元数据并不存放在HDFS上，而是存放在传统的RDBMS中，典型的如MySQL，这里我们以MySQL为元数据库，结合1.1.0版本的Hive为例进行说明。<br>连接上MySQL后可以看到Hive元数据对应的表有36个，以下是部分主要表的简要说明。</p>
+<table>
+<thead>
+<tr>
+<th>表名</th>
+<th>说明</th>
+<th>关联键</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>BUCKETING_COLS</td>
+<td>存储bucket字段信息，通过SD_ID与其他表关联</td>
+</tr>
+<tr>
+<td>CDS</td>
+<td>一个字段CD_ID，与SDS表关联</td>
+</tr>
+<tr>
+<td>COLUMNS_V2</td>
+<td>Hive表字段信息(字段注释，字段名，字段类型，字段序号)</td>
+</tr>
+<tr>
+<td>DBS</td>
+<td>Hive中所有数据库的基本信息</td>
+</tr>
+<tr>
+<td>GLOBAL_PRIVS</td>
+<td>全局变量，与表无关</td>
+</tr>
+<tr>
+<td>PARTITIONS</td>
+<td>Hive表分区信息(创建时间，具体的分区)</td>
+</tr>
+<tr>
+<td>PARTITION_KEYS</td>
+<td>Hive分区表分区字段(名称，类型，comment，序号)</td>
+</tr>
+<tr>
+<td>PARTITION_KEY_VALS</td>
+<td>Hive表分区名(键值，序号)</td>
+</tr>
+<tr>
+<td>PARTITION_PARAMS</td>
+<td>存储某分区相关信息，包括文件数，文件大小，记录条数等。通过PART_ID关联</td>
+</tr>
+<tr>
+<td>ROLES</td>
+<td>角色表，和GLOBAL_PRIVS配合，与表无关</td>
+</tr>
+<tr>
+<td>SDS</td>
+<td>所有hive表、表分区所对应的hdfs数据目录和数据格式</td>
+<td>SD_ID,SERDE_ID</td>
+</tr>
+<tr>
+<td>SEQUENCE_TABLE</td>
+<td>存储sqeuence相关信息，与表无关</td>
+</tr>
+<tr>
+<td>SERDES</td>
+<td>Hive表序列化反序列化使用的类库信息</td>
+</tr>
+<tr>
+<td>SERDE_PARAMS</td>
+<td>序列化反序列化信息，如行分隔符、列分隔符、NULL的表示字符等</td>
+</tr>
+<tr>
+<td>SORT_COLS</td>
+<td>Hive表SORTED BY字段信息(字段名，sort类型，字段序号)</td>
+</tr>
+<tr>
+<td>TABLE_PARAMS</td>
+<td>表级属性，如是否外部表，表注释等</td>
+</tr>
+<tr>
+<td>TBLS</td>
+<td>所有hive表的基本信息</td>
+</tr>
+<tr>
+<td>TBL_PRIVS</td>
+<td>表赋权限相关信息，通过TBL_ID关联</td>
+</tr>
+<tr>
+<td>VERSION</td>
+<td>存储Hive版本的元数据表</td>
+</tr>
+</tbody>
+</table>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:45:25.000Z" itemprop="dateUpdated">2018-04-17 12:45:25</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Hive/Hive--metastore.html" target="_blank" rel="external">http://xiejm.com/Hive/Hive--metastore.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hive/">Hive</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--metastore.html&title=《Hive的元数据管理》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--metastore.html&title=《Hive的元数据管理》 — 云筑小站&source=脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--metastore.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive的元数据管理》 — 云筑小站&url=http://xiejm.com/Hive/Hive--metastore.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--metastore.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/Hive/HIve--JDBC API.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hive的JDBC使用Java API编程</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/Hive/Hive--partition.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Hive的分区表</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--metastore.html&title=《Hive的元数据管理》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--metastore.html&title=《Hive的元数据管理》 — 云筑小站&source=脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--metastore.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive的元数据管理》 — 云筑小站&url=http://xiejm.com/Hive/Hive--metastore.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--metastore.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABzUlEQVR42u3aS27CQBAFQO5/abKNhDy87h4PIJVXiAi7nMXT9OfxiK/nv+v1m6vr6j6vnzdfuLi4Y27yyKtvrv6a/yo34OLinudWQyd/gUmo4eLi/i63+uDer3Bxcb+Zuy5a1uGFi4v7W9yk+FmH2hr3gVoNFxd3wM27lPd9vqW/i4uL2+I+i1cvgPLv39wNFxf3CDcPlOqxI8dV74OLi3uSm996/chkQJu3U9/Uari4uLdx83WK/MiSH4byGgcXF/cMt7pulYRXtZ1aGNzi4uIe4eYRVj6CbCqH3tRquLi4N3N77dH8cDMf2+Di4p7k5stVvSWMPKp6LRVcXNy93PKAc7wRUR24XtZquLi4B7mTxay9G1ZRkOHi4t7AXR9W8vFq+QzVKoRwcXE/xc3jLCmWktga7ZHh4uLezJ3EWbXlkb/e5ZAVFxf3CLc60qiWTKNjTZ6muLi4Y+6kudl7jdEaBy4u7hFur8XZC7veikbzZXBxccfcanitS5Q82pLCqZy+uLi4W7nzwWq12bFvuoKLi/t57q5ipjliwcXF/UpufgzqRdjmUQouLu6Am69Orgue6rA2yStcXNzz3GrFkbdN86WN/N+Bi4t7M/cPkhhxsE9tcDIAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

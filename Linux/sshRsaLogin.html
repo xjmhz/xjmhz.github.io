@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Linux/sshRsaLogin.html">
+    
+    
+    <title>Linux(CentOS 6)配置SSH无密码登陆 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Linux,SSH">
+    <meta name="description" content="最近在搭建Hadoop环境需要设置无密码登陆，所谓无密码登陆其实是指通过证书认证的方式登陆，使用一种被称为”公私钥”认证的方式来进行ssh登录。这篇教程介绍使用SSH Key来实现SSH无密码登录，而且使用scp复制文件时也不需要再输入密码．除了方便SSH登录，scp复制文件外，SSH无密码登录也为Linux服务器增加了又一道安全防线．">
+<meta name="keywords" content="Linux,SSH">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Linux(CentOS 6)配置SSH无密码登陆">
+<meta property="og:url" content="http://xiejm.com/Linux/sshRsaLogin.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="最近在搭建Hadoop环境需要设置无密码登陆，所谓无密码登陆其实是指通过证书认证的方式登陆，使用一种被称为”公私钥”认证的方式来进行ssh登录。这篇教程介绍使用SSH Key来实现SSH无密码登录，而且使用scp复制文件时也不需要再输入密码．除了方便SSH登录，scp复制文件外，SSH无密码登录也为Linux服务器增加了又一道安全防线．">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-17T04:43:59.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Linux(CentOS 6)配置SSH无密码登陆">
+<meta name="twitter:description" content="最近在搭建Hadoop环境需要设置无密码登陆，所谓无密码登陆其实是指通过证书认证的方式登陆，使用一种被称为”公私钥”认证的方式来进行ssh登录。这篇教程介绍使用SSH Key来实现SSH无密码登录，而且使用scp复制文件时也不需要再输入密码．除了方便SSH登录，scp复制文件外，SSH无密码登录也为Linux服务器增加了又一道安全防线．">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Linux(CentOS 6)配置SSH无密码登陆</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Linux(CentOS 6)配置SSH无密码登陆</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-09-12T00:14:24.000Z" itemprop="datePublished" class="page-time">
+  2017-09-12
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-何为“公私钥“认证方式"><span class="post-toc-text">1.何为“公私钥“认证方式:</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-配置环境说明："><span class="post-toc-text">2.配置环境说明：</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-方法一配置步骤"><span class="post-toc-text">3.方法一配置步骤</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-1-检查sshd"><span class="post-toc-text">3.1 检查sshd</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-2-生成公私钥"><span class="post-toc-text">3.2 生成公私钥</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-3-合成并分发公钥"><span class="post-toc-text">3.3 合成并分发公钥</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-4-分发authorized-keys"><span class="post-toc-text">3.4 分发authorized_keys</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-5-分发known-hosts"><span class="post-toc-text">3.5 分发known_hosts</span></a></li><li class="post-toc-item post-toc-level-4"><a class="post-toc-link" href="#3-6验证SSH"><span class="post-toc-text">3.6验证SSH</span></a></li></ol></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-方法二配置步骤"><span class="post-toc-text">4.方法二配置步骤</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Linux/sshRsaLogin"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Linux(CentOS 6)配置SSH无密码登陆</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-09-12 08:14:24" datetime="2017-09-12T00:14:24.000Z"  itemprop="datePublished">2017-09-12</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>最近在搭建Hadoop环境需要设置无密码登陆，所谓无密码登陆其实是指通过证书认证的方式登陆，使用一种被称为”公私钥”认证的方式来进行ssh登录。<br>这篇教程介绍使用SSH Key来实现SSH无密码登录，而且使用scp复制文件时也不需要再输入密码．除了方便SSH登录，scp复制文件外，SSH无密码登录也为Linux服务器增加了又一道安全防线．<br><a id="more"></a></p>
+<h2 id="1-何为“公私钥“认证方式"><a href="#1-何为“公私钥“认证方式" class="headerlink" title="1.何为“公私钥“认证方式:"></a>1.何为“公私钥“认证方式:<br></h2><p>首先在客户端上创建一对公私钥 （公钥文件：<code>~/.ssh/id_rsa.pub</code>； 私钥文件：<code>~/.ssh/id_rsa</code>）。然后把公钥放到服务器上（<code>~/.ssh/authorized_keys</code>）, 自己保留好私钥.在使用ssh登录时,ssh程序会发送私钥去和服务器上的公钥做匹配.如果匹配成功就可以登录了。</p>
+<h2 id="2-配置环境说明："><a href="#2-配置环境说明：" class="headerlink" title="2.配置环境说明："></a>2.配置环境说明：</h2><ul>
+<li>CentOS 6.7 minimal</li>
+<li>集群节点4台，并已经配置<code>/etc/hosts</code>主机映射<ul>
+<li>192.168.194.111 hadoop001</li>
+<li>192.168.194.112 hadoop002</li>
+<li>192.168.194.113 hadoop003</li>
+<li>192.168.194.114 hadoop004<blockquote>
+<p>如果你有更多的节点，操作是一样的。当你的集群达到一定规模时，可以使用shell脚本或者python脚本来实现SSH免密配置</p>
+</blockquote>
+</li>
+</ul>
+</li>
+</ul>
+<h2 id="3-方法一配置步骤"><a href="#3-方法一配置步骤" class="headerlink" title="3.方法一配置步骤"></a>3.方法一配置步骤</h2><p><strong>以下使用hadoop用户做示例,如果是其他用户请参照本示例操作</strong></p>
+<h4 id="3-1-检查sshd"><a href="#3-1-检查sshd" class="headerlink" title="3.1 检查sshd"></a>3.1 检查sshd</h4><p><em>每个节点都要操作</em><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 software]<span class="comment"># service sshd status</span></span><br><span class="line">openssh-daemon (pid  1844) is running...</span><br><span class="line">[root@hadoop001 software]<span class="comment"># su - hadoop</span></span><br></pre></td></tr></table></figure></p>
+<h4 id="3-2-生成公私钥"><a href="#3-2-生成公私钥" class="headerlink" title="3.2 生成公私钥"></a>3.2 生成公私钥</h4><p><em>在所有节点终端生成公钥，生成的密钥在.ssh 目录下，并进入.ssh目录</em></p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ ssh-keygen -t rsa -P <span class="string">''</span> -f ~/.ssh/id_rsa</span><br><span class="line">[hadoop@hadoop001 hadoop]$ <span class="built_in">cd</span> .ssh/</span><br><span class="line">[hadoop@hadoop001 hadoop]$ chmod 0600 ~/.ssh/authorized_keys`</span><br></pre></td></tr></table></figure>
+<h4 id="3-3-合成并分发公钥"><a href="#3-3-合成并分发公钥" class="headerlink" title="3.3 合成并分发公钥"></a>3.3 合成并分发公钥</h4><p><em>只需在<code>hadoop001</code>节点操作，复制所有节点的公钥文件合并到<code>authorized_keys</code></em><br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ ssh-keygen -t rsa -P <span class="string">''</span> -f ~/.ssh/id_rsa</span><br><span class="line">[hadoop@hadoop001 hadoop]$ <span class="built_in">cd</span> .ssh/</span><br><span class="line">[hadoop@hadoop001 hadoop]$ chmod 0600 ~/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line">[hadoop@hadoop001 .ssh]$ ssh hadoop001 cat /home/hadoop/.ssh/id_rsa.pub &gt;&gt;authorized_keys</span><br><span class="line">[hadoop@hadoop001 .ssh]$ ssh hadoop002 cat /home/hadoop/.ssh/id_rsa.pub &gt;&gt;authorized_keys</span><br><span class="line">[hadoop@hadoop001 .ssh]$ ssh hadoop003 cat /home/hadoop/.ssh/id_rsa.pub &gt;&gt;authorized_keys</span><br><span class="line">[hadoop@hadoop001 .ssh]$ ssh hadoop004 cat /home/hadoop/.ssh/id_rsa.pub &gt;&gt;authorized_keys</span><br></pre></td></tr></table></figure></p>
+<h4 id="3-4-分发authorized-keys"><a href="#3-4-分发authorized-keys" class="headerlink" title="3.4 分发authorized_keys"></a>3.4 分发authorized_keys</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 .ssh]$ chmod 0600 ~/.ssh/authorized_keys</span><br><span class="line">[hadoop@hadoop001 .ssh]$ scp authorized_keys hadoop@hadoop002:/home/hadoop/.ssh/</span><br><span class="line">[hadoop@hadoop001 .ssh]$ scp authorized_keys hadoop@hadoop003:/home/hadoop/.ssh/</span><br><span class="line">[hadoop@hadoop001 .ssh]$ scp authorized_keys hadoop@hadoop004:/home/hadoop/.ssh/</span><br></pre></td></tr></table></figure>
+<h4 id="3-5-分发known-hosts"><a href="#3-5-分发known-hosts" class="headerlink" title="3.5 分发known_hosts"></a>3.5 分发known_hosts</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 .ssh]$ chmod 0600 ~/.ssh/authorized_keys</span><br><span class="line">[hadoop@hadoop001 .ssh]$ scp known_hosts hadoop@hadoop002:/home/hadoop/.ssh/</span><br><span class="line">[hadoop@hadoop001 .ssh]$ scp known_hosts hadoop@hadoop003:/home/hadoop/.ssh/</span><br><span class="line">[hadoop@hadoop001 .ssh]$ scp known_hosts hadoop@hadoop004:/home/hadoop/.ssh/</span><br></pre></td></tr></table></figure>
+<h4 id="3-6验证SSH"><a href="#3-6验证SSH" class="headerlink" title="3.6验证SSH"></a>3.6验证SSH</h4><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 .ssh]<span class="variable">$ssh</span> hadoop001 date   <span class="comment">#不需要回车输入yes,即SSH配置成功</span></span><br><span class="line">Sat Sep  9 20:14:57 CST 2017</span><br></pre></td></tr></table></figure>
+<h2 id="4-方法二配置步骤"><a href="#4-方法二配置步骤" class="headerlink" title="4.方法二配置步骤"></a>4.方法二配置步骤</h2><p>可以使用<code>ssh-copy-id</code>命令来完成．<br><code>ssh-copy-id</code>命令会自动上传SSH公钥到其他节点的<code>.ssh/authorized_keys</code>文件中．<br><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 .ssh]<span class="variable">$ssh</span>-copy-id hadoop@hadoop001</span><br><span class="line">[hadoop@hadoop001 .ssh]<span class="variable">$ssh</span>-copy-id hadoop@hadoop002</span><br><span class="line">[hadoop@hadoop001 .ssh]<span class="variable">$ssh</span>-copy-id hadoop@hadoop003</span><br><span class="line">[hadoop@hadoop001 .ssh]<span class="variable">$ssh</span>-copy-id hadoop@hadoop004</span><br></pre></td></tr></table></figure></p>
+<p>同理其他节点也使用<code>ssh-copy-id</code>分发SSH公钥,这样也能达到相互免密登录的效果</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:43:59.000Z" itemprop="dateUpdated">2018-04-17 12:43:59</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Linux/sshRsaLogin.html" target="_blank" rel="external">http://xiejm.com/Linux/sshRsaLogin.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/SSH/">SSH</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Linux/sshRsaLogin.html&title=《Linux(CentOS 6)配置SSH无密码登陆》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Linux/sshRsaLogin.html&title=《Linux(CentOS 6)配置SSH无密码登陆》 — 云筑小站&source=最近在搭建Hadoop环境需要设置无密码登陆，所谓无密码登陆其实是指通过证书认证的方式登陆，使用一种被称为”公私钥”认证的方式来进行ssh登录。这篇教程介..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Linux/sshRsaLogin.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Linux(CentOS 6)配置SSH无密码登陆》 — 云筑小站&url=http://xiejm.com/Linux/sshRsaLogin.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Linux/sshRsaLogin.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/Linux/Change_CentOS_yum_repo_to_aliyun.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">将CentOS的yum源更换为国内的阿里云源</h4>
+      </a>
+    </div>
+  
+
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Linux/sshRsaLogin.html&title=《Linux(CentOS 6)配置SSH无密码登陆》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Linux/sshRsaLogin.html&title=《Linux(CentOS 6)配置SSH无密码登陆》 — 云筑小站&source=最近在搭建Hadoop环境需要设置无密码登陆，所谓无密码登陆其实是指通过证书认证的方式登陆，使用一种被称为”公私钥”认证的方式来进行ssh登录。这篇教程介..." data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Linux/sshRsaLogin.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Linux(CentOS 6)配置SSH无密码登陆》 — 云筑小站&url=http://xiejm.com/Linux/sshRsaLogin.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Linux/sshRsaLogin.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABy0lEQVR42u3aS27DMAxF0ex/0y7QUYHUzn2kKDvA1ShwHek0A0L8vF54Hb/r7+ez9f7+2W7X77SWXLly29z0+PdjDrCu9yHflStX7n4uD17XIYkENR745MqV+3wu2i5Ey5Ur99u5aZLDkx+5cuU+k0uSFr5p+mQkV5MrV26DWyuYrv08Xt+VK1fuoq4EL3ry0HM0lly5cvdw+XWEpEBpYErLrHLlyt3PJc0SntLUAhw5Ua5cudPc4GIxkJXEP4pcuXI3csmARb8Mykc6Tv8qV67cW7kczUsktcbJP1UcuXLlDnNJCCMFC14kJU8+XLDkypU7zO1cPtLSRnp5iju9cuXKXcRNcTUEuUjx65FcuXKnuWnykyYwJDzxs+TKlbuTS47kyU+nYNrq/MiVK3cRNy1/8JEL3o6NMx25cuUOc3mQ4u3VzoDFh9AmV67cjdx0FCMthfCmCwpkcuXK3cLlqz+exQsx6H4kV67cAW4aUGqjluTfXtaClStX7iJuGrxq7ZZagJMrV+693E7w6rRJivVduXLlPobLA1+6W9BukStX7pdwO++nFym5cuXu5KbjWbzomY53LCuLyJUrt8GtFUzTI9MncuXKvYn7Awr2/DM78aEXAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

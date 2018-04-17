@@ -1,0 +1,467 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Hive/Hive--load_data.html">
+    
+    
+    <title>Hive的几种数据导入方式 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Hive">
+    <meta name="description" content="在Hive中建好表之后，需要记载数据用于后续查询分析操作。本文介绍向Hive表中加载数据的几种方式。">
+<meta name="keywords" content="Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive的几种数据导入方式">
+<meta property="og:url" content="http://xiejm.com/Hive/Hive--load_data.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="在Hive中建好表之后，需要记载数据用于后续查询分析操作。本文介绍向Hive表中加载数据的几种方式。">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-17T04:45:44.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive的几种数据导入方式">
+<meta name="twitter:description" content="在Hive中建好表之后，需要记载数据用于后续查询分析操作。本文介绍向Hive表中加载数据的几种方式。">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Hive的几种数据导入方式</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Hive的几种数据导入方式</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-03T14:49:38.000Z" itemprop="datePublished" class="page-time">
+  2017-10-03
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#建表时候直接指定"><span class="post-toc-text">建表时候直接指定</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#从本地文件系统导入数据到Hive表中"><span class="post-toc-text">从本地文件系统导入数据到Hive表中</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#从HDFS上导入数据到Hive表中"><span class="post-toc-text">从HDFS上导入数据到Hive表中</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#从别的表中查询数据到Hive表中"><span class="post-toc-text">从别的表中查询数据到Hive表中</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#基本模式"><span class="post-toc-text">基本模式</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#多插入模式"><span class="post-toc-text">多插入模式</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#在创建表的时候从别的表中查询记录并插入相应的表中"><span class="post-toc-text">在创建表的时候从别的表中查询记录并插入相应的表中</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Hive导出数据到文件系统"><span class="post-toc-text">Hive导出数据到文件系统</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Hive/Hive--load_data"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Hive的几种数据导入方式</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-03 22:49:38" datetime="2017-10-03T14:49:38.000Z"  itemprop="datePublished">2017-10-03</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>在Hive中建好表之后，需要记载数据用于后续查询分析操作。<br>本文介绍向Hive表中加载数据的几种方式。<br><a id="more"></a></p>
+<h2 id="建表时候直接指定"><a href="#建表时候直接指定" class="headerlink" title="建表时候直接指定"></a>建表时候直接指定</h2><p>如果数据已经存在HDFS中，那么可以直接在建表的时候使用<code>location</code>来指定数据所在HDFS路径。</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">EXTERNAL</span>] <span class="keyword">TABLE</span> emp (</span><br><span class="line"><span class="keyword">day</span> <span class="keyword">STRING</span>,</span><br><span class="line"><span class="keyword">url</span> <span class="keyword">STRING</span>)</span><br><span class="line"><span class="keyword">ROW</span> <span class="keyword">FORMAT</span> <span class="keyword">DELIMITED</span></span><br><span class="line"><span class="keyword">FIELDS</span> <span class="keyword">TERMINATED</span> <span class="keyword">BY</span> <span class="string">'\t'</span></span><br><span class="line">location <span class="string">'/tmp/emp/</span></span><br></pre></td></tr></table></figure>
+<h2 id="从本地文件系统导入数据到Hive表中"><a href="#从本地文件系统导入数据到Hive表中" class="headerlink" title="从本地文件系统导入数据到Hive表中"></a>从本地文件系统导入数据到Hive表中</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">"/path/to/dir"</span> <span class="keyword">into</span> <span class="keyword">table</span> tab_name [<span class="keyword">PARTITION</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="从HDFS上导入数据到Hive表中"><a href="#从HDFS上导入数据到Hive表中" class="headerlink" title="从HDFS上导入数据到Hive表中"></a>从HDFS上导入数据到Hive表中</h2><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> inpath <span class="string">"/path/to/hdfs_dir"</span> <span class="keyword">into</span> <span class="keyword">table</span> tab_name [<span class="keyword">PARTITION</span>]</span><br></pre></td></tr></table></figure>
+<h2 id="从别的表中查询数据到Hive表中"><a href="#从别的表中查询数据到Hive表中" class="headerlink" title="从别的表中查询数据到Hive表中"></a>从别的表中查询数据到Hive表中</h2><h3 id="基本模式"><a href="#基本模式" class="headerlink" title="基本模式"></a>基本模式</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> tab_name [<span class="keyword">PARTITION</span> ] <span class="keyword">select</span> ... <span class="keyword">from</span> tab_name ;</span><br></pre></td></tr></table></figure>
+<h3 id="多插入模式"><a href="#多插入模式" class="headerlink" title="多插入模式"></a>多插入模式</h3><figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">from tab_name</span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> tab_name1 <span class="keyword">select</span> ....</span><br><span class="line"><span class="keyword">insert</span> overwrite <span class="keyword">table</span> tab_name2 select...</span><br></pre></td></tr></table></figure>
+<p><strong>Hive不支持用Insert语句一条一条地进行插入操作，也不支持UPDATE操作</strong></p>
+<h2 id="在创建表的时候从别的表中查询记录并插入相应的表中"><a href="#在创建表的时候从别的表中查询记录并插入相应的表中" class="headerlink" title="在创建表的时候从别的表中查询记录并插入相应的表中"></a>在创建表的时候从别的表中查询记录并插入相应的表中</h2><p>在实际情况下，表的输出结果可能很多，不适于显示在控制台上，这时候，将Hive的查询输出结果直接保存在一个新的表中是合适的，我们称这种情况是<strong>CTAS</strong></p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> tabe_name <span class="keyword">as</span> <span class="keyword">select</span> ......</span><br></pre></td></tr></table></figure>
+<p><strong>注意：</strong> CTAS是原子的，如果select查询失败，则新表不会创建</p>
+<h2 id="Hive导出数据到文件系统"><a href="#Hive导出数据到文件系统" class="headerlink" title="Hive导出数据到文件系统"></a>Hive导出数据到文件系统</h2><p>顺带也介绍下从Hive导出数据到HDFS和本地文件系统</p>
+<p>先来看下语法：</p>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">INSERT</span> OVERWRITE [<span class="keyword">LOCAL</span>] <span class="keyword">DIRECTORY</span> directory1</span><br><span class="line">  [<span class="keyword">ROW</span> <span class="keyword">FORMAT</span> row_format] [<span class="keyword">STORED</span> <span class="keyword">AS</span> file_format]</span><br><span class="line">  <span class="keyword">SELECT</span> ... <span class="keyword">FROM</span> ...</span><br></pre></td></tr></table></figure>
+<p>在上面的语法中，如果指定了LOCAL关键字，则为导出到本地文件系统，否则导出到HDFS中。<br>使用ROW FORMAT关键字可以指定导出文件分隔符。</p>
+<p>再来看下示例：</p>
+<p>将emp表的所有数据导出到本地文件系统<code>/tmp/emp/</code>目录，字段间分割符为tab <code>\t</code></p>
+<p>INSERT OVERWRITE LOCAL DIRECTORY ‘/tmp/emp/‘<br>  ROW FORMAT DELIMITED FIELDS TERMINATED BY ‘\t’<br>SELECT * FROM emp;</p>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:45:44.000Z" itemprop="dateUpdated">2018-04-17 12:45:44</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Hive/Hive--load_data.html" target="_blank" rel="external">http://xiejm.com/Hive/Hive--load_data.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hive/">Hive</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--load_data.html&title=《Hive的几种数据导入方式》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--load_data.html&title=《Hive的几种数据导入方式》 — 云筑小站&source=在Hive中建好表之后，需要记载数据用于后续查询分析操作。本文介绍向Hive表中加载数据的几种方式。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--load_data.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive的几种数据导入方式》 — 云筑小站&url=http://xiejm.com/Hive/Hive--load_data.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--load_data.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/MySQL/MySQL--Source_Install.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">MySQL 5.6基于Linux源码编译安装</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/Hive/Hive--DataType.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Hive的数据类型和分隔符</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--load_data.html&title=《Hive的几种数据导入方式》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--load_data.html&title=《Hive的几种数据导入方式》 — 云筑小站&source=在Hive中建好表之后，需要记载数据用于后续查询分析操作。本文介绍向Hive表中加载数据的几种方式。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--load_data.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive的几种数据导入方式》 — 云筑小站&url=http://xiejm.com/Hive/Hive--load_data.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--load_data.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABz0lEQVR42u3aSW7DMAwF0Nz/0i7QVYG0yqcoyS7wtDIy2E9eEOLwesXr+l7vn/z8/Hpb4/v89ZsFCxcXt829hmv8mPH1eDPJt79sCRcX9yA3CTp52Oq8gg82XFzch3GTo0ln87i4uP+ROw5nSbZSTYRwcXHv5ebJyfi/SaqTvI4FuRouLm6DWy2Y7rjeWN/FxcUtcq/i2hH4Ck/HxcU9wh03UJM0plM6mSuU4OLi7uauCk9VylwJBhcX9wy3c7tqWSQPkR8CKy4u7mZuHsjywLTjPuW4i4uL2+YmhcvCEaQx2jUuo+Di4p7nVluh+ZjFKjouLu4Zbh6YxglMPpZRHczCxcW9izs385Bvu9O4XfDucXFxi9wo5ShuYO5uUSsXFxf3ILdT/uiUR/MSKi4u7kludbiqE8IKhY9q/wcXF3cpN39kdXgiP9DkiRMuLu5Jbj6AlSQtcylQIZDh4uIe4eYrSYrmWq3RNnBxcY9wqwGl2jLJG6tzRytcXNx93Dx4zR1lxtflIS1cXNyD3Dx4zZVQlx1lcHFxH8Yt9GemQlt0VMLFxX0kt398ybeBi4t7L7daJK0OYM0Fx1ZZBBcXt8HtFEyTtutcsxYXF/cm7hcg4RsxEo40CQAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

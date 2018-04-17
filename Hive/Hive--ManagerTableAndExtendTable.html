@@ -1,0 +1,489 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html">
+    
+    
+    <title>hive内部表与外部表区别详细介绍 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Hive">
+    <meta name="description" content="本文记录了Hive的内部表与外部表区别">
+<meta name="keywords" content="Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="hive内部表与外部表区别详细介绍">
+<meta property="og:url" content="http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="本文记录了Hive的内部表与外部表区别">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:updated_time" content="2018-04-17T04:45:34.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="hive内部表与外部表区别详细介绍">
+<meta name="twitter:description" content="本文记录了Hive的内部表与外部表区别">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">hive内部表与外部表区别详细介绍</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">hive内部表与外部表区别详细介绍</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-08T06:42:30.000Z" itemprop="datePublished" class="page-time">
+  2017-10-08
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#内部表"><span class="post-toc-text">内部表</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#外部表"><span class="post-toc-text">外部表</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#总结"><span class="post-toc-text">总结</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Hive/Hive--ManagerTableAndExtendTable"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">hive内部表与外部表区别详细介绍</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-08 14:42:30" datetime="2017-10-08T06:42:30.000Z"  itemprop="datePublished">2017-10-08</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>本文记录了Hive的内部表与外部表区别<br><a id="more"></a></p>
+<h2 id="内部表"><a href="#内部表" class="headerlink" title="内部表"></a>内部表</h2><ul>
+<li>首先我们用下面语句在Hive中创建一个表：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">create</span> <span class="keyword">table</span> emp(</span><br><span class="line">empno <span class="built_in">int</span>,ename <span class="keyword">string</span>,job <span class="keyword">string</span>,mgr <span class="built_in">int</span>,hiredate <span class="keyword">string</span>,sal <span class="keyword">double</span>,deptno <span class="built_in">int</span></span><br><span class="line">)<span class="keyword">row</span> <span class="keyword">format</span> <span class="keyword">delimited</span> <span class="keyword">fields</span> <span class="keyword">terminated</span> <span class="keyword">by</span> <span class="string">'\t'</span>;</span><br><span class="line"></span><br><span class="line">OK</span><br><span class="line">Time taken: 0.359 seconds</span><br></pre></td></tr></table></figure>
+<ul>
+<li>接着我们就在Hive里面创建了一张普通的表，现在我们给这个表导入数据：</li>
+</ul>
+<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">load</span> <span class="keyword">data</span> <span class="keyword">local</span> inpath <span class="string">'/root/emp.txt'</span> overwrite <span class="keyword">into</span> <span class="keyword">table</span> emp;</span><br><span class="line">Loading data to table default.emp</span><br><span class="line">Table default.emp stats: [numFiles=1, numRows=0, totalSize=700, rawDataSize=0]</span><br><span class="line">OK</span><br><span class="line">Time taken: 0.82 seconds</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">hive&gt; select * from emp;</span><br><span class="line">OK</span><br><span class="line">7369	SMITH	CLERK	7902	1980-12-17	800.0	NULL</span><br><span class="line">7499	ALLEN	SALESMAN	7698	1981-2-20	1600.0	300</span><br><span class="line">7521	WARD	SALESMAN	7698	1981-2-22	1250.0	500</span><br><span class="line">7566	JONES	MANAGER	7839	1981-4-2	2975.0	NULL</span><br><span class="line">7654	MARTIN	SALESMAN	7698	1981-9-28	1250.0	1400</span><br><span class="line">7698	BLAKE	MANAGER	7839	1981-5-1	2850.0	NULL</span><br><span class="line">7782	CLARK	MANAGER	7839	1981-6-9	2450.0	NULL</span><br><span class="line">7788	SCOTT	ANALYST	7566	1987-4-19	3000.0	NULL</span><br><span class="line">7839	KING	PRESIDENT	NULL	1981-11-17	5000.0	NULL</span><br><span class="line">7844	TURNER	SALESMAN	7698	1981-9-8	1500.0	0</span><br><span class="line">7876	ADAMS	CLERK	7788	1987-5-23	1100.0	NULL</span><br><span class="line">7900	JAMES	CLERK	7698	1981-12-3	950.0	NULL</span><br><span class="line">7902	FORD	ANALYST	7566	1981-12-3	3000.0	NULL</span><br><span class="line">7934	MILLER	CLERK	7782	1982-1-23	1300.0	NULL</span><br><span class="line">8888	HIVE	PROGRAM	7839	1988-1-23	10300.0	NULL</span><br><span class="line">Time taken: 1.027 seconds, Fetched: 15 row(s)</span><br></pre></td></tr></table></figure>
+<ul>
+<li>查看emp表存储的HDFS文件</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; dfs -ls /user/hive/warehouse/emp;</span><br><span class="line">Found 1 items</span><br><span class="line">-rwxr-xr-x   1 root supergroup        700 2017-09-20 17:13 /user/hive/warehouse/emp/emp.txt</span><br></pre></td></tr></table></figure>
+<ul>
+<li>接着我们来删除emp</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##############删除表</span></span><br><span class="line">hive&gt; drop table emp;</span><br><span class="line">OK</span><br><span class="line">Time taken: 0.239 seconds</span><br><span class="line"></span><br><span class="line"><span class="comment">################查emo表的文件提示没有这个目录</span></span><br><span class="line">hive&gt; dfs -ls /user/hive/warehouse/emp;</span><br><span class="line">ls: `/user/hive/warehouse/emp<span class="string">': No such file or directory</span></span><br><span class="line"><span class="string">Command failed with exit code = 1</span></span><br><span class="line"><span class="string">Query returned non-zero code: 1, cause: null</span></span><br></pre></td></tr></table></figure>
+<p>看到没，当我们把emp表删除后，再去查HDFS文件提示目录不存在。表数据已经被删除了。<br>如果你的Hadoop启动垃圾箱机制，那么drop table 命令将会把表的所有移动到垃圾箱。</p>
+<h2 id="外部表"><a href="#外部表" class="headerlink" title="外部表"></a>外部表</h2><ul>
+<li>现在我们来创建一个外部表：</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; create external table emp_external(</span><br><span class="line">    &gt; empno int,ename string,job string,mgr int,hiredate string,sal double,deptno int);</span><br><span class="line">OK</span><br><span class="line">Time taken: 0.213 seconds</span><br></pre></td></tr></table></figure>
+<p>通过上面的创建表命令我们发现，创建表和外部表的区别，创建外部表多了external关键字<br>当然我们在创建外部表时还可以加一个<code>location &#39;hdfs PATH&#39;</code>参数来指定目录<br>默认情况下，Hive将在HDFS上的/user/hive/warehouse/文件夹下以外部表的表名创建一个文件夹，并将属于这个表的数据存放在这里<br>接着使用hive 中的dfs命令查下</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; dfs -ls /user/hive/warehouse;</span><br><span class="line">Found 2 items</span><br><span class="line">drwxr-xr-x   - root supergroup          0 2017-09-20 17:45 /user/hive/warehouse/emp_external</span><br><span class="line">drwxr-xr-x   - root supergroup          0 2017-09-13 21:46 /user/hive/warehouse/hive.db</span><br></pre></td></tr></table></figure>
+<ul>
+<li>导入表数据</li>
+</ul>
+<p>和创建表的导入数据到表一样，将本地的数据导入到外部表</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; load data <span class="built_in">local</span> inpath <span class="string">'/root/emp.txt'</span> overwrite into table emp_external;</span><br><span class="line">Loading data to table default.emp_external</span><br><span class="line">Table default.emp_external stats: [numFiles=1, numRows=0, totalSize=700, rawDataSize=0]</span><br><span class="line">OK</span><br><span class="line">Time taken: 1.087 seconds</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">############再emp_external目录下多了一个数据文件</span></span><br><span class="line">hive&gt; dfs -ls /user/hive/warehouse/emp_external;</span><br><span class="line">Found 1 items</span><br><span class="line">-rwxr-xr-x   1 root supergroup        700 2017-09-20 17:56 /user/hive/warehouse/emp_external/emp.txt</span><br><span class="line">hive&gt;</span><br></pre></td></tr></table></figure>
+<ul>
+<li>删除外部表</li>
+</ul>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">##############删除表</span></span><br><span class="line">hive&gt; drop table emp_external;</span><br><span class="line">OK</span><br><span class="line">Time taken: 0.326 seconds</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">hive&gt; dfs -ls /user/hive/warehouse/emp_external;</span><br><span class="line">Found 1 items</span><br><span class="line">-rwxr-xr-x   1 root supergroup        700 2017-09-20 17:56 /user/hive/warehouse/emp_external/emp.txt</span><br></pre></td></tr></table></figure>
+<p>通过上面删除表后查看HDFS文件发现表被删除了，但是表对应的数据文件并没有被删除</p>
+<h2 id="总结"><a href="#总结" class="headerlink" title="总结"></a>总结</h2><ul>
+<li>外部表中的数据并不是由它自己来管理的！而表则不一样；</li>
+<li>在删除表的时候，Hive将会把属于表的元数据和数据全部删掉；而删除外部表的时候，Hive仅仅删除外部表的元数据，数据是不会删除的！</li>
+<li>在与第三方共用数据时，可以使用外部表。</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:45:34.000Z" itemprop="dateUpdated">2018-04-17 12:45:34</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Hive/Hive--ManagerTableAndExtendTable.html" target="_blank" rel="external">http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hive/">Hive</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html&title=《hive内部表与外部表区别详细介绍》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html&title=《hive内部表与外部表区别详细介绍》 — 云筑小站&source=本文记录了Hive的内部表与外部表区别" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《hive内部表与外部表区别详细介绍》 — 云筑小站&url=http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/Hive/Hive--DDL.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hive--数据库和表</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/Hive/Hive--UDF.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Hive--UDF开发</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html&title=《hive内部表与外部表区别详细介绍》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html&title=《hive内部表与外部表区别详细介绍》 — 云筑小站&source=本文记录了Hive的内部表与外部表区别" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《hive内部表与外部表区别详细介绍》 — 云筑小站&url=http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--ManagerTableAndExtendTable.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACOElEQVR42u3awW6EMAxFUf7/p6nU1VRVmPtspirxzWpEKeSweIoTHwce5/d4/f06rq+vnnb9hOMTQ4YMGY9lnJfjN4NPiL9rxSBzkyFDxhxGLWTT9Ku99/oeGTJkyFjds7rCF47XT5AhQ4aMuwI3LW7JdGXIkCGjU8QWXwDu4Z/mhlpchgwZD2TUDgb+5vfHzzdkyJDx7xlnOHggpp+mNSsZMmRszeBbaaQZgl/nH4IvSWXIkLErg2/T82KSfxT+1zfPlCFDxtYMEoLpQ3ko13hvlp4yZMjYmkHCLm2k6BxVkrJZhgwZExhkimnU8sjuB+6PXUMZMmRsyqgtE2vTTaM2bUqTIUPGBAbfoE9hpKzlQV/scZMhQ8ZjGbwQ5a/sb+SRYJUhQ8Y0RvxvuOyshW9cJMuQIWMMI+0m4xtncZ9a2rohQ4aMAYxapKbTqkUtOuaUIUPG1ozaRht5cTot/hGX98iQIWMAg18vtj6EGLL0XDaHyZAhYztGGnC1FgpO4kcUBxkyZMh4OKMTcJ8rSotdbDJkyNiakS4Qa80T/UBf/pcMGTK2ZpAysnbkmS77jnDIkCFjDuMMx72R2j9gWHa3yZAhYyNGK6dxZKcbc+mxgQwZMiYwaucJvLwkS8kbDh5kyJAxgJEeA3TS/a76O+4ZkSFDxgBGp80rbe8g23bFwJUhQ8YABm+GqFXStQMJGTJkTGDwmOMFLQnT2udr1eIyZMh4IKNzMFBroag1ZHQWnTJkyHgs4wsvTBkGqPfiuwAAAABJRU5ErkJggg==" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

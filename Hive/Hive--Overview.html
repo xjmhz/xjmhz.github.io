@@ -1,0 +1,525 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Hive/Hive--Overview.html">
+    
+    
+    <title>Hive--概述 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Hive">
+    <meta name="description" content="一.Hive是什么 Hive是使用一种类似于用SQL的查询语言，直接作用在分布式存储系统之上。 由Facebook开源，解决海量数据结构化的日志数据统计问题 构建在Hadoop之上的数据仓库：数据存放在HDFS,计算通过YARN和MR 引擎：Hive QL —&amp;gt; MapReduce  重点关注HQL翻译成MR会产生几个作业 Hive底层：MapReduce、Spark（Hive on Spa">
+<meta name="keywords" content="Hive">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hive--概述">
+<meta property="og:url" content="http://xiejm.com/Hive/Hive--Overview.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="一.Hive是什么 Hive是使用一种类似于用SQL的查询语言，直接作用在分布式存储系统之上。 由Facebook开源，解决海量数据结构化的日志数据统计问题 构建在Hadoop之上的数据仓库：数据存放在HDFS,计算通过YARN和MR 引擎：Hive QL —&amp;gt; MapReduce  重点关注HQL翻译成MR会产生几个作业 Hive底层：MapReduce、Spark（Hive on Spa">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://oss.xiejm.com/Note/hadoop/201709171756.jpg">
+<meta property="og:image" content="http://oss.xiejm.com/Note/hadoop/201709172131.png">
+<meta property="og:image" content="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/201709172155.png">
+<meta property="og:updated_time" content="2018-04-17T04:45:41.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hive--概述">
+<meta name="twitter:description" content="一.Hive是什么 Hive是使用一种类似于用SQL的查询语言，直接作用在分布式存储系统之上。 由Facebook开源，解决海量数据结构化的日志数据统计问题 构建在Hadoop之上的数据仓库：数据存放在HDFS,计算通过YARN和MR 引擎：Hive QL —&amp;gt; MapReduce  重点关注HQL翻译成MR会产生几个作业 Hive底层：MapReduce、Spark（Hive on Spa">
+<meta name="twitter:image" content="http://oss.xiejm.com/Note/hadoop/201709171756.jpg">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Hive--概述</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Hive--概述</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-06T13:17:22.000Z" itemprop="datePublished" class="page-time">
+  2017-10-06
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#一-Hive是什么"><span class="post-toc-text">一.Hive是什么</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#二-产生背景"><span class="post-toc-text">二.产生背景</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-Hive-发展历程"><span class="post-toc-text">3.Hive 发展历程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-Hive架构"><span class="post-toc-text">4.Hive架构</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Hive的优点："><span class="post-toc-text">Hive的优点：</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#Hive主要部件"><span class="post-toc-text">Hive主要部件</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Hive-部署架构"><span class="post-toc-text">Hive 部署架构</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Hive与RDBMS的关系"><span class="post-toc-text">Hive与RDBMS的关系</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#使用Hive的好处："><span class="post-toc-text">使用Hive的好处：</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Hive/Hive--Overview"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Hive--概述</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-06 21:17:22" datetime="2017-10-06T13:17:22.000Z"  itemprop="datePublished">2017-10-06</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <h2 id="一-Hive是什么"><a href="#一-Hive是什么" class="headerlink" title="一.Hive是什么"></a>一.Hive是什么</h2><ol>
+<li>Hive是使用一种类似于用SQL的查询语言，直接作用在分布式存储系统之上。</li>
+<li>由Facebook开源，解决海量数据<strong>结构化的日志数据</strong>统计问题</li>
+<li>构建在Hadoop之上的数据仓库：<strong>数据存放在HDFS,计算通过YARN和MR</strong></li>
+<li>引擎：Hive QL —&gt; MapReduce  重点关注HQL翻译成MR会产生几个作业</li>
+<li>Hive底层：MapReduce、Spark（Hive on Spark）、Tez</li>
+<li>压缩/存储格式： 在生产中如何选择合适的压缩方式，这才是关键。压缩会消耗一定的CPU资源。</li>
+<li>生产环境慎选 Spark（Hive on Spark）</li>
+<li>现在的至少有70%用Hive来做数据仓库的</li>
+</ol>
+<h2 id="二-产生背景"><a href="#二-产生背景" class="headerlink" title="二.产生背景"></a>二.产生背景</h2><ol>
+<li><p>由于MapReduce的繁琐：Mapper—&gt;Reducer—&gt;Driver—&gt;package(打包)</p>
+</li>
+<li><p>大量数据存放在HDFS，如何快速的对HDFS上的文件进行统计和分析操作。<br>HDFS仅仅只是一个纯文本文件而已，没有schema的概念，没有schema，那么就没办法使用sql进行查询</p>
+</li>
+<li>如何为HDFS上的文件添加Schema信息</li>
+</ol>
+<h2 id="3-Hive-发展历程"><a href="#3-Hive-发展历程" class="headerlink" title="3.Hive 发展历程"></a>3.Hive 发展历程</h2><p>Hive推出至今已经10年了，以下是Hive的重要里程碑需牢记</p>
+<pre><code>07/08 由facebook开源
+13/05 hive-0.11 stinger Phase 1  ORC/HiveServer2
+13/10 hive-0.12 stinger Phase 2  ORC/improvement
+14/04 hive-0.13 stinger Phase 2  Tez/Vectorized query engine
+14/11 hive-0.14 Stinger.next Phase 1 Cost-based optimaizer(CBO)
+</code></pre><h2 id="4-Hive架构"><a href="#4-Hive架构" class="headerlink" title="4.Hive架构"></a>4.Hive架构</h2><h3 id="Hive的优点："><a href="#Hive的优点：" class="headerlink" title="Hive的优点："></a>Hive的优点：</h3><ul>
+<li>简单易上手</li>
+<li>容易扩展（基于HDFS和YARN）</li>
+<li>统一的元数据<code>metastore</code>管理：</li>
+</ul>
+<figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://oss.xiejm.com/Note/hadoop/201709171756.jpg" alt="image" title="">
+                </div>
+                <div class="image-caption">image</div>
+            </figure>
+<h3 id="Hive主要部件"><a href="#Hive主要部件" class="headerlink" title="Hive主要部件"></a>Hive主要部件</h3><ul>
+<li><p>用户接口：CLI（command-line interface，命令行界面）、JDBC/ODBC、Broswer</p>
+</li>
+<li><p>Driver：管理整个SQL作业的生命周期,接受query的组件，该组件实现session的概念，以处理和提供基于JDBC/ODBC执行。</p>
+</li>
+<li><p>SQL Parser：把SQL语句转换成抽象语法数，抽象语法数是不能执行的，先要转换成逻辑计划，逻辑执行计划优化以后生成物理执行计划，物理执行计划优化以后才能变成作业去运行</p>
+</li>
+<li><p>metastore包含：存储数据仓库所有的各种表与分区的结构化信息，包括列与列的信息，序列化器与反序列化，从而能够读写HDFS中的数据</p>
+</li>
+<li>metastore包含：<ul>
+<li>database: name location  owner</li>
+<li>table: name owner location column name/type/index createtime</li>
+</ul>
+</li>
+</ul>
+<p>metastore和Spark、impala等SQL引擎是通用的</p>
+<h2 id="Hive-部署架构"><a href="#Hive-部署架构" class="headerlink" title="Hive 部署架构"></a>Hive 部署架构</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://oss.xiejm.com/Note/hadoop/201709172131.png" alt="image" title="">
+                </div>
+                <div class="image-caption">image</div>
+            </figure>
+<p>上图是Hive的部署架构：<br>Hive 默认元数据存放在derby里面；<br>derby只能单session ；<br><em>在测试环境也建议使用MySQL；</em><br><em>在生产环境中MySQL必须有主备；</em></p>
+<h2 id="Hive与RDBMS的关系"><a href="#Hive与RDBMS的关系" class="headerlink" title="Hive与RDBMS的关系"></a>Hive与RDBMS的关系</h2><p>其实Hive与关系型数据库没有直接关系，只是SQL有点像<br>Hive的事务比较鸡肋<br><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/201709172155.png" alt="Hive与传统关系数据库的对比" title="">
+                </div>
+                <div class="image-caption">Hive与传统关系数据库的对比</div>
+            </figure></p>
+<h2 id="使用Hive的好处："><a href="#使用Hive的好处：" class="headerlink" title="使用Hive的好处："></a>使用Hive的好处：</h2><ul>
+<li>90%任务由Hive编写，代码量通常1、2行，开发周期通常很短</li>
+<li>Hive的所有执行，最终都将转化成MapReduce任务</li>
+<li>Hive长处在于数据统计，容量、投放量的计算，group by，join</li>
+<li>更多精力放在数据逻辑上，优化数据结构和性能</li>
+</ul>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:45:41.000Z" itemprop="dateUpdated">2018-04-17 12:45:41</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Hive/Hive--Overview.html" target="_blank" rel="external">http://xiejm.com/Hive/Hive--Overview.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hive/">Hive</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--Overview.html&title=《Hive--概述》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--Overview.html&title=《Hive--概述》 — 云筑小站&source=脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--Overview.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive--概述》 — 云筑小站&url=http://xiejm.com/Hive/Hive--Overview.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--Overview.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/Hive/Hive--UDF.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hive--UDF开发</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/MySQL/MySQL--Source_Install.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">MySQL 5.6基于Linux源码编译安装</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--Overview.html&title=《Hive--概述》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--Overview.html&title=《Hive--概述》 — 云筑小站&source=脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--Overview.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive--概述》 — 云筑小站&url=http://xiejm.com/Hive/Hive--Overview.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--Overview.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABvklEQVR42u3aSW6DQBAFUN//0mRrKTH8qh7A0euVZdrw8KJUQ79e8Tre1vs35zt/70nuMGHh4uIOc4/T9Yn7CXF+9fzzuQEXF3c/N3/M+Z5qyMv34OLiPpl7EWjicIaLi/ufuFXKeCmFi4t7FzcpfvKi5RG1Gi4u7gC3l6DM/bykv4uLi9viHsWV3yEZrpSfjouLu4WbB5ReClJNhpIyCRcXdzW3V5ZUG6DjLzZUReHi4ha5nwJZ3hapHsKYkDbh4uIu5o4PUZKX7N3hDwMuLu5juEnakYfC3hgGFxd3Jzf5Wf7I6tGK6tgGFxd3D3ck+egNUap7oriLi4u7mJsHtV47tTpwvSh+cHFxF3B7rZBZSUz1NXBxcXdyq+PPuU3SvBDCxcW9l1ttdlQLm8nnyHBxcTdyq0cxjtYqp1C4uLjbudWaaUVyc3EHXFzcxdxe0CkfmCj+NRPmObi4uAPcXotz5LdJqjThubi4uMPcPHj1xip50yS6iouLu5GbD1HmHsyaVhvh4uI+gJunMr3SCxcX97u41cMZUdd2ZPKDi4u7jNs86Vkc01YPhuLi4t7FrVYc463P3tgGFxd3C/cH27oLCbb3dDgAAAAASUVORK5CYII=" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>

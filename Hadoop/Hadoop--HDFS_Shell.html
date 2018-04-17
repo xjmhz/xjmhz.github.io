@@ -1,0 +1,484 @@
+<!DOCTYPE html>
+<html>
+<head>
+    
+
+    
+
+    
+
+
+
+    <meta charset="utf-8">
+    
+    
+    <link rel="canonical" href="http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html">
+    
+    
+    <title>Hadoop--HDFS的shell(命令行客户端)操作 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
+    
+    <meta name="theme-color" content="#00bcd4">
+    
+    
+    <meta name="keywords" content="Hadoop">
+    <meta name="description" content="Hadoop有两个常用命令  hadoop 和 hdfs hadoop fs &amp;lt;====&amp;gt; hdfs dfs   这两个命令时相等的 1.hadoop 命令使用                                                                                             image              命令">
+<meta name="keywords" content="Hadoop">
+<meta property="og:type" content="article">
+<meta property="og:title" content="Hadoop--HDFS的shell(命令行客户端)操作">
+<meta property="og:url" content="http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html">
+<meta property="og:site_name" content="云筑小站">
+<meta property="og:description" content="Hadoop有两个常用命令  hadoop 和 hdfs hadoop fs &amp;lt;====&amp;gt; hdfs dfs   这两个命令时相等的 1.hadoop 命令使用                                                                                             image              命令">
+<meta property="og:locale" content="zh-CN">
+<meta property="og:image" content="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/20170920131431.png">
+<meta property="og:updated_time" content="2018-04-17T04:46:01.000Z">
+<meta name="twitter:card" content="summary">
+<meta name="twitter:title" content="Hadoop--HDFS的shell(命令行客户端)操作">
+<meta name="twitter:description" content="Hadoop有两个常用命令  hadoop 和 hdfs hadoop fs &amp;lt;====&amp;gt; hdfs dfs   这两个命令时相等的 1.hadoop 命令使用                                                                                             image              命令">
+<meta name="twitter:image" content="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/20170920131431.png">
+    
+        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
+    
+    <link rel="shortcut icon" href="/favicon.ico">
+    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
+    <script>window.lazyScripts=[]</script>
+
+    <!-- custom head -->
+    
+
+</head>
+
+<body>
+    <div id="loading" class="active"></div>
+
+    <aside id="menu" class="hide" >
+  <div class="inner flex-row-vertical">
+    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
+        <i class="icon icon-lg icon-close"></i>
+    </a>
+    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
+      <div class="brand">
+        <a href="/" class="avatar waves-effect waves-circle waves-light">
+          <img src="/img/avatar.jpg">
+        </a>
+        <hgroup class="introduce">
+          <h5 class="nickname">XieJM</h5>
+          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
+        </hgroup>
+      </div>
+    </div>
+    <div class="scroll-wrap flex-col">
+      <ul class="nav">
+        
+            <li class="waves-block waves-effect">
+              <a href="/"  >
+                <i class="icon icon-lg icon-home"></i>
+                主页
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/archives"  >
+                <i class="icon icon-lg icon-archives"></i>
+                归档
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/tags"  >
+                <i class="icon icon-lg icon-tags"></i>
+                标签
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="/categories"  >
+                <i class="icon icon-lg icon-th-list"></i>
+                分类
+              </a>
+            </li>
+        
+            <li class="waves-block waves-effect">
+              <a href="https://github.com/xjmhz" target="_blank" >
+                <i class="icon icon-lg icon-github"></i>
+                Github
+              </a>
+            </li>
+        
+      </ul>      
+    </div>
+    <footer class="footer">
+    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
+    <p>        
+        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
+        
+        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
+        
+    </p>
+    <p><span>XieJM &copy; 2017 - 2018</span>
+    </p>
+    <p><span>
+            
+            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
+        </span>
+    </p>
+</footer>
+  </div>
+</aside>
+
+    <main id="main">
+        <header class="top-header" id="header">
+    <div class="flex-row">
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
+          <i class="icon icon-lg icon-navicon"></i>
+        </a>
+        <div class="flex-col header-title ellipsis">Hadoop--HDFS的shell(命令行客户端)操作</div>
+        
+        <div class="search-wrap" id="search-wrap">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
+                <i class="icon icon-lg icon-chevron-left"></i>
+            </a>
+            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
+            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
+                <i class="icon icon-lg icon-search"></i>
+            </a>
+        </div>
+        
+        
+        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
+            <i class="icon icon-lg icon-share-alt"></i>
+        </a>
+        
+    </div>
+</header>
+<header class="content-header post-header">
+
+    <div class="container fade-scale">
+        <h1 class="title">Hadoop--HDFS的shell(命令行客户端)操作</h1>
+        <h5 class="subtitle">
+            
+                <time datetime="2017-10-03T13:01:46.000Z" itemprop="datePublished" class="page-time">
+  2017-10-03
+</time>
+
+
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+            
+        </h5>
+    </div>
+
+    
+
+
+</header>
+
+
+<div class="container body-wrap">
+    
+    <aside class="post-widget">
+        <nav class="post-toc-wrap" id="post-toc">
+            <h4>TOC</h4>
+            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-hadoop-命令使用"><span class="post-toc-text">1.hadoop 命令使用</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-常用命令参数介绍"><span class="post-toc-text">2.常用命令参数介绍</span></a></li></ol>
+        </nav>
+    </aside>
+    
+<article id="post-Hadoop/Hadoop--HDFS_Shell"
+  class="post-article article-type-post fade" itemprop="blogPost">
+
+    <div class="post-card">
+        <h1 class="post-card-title">Hadoop--HDFS的shell(命令行客户端)操作</h1>
+        <div class="post-meta">
+            <time class="post-time" title="2017-10-03 21:01:46" datetime="2017-10-03T13:01:46.000Z"  itemprop="datePublished">2017-10-03</time>
+
+            
+	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
+
+
+
+            
+<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
+    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
+</span>
+
+
+        </div>
+        <div class="post-content" id="post-content" itemprop="postContent">
+            <p>Hadoop有两个常用命令  hadoop 和 hdfs</p>
+<p>hadoop fs &lt;====&gt; hdfs dfs   这两个命令时相等的</p>
+<h2 id="1-hadoop-命令使用"><a href="#1-hadoop-命令使用" class="headerlink" title="1.hadoop 命令使用"></a>1.hadoop 命令使用</h2><figure class="image-bubble">
+                <div class="img-lightbox">
+                    <div class="overlay"></div>
+                    <img src="http://wpxiejm.oss-cn-beijing.aliyuncs.com/Note/hadoop/20170920131431.png" alt="image" title="">
+                </div>
+                <div class="image-caption">image</div>
+            </figure>
+<p>命令行客户端支持的命令参数：</p>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 bin]<span class="comment"># hadoop fs</span></span><br><span class="line">Usage: hadoop fs [generic options]</span><br><span class="line">    [-appendToFile &lt;localsrc&gt; ... &lt;dst&gt;]</span><br><span class="line">    [-cat [-ignoreCrc] &lt;src&gt; ...]</span><br><span class="line">    [-checksum &lt;src&gt; ...]</span><br><span class="line">    [-chgrp [-R] GROUP PATH...]</span><br><span class="line">    [-chmod [-R] &lt;MODE[,MODE]... | OCTALMODE&gt; PATH...]</span><br><span class="line">    [-chown [-R] [OWNER][:[GROUP]] PATH...]</span><br><span class="line">    [-copyFromLocal [-f] [-p] [-l] &lt;localsrc&gt; ... &lt;dst&gt;]</span><br><span class="line">    [-copyToLocal [-p] [-ignoreCrc] [-crc] &lt;src&gt; ... &lt;localdst&gt;]</span><br><span class="line">    [-count [-q] [-h] [-v] &lt;path&gt; ...]</span><br><span class="line">    [-cp [-f] [-p | -p[topax]] &lt;src&gt; ... &lt;dst&gt;]</span><br><span class="line">    [-createSnapshot &lt;snapshotDir&gt; [&lt;snapshotName&gt;]]</span><br><span class="line">    [-deleteSnapshot &lt;snapshotDir&gt; &lt;snapshotName&gt;]</span><br><span class="line">    [-df [-h] [&lt;path&gt; ...]]</span><br><span class="line">    [-du [-s] [-h] &lt;path&gt; ...]</span><br><span class="line">    [-expunge]</span><br><span class="line">    [-find &lt;path&gt; ... &lt;expression&gt; ...]</span><br><span class="line">    [-get [-p] [-ignoreCrc] [-crc] &lt;src&gt; ... &lt;localdst&gt;]</span><br><span class="line">    [-getfacl [-R] &lt;path&gt;]</span><br><span class="line">    [-getfattr [-R] &#123;-n name | -d&#125; [-e en] &lt;path&gt;]</span><br><span class="line">    [-getmerge [-nl] &lt;src&gt; &lt;localdst&gt;]</span><br><span class="line">    [-<span class="built_in">help</span> [cmd ...]]</span><br><span class="line">    [-ls [-d] [-h] [-R] [&lt;path&gt; ...]]</span><br><span class="line">    [-mkdir [-p] &lt;path&gt; ...]</span><br><span class="line">    [-moveFromLocal &lt;localsrc&gt; ... &lt;dst&gt;]</span><br><span class="line">    [-moveToLocal &lt;src&gt; &lt;localdst&gt;]</span><br><span class="line">    [-mv &lt;src&gt; ... &lt;dst&gt;]</span><br><span class="line">    [-put [-f] [-p] [-l] &lt;localsrc&gt; ... &lt;dst&gt;]</span><br><span class="line">    [-renameSnapshot &lt;snapshotDir&gt; &lt;oldName&gt; &lt;newName&gt;]</span><br><span class="line">    [-rm [-f] [-r|-R] [-skipTrash] &lt;src&gt; ...]</span><br><span class="line">    [-rmdir [--ignore-fail-on-non-empty] &lt;dir&gt; ...]</span><br><span class="line">    [-setfacl [-R] [&#123;-b|-k&#125; &#123;-m|-x &lt;acl_spec&gt;&#125; &lt;path&gt;]|[--<span class="built_in">set</span> &lt;acl_spec&gt; &lt;path&gt;]]</span><br><span class="line">    [-setfattr &#123;-n name [-v value] | -x name&#125; &lt;path&gt;]</span><br><span class="line">    [-setrep [-R] [-w] &lt;rep&gt; &lt;path&gt; ...]</span><br><span class="line">    [-<span class="built_in">stat</span> [format] &lt;path&gt; ...]</span><br><span class="line">    [-tail [-f] &lt;file&gt;]</span><br><span class="line">    [-<span class="built_in">test</span> -[defsz] &lt;path&gt;]</span><br><span class="line">    [-text [-ignoreCrc] &lt;src&gt; ...]</span><br><span class="line">    [-touchz &lt;path&gt; ...]</span><br><span class="line">    [-usage [cmd ...]]</span><br><span class="line"></span><br><span class="line">Generic options supported are</span><br><span class="line">-conf &lt;configuration file&gt;     specify an application configuration file</span><br><span class="line">-D &lt;property=value&gt;            use value <span class="keyword">for</span> given property</span><br><span class="line">-fs &lt;<span class="built_in">local</span>|namenode:port&gt;      specify a namenode</span><br><span class="line">-jt &lt;<span class="built_in">local</span>|resourcemanager:port&gt;    specify a ResourceManager</span><br><span class="line">-files &lt;comma separated list of files&gt;    specify comma separated files to be copied to the map reduce cluster</span><br><span class="line">-libjars &lt;comma separated list of jars&gt;    specify comma separated jar files to include <span class="keyword">in</span> the classpath.</span><br><span class="line">-archives &lt;comma separated list of archives&gt;    specify comma separated archives to be unarchived on the compute machines.</span><br><span class="line"></span><br><span class="line">The general <span class="built_in">command</span> line syntax is</span><br><span class="line">bin/hadoop <span class="built_in">command</span> [genericOptions] [commandOptions]</span><br></pre></td></tr></table></figure>
+<h2 id="2-常用命令参数介绍"><a href="#2-常用命令参数介绍" class="headerlink" title="2.常用命令参数介绍"></a>2.常用命令参数介绍</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">-<span class="built_in">help</span></span><br><span class="line">功能：输出这个命令参数手册</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">-ls</span><br><span class="line">功能：显示目录信息</span><br><span class="line">示例： hadoop fs -ls hdfs://hadoop001:9000/</span><br><span class="line">备注：这些参数中，所有的hdfs路径都可以简写</span><br><span class="line">--&gt;hadoop fs -ls /   等同于上一条命令的效果</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-mkdir</span><br><span class="line">功能：在hdfs上创建目录</span><br><span class="line">示例：hadoop fs  -mkdir  -p  /aaa/bbb/cc/dd</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-moveFromLocal</span><br><span class="line">功能：从本地剪切粘贴到hdfs</span><br><span class="line">示例：hadoop  fs  -moveFromLocal  /home/hadoop/a.txt  /aaa/bbb/cc/dd</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">--appendToFile</span><br><span class="line">功能：追加一个文件到已经存在的文件末尾</span><br><span class="line">示例：hadoop  fs  -appendToFile  ./hello.txt  hdfs://hadoop001:9000/hello.txt</span><br><span class="line">可以简写为：</span><br><span class="line">Hadoop  fs  -appendToFile  ./hello.txt  /hello.txt</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-cat</span><br><span class="line">功能：显示文件内容</span><br><span class="line">示例：hadoop fs -cat  /hello.txt</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-tail</span><br><span class="line">功能：显示一个文件的末尾</span><br><span class="line">示例：hadoop  fs  -tail  /hello.txt</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-text</span><br><span class="line">功能：以字符形式打印一个文件的内容</span><br><span class="line">示例：hadoop  fs  -text  /hello.txt</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-chgrp</span><br><span class="line">-chmod</span><br><span class="line">-chown</span><br><span class="line">功能：linux文件系统中的用法一样，对文件所属权限</span><br><span class="line">示例：</span><br><span class="line">hadoop  fs  -chmod  666  /hello.txt</span><br><span class="line">hadoop  fs  -chown  someuser:somegrp   /hello.txt</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-copyFromLocal</span><br><span class="line">功能：从本地文件系统中拷贝文件到hdfs路径去</span><br><span class="line">示例：hadoop  fs  -copyFromLocal  ./jdk.tar.gz  /aaa/</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-copyToLocal</span><br><span class="line">功能：从hdfs拷贝到本地</span><br><span class="line">示例：hadoop fs -copyToLocal /aaa/jdk.tar.gz</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-cp</span><br><span class="line">功能：从hdfs的一个路径拷贝hdfs的另一个路径</span><br><span class="line">示例： hadoop  fs  -cp  /aaa/jdk.tar.gz  /bbb/jdk.tar.gz.2</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-mv</span><br><span class="line">功能：在hdfs目录中移动文件</span><br><span class="line">示例： hadoop  fs  -mv  /aaa/jdk.tar.gz  /</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-get</span><br><span class="line">功能：等同于copyToLocal，就是从hdfs下载文件到本地</span><br><span class="line">示例：hadoop fs -get  /aaa/jdk.tar.gz</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-getmerge</span><br><span class="line">功能：合并下载多个文件</span><br><span class="line">示例：比如hdfs的目录 /aaa/下有多个文件:log.1, log.2,log.3,...</span><br><span class="line">hadoop fs -getmerge /aaa/<span class="built_in">log</span>.* ./log.sum</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-put</span><br><span class="line">功能：等同于copyFromLocal</span><br><span class="line">示例：hadoop  fs  -put  /aaa/jdk.tar.gz  /bbb/jdk.tar.gz.2</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-rm</span><br><span class="line">功能：删除文件或文件夹</span><br><span class="line">示例：hadoop fs -rm -r /aaa/bbb/</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-rmdir</span><br><span class="line">功能：删除空目录</span><br><span class="line">示例：hadoop  fs  -rmdir   /aaa/bbb/ccc</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-df</span><br><span class="line">功能：统计文件系统的可用空间信息</span><br><span class="line">示例：hadoop  fs  -df  -h  /</span><br><span class="line"></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># hadoop fs -df -h /</span></span><br><span class="line">Filesystem               Size    Used  Available  Use%</span><br><span class="line">hdfs://hadoop001:9000  15.1 G  17.1 M      7.6 G    0%</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">-du</span><br><span class="line">功能：统计文件夹的大小信息</span><br><span class="line">示例：</span><br><span class="line">hadoop  fs  -du  -s  -h /aaa/*</span><br><span class="line"></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># hadoop fs -du -s -h /aaa/*</span></span><br><span class="line">419.8 K  419.8 K  /aaa/bbbb</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">-count</span><br><span class="line">功能：统计一个指定目录下的文件节点数量</span><br><span class="line">示例：hadoop fs -count /aaa/</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">-setrep</span><br><span class="line">功能：设置hdfs中文件的副本数量</span><br><span class="line">示例：hadoop fs -setrep 3 /aaa/jdk.tar.gz</span><br><span class="line">&lt;这里设置的副本数只是记录在namenode的元数据中，是否真的会有这么多副本，还得看datanode的数量&gt;</span><br></pre></td></tr></table></figure>
+
+        </div>
+
+        <blockquote class="post-copyright">
+    <div class="content">
+        
+<span class="post-time">
+    最后更新时间：<time datetime="2018-04-17T04:46:01.000Z" itemprop="dateUpdated">2018-04-17 12:46:01</time>
+</span><br>
+
+
+        
+        原始链接：<a href="/Hadoop/Hadoop--HDFS_Shell.html" target="_blank" rel="external">http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html</a>
+        
+    </div>
+    <footer>
+        <a href="http://xiejm.com">
+            <img src="/img/avatar.jpg" alt="XieJM">
+            XieJM
+        </a>
+    </footer>
+</blockquote>
+
+        
+
+
+        <div class="post-footer">
+            
+	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li></ul>
+
+
+            
+<div class="page-share-wrap">
+    
+
+<div class="page-share" id="pageShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html&title=《Hadoop--HDFS的shell(命令行客户端)操作》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html&title=《Hadoop--HDFS的shell(命令行客户端)操作》 — 云筑小站&source=脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hadoop--HDFS的shell(命令行客户端)操作》 — 云筑小站&url=http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+
+    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
+        <i class="icon icon-share-alt icon-lg"></i>
+    </a>
+</div>
+
+
+
+        </div>
+    </div>
+
+    
+<nav class="post-nav flex-row flex-justify-between">
+  
+    <div class="waves-block waves-effect prev">
+      <a href="/Hadoop/Hadoop--Fully_Distributed _Mode_HA.html" id="post-prev" class="post-nav-link">
+        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
+        <h4 class="title">Hadoop--集群(Fully Distributed Mode)模式部署+HA</h4>
+      </a>
+    </div>
+  
+
+  
+    <div class="waves-block waves-effect next">
+      <a href="/Hadoop/Hadoop_source_code_building.html" id="post-next" class="post-nav-link">
+        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
+        <h4 class="title">Hadoop 源码编译安装</h4>
+      </a>
+    </div>
+  
+</nav>
+
+
+
+    
+
+
+<section class="comments" id="comments">
+    <div id="disqus_thread"></div>
+    <script>
+    var disqus_shortname = 'true';
+    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
+    </script>
+    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
+</section>
+
+
+
+
+
+
+
+
+
+
+
+
+
+</article>
+
+
+
+</div>
+
+    </main>
+    <div class="mask" id="mask"></div>
+<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
+
+
+
+<div class="global-share" id="globalShare">
+    <ul class="reset share-icons">
+      <li>
+        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html&title=《Hadoop--HDFS的shell(命令行客户端)操作》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
+          <i class="icon icon-weibo"></i>
+        </a>
+      </li>
+      <li>
+        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
+          <i class="icon icon-weixin"></i>
+        </a>
+      </li>
+      <li>
+        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html&title=《Hadoop--HDFS的shell(命令行客户端)操作》 — 云筑小站&source=脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。" data-title=" QQ">
+          <i class="icon icon-qq"></i>
+        </a>
+      </li>
+      <li>
+        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html" data-title=" Facebook">
+          <i class="icon icon-facebook"></i>
+        </a>
+      </li>
+      <li>
+        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hadoop--HDFS的shell(命令行客户端)操作》 — 云筑小站&url=http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html&via=http://xiejm.com" data-title=" Twitter">
+          <i class="icon icon-twitter"></i>
+        </a>
+      </li>
+      <li>
+        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hadoop/Hadoop--HDFS_Shell.html" data-title=" Google+">
+          <i class="icon icon-google-plus"></i>
+        </a>
+      </li>
+    </ul>
+ </div>
+
+
+<div class="page-modal wx-share" id="wxShare">
+    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
+    <p>扫一扫，分享到微信</p>
+    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACKElEQVR42u3aQW6EMAwF0Ln/padSV5VG0G8bRiJ5rKqWEh4Ly87P6xVf79+rd+ff37wPrs+/vu64MDAwHst4n15H95wv/HnP0Yrn9yfvhoGBsQ/jvHQmC09KZ0L6550xMDAwTkvqeVHuNYgYGBgYE8Z5Me0xkrKOgYGBkRfBpLzm+LzpvGwWx8DAeCDjqiHzjp9vzDcwMDAewngXr94Tqh+o/FYYGBhLM5KRMnn16jGLeemPOlwMDIwlGMmj50W5hy80ixgYGBswqjFkte2rbv1XD3lgYGDswEhed36QIvnfZonHwMDYjJG0d9U2brJK8skwMDDWZsw30aoHv+bh6GV7hxgYGA9h9LbpqwFndaC9YBbHwMBYiJHfmgylk2AgCTsLhy0wMDAWYsxjyEmoOWkWD2dxDAyM5RjVLa1eqNlr9cqfAwMDY2lGfkTsquNl+ScrDLEYGBiLMqoLV0fZPJcYrYWBgbEBo9eoVY9z9UpwVIgxMDCWZuRF9r7jXPnom4zfGBgY6zHywbVaQCekJM7EwMDYmdFr7KrLJ7W/0GhiYGAszeg1ZL0wIB9ZL4giMDAwFmLcccBrEjY0W0wMDIylGdUCl2zWfzMExcDA2IeRPzoPO6vjaB5SHq6FgYGxAaMXSVY/Qd72lSMKDAwMjFa42AsGqqUcAwMD4zsHKfLQ9PAzYWBgbMDoDbH5Zv2kKYzAGBgYSzOqwUB1ZJ0EkEnxxcDAWJrxA0PWzFLkRtqLAAAAAElFTkSuQmCC" alt="微信分享二维码">
+</div>
+
+
+
+
+    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
+<script>
+var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
+
+
+</script>
+
+<script src="/js/main.min.js?v=1.6.13"></script>
+
+
+<div class="search-panel" id="search-panel">
+    <ul class="search-result" id="search-result"></ul>
+</div>
+<template id="search-tpl">
+<li class="item">
+    <a href="{path}" class="waves-block waves-effect">
+        <div class="title ellipsis" title="{title}">{title}</div>
+        <div class="flex-row flex-middle">
+            <div class="tags ellipsis">
+                {tags}
+            </div>
+            <time class="flex-col time">{date}</time>
+        </div>
+    </a>
+</li>
+</template>
+
+<script src="/js/search.min.js?v=1.6.13" async></script>
+
+
+
+
+
+
+<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
+
+
+
+<script>
+(function() {
+    var OriginTitile = document.title, titleTime;
+    document.addEventListener('visibilitychange', function() {
+        if (document.hidden) {
+            document.title = 'XieJM's Blog';
+            clearTimeout(titleTime);
+        } else {
+            document.title = 'XieJM's Blog';
+            titleTime = setTimeout(function() {
+                document.title = OriginTitile;
+            },2000);
+        }
+    });
+})();
+</script>
+
+
+
+</body>
+</html>
