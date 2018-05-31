@@ -1,208 +1,156 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    <link rel="canonical" href="http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html">
-    
-    
-    <title>Hadoop伪分布式部署 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <title>Hadoop伪分布式部署 | 云筑小站</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#00bcd4">
-    
-    
-    <meta name="keywords" content="Hadoop">
-    <meta name="description" content="本文主要记录Hadoop伪分布式（Pseudo-Distributed Mode）部署的详细步骤：伪分布模式在“单节点集群”上运行Hadoop，其中所有的守护进程都运行在同一台机器上。该模式在单机模式之上增加了代码调试功能，允许你检查内存使用情况，HDFS输入输出，以及其他的守护进程交互。 1.基本环境 CentOS 6.7 JDK1.7+ Hadoop 2.7.4   系统原始环境特别说明：系统">
-<meta name="keywords" content="Hadoop">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Hadoop伪分布式部署">
-<meta property="og:url" content="http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html">
-<meta property="og:site_name" content="云筑小站">
-<meta property="og:description" content="本文主要记录Hadoop伪分布式（Pseudo-Distributed Mode）部署的详细步骤：伪分布模式在“单节点集群”上运行Hadoop，其中所有的守护进程都运行在同一台机器上。该模式在单机模式之上增加了代码调试功能，允许你检查内存使用情况，HDFS输入输出，以及其他的守护进程交互。 1.基本环境 CentOS 6.7 JDK1.7+ Hadoop 2.7.4   系统原始环境特别说明：系统">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-17T04:46:06.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hadoop伪分布式部署">
-<meta name="twitter:description" content="本文主要记录Hadoop伪分布式（Pseudo-Distributed Mode）部署的详细步骤：伪分布模式在“单节点集群”上运行Hadoop，其中所有的守护进程都运行在同一台机器上。该模式在单机模式之上增加了代码调试功能，允许你检查内存使用情况，HDFS输入输出，以及其他的守护进程交互。 1.基本环境 CentOS 6.7 JDK1.7+ Hadoop 2.7.4   系统原始环境特别说明：系统">
-    
-        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
-    <script>window.lazyScripts=[]</script>
 
-    <!-- custom head -->
+    <meta name="description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Hadoop伪分布式部署 | 云筑小站">
+    <meta name="twitter:description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Hadoop伪分布式部署 | 云筑小站">
+    <meta property="og:description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    
+    <meta name="author" content="XieJM">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/favicon.png">
     
 
+    
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    
+    
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="云筑小站" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html"/>
+
+    
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
+<body class="home-template no-js">
 
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 云筑小站 的主页"><img src="/images/logo.png" width="80" alt="云筑小站 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for 云筑小站">云筑小站</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">分享技术 记录生活</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">文章</a></li>
+            
+              <li class="navigation__item"><a href="/archives">归档</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/xjmhz" title="查看我的GitHub主页" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/img/avatar.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">XieJM</h5>
-          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
-        </hgroup>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+
+<!-- Twitter -->
+
+<!-- instagram -->
+
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
       </div>
+
     </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                归档
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags"  >
-                <i class="icon icon-lg icon-tags"></i>
-                标签
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/categories"  >
-                <i class="icon icon-lg icon-th-list"></i>
-                分类
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/xjmhz" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-      </ul>      
-    </div>
-    <footer class="footer">
-    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
-    <p>        
-        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
-        
-        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
-        
-    </p>
-    <p><span>XieJM &copy; 2017 - 2018</span>
-    </p>
-    <p><span>
-            
-            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
-        </span>
-    </p>
-</footer>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
   </div>
-</aside>
-
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">Hadoop伪分布式部署</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">Hadoop伪分布式部署</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-10-03T06:16:06.000Z" itemprop="datePublished" class="page-time">
-  2017-10-03
-</time>
-
-
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
-
-            
-        </h5>
-    </div>
-
-    
-
-
 </header>
 
 
-<div class="container body-wrap">
-    
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-基本环境"><span class="post-toc-text">1.基本环境</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-JDK安装"><span class="post-toc-text">2.JDK安装</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-创建Hadoop用户"><span class="post-toc-text">3.创建Hadoop用户</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-上传（下载）解压Hadoop包"><span class="post-toc-text">4.上传（下载）解压Hadoop包</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5-配置环境变量"><span class="post-toc-text">5.配置环境变量</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#6-配置SSH"><span class="post-toc-text">6.配置SSH</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#7-配置core-site-xml"><span class="post-toc-text">7.配置core-site.xml</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#8-配置hdfs-site-xml"><span class="post-toc-text">8.配置hdfs-site.xml</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#9-修改mapred-site-xml"><span class="post-toc-text">9.修改mapred-site.xml</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#10-修改yarn-site-xml"><span class="post-toc-text">10.修改yarn-site.xml</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#11-修改slave文件"><span class="post-toc-text">11.修改slave文件</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#12-启动HDFS和YARN"><span class="post-toc-text">12.启动HDFS和YARN</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#13-检查启动进程"><span class="post-toc-text">13.检查启动进程</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#14-验证MapReduce"><span class="post-toc-text">14.验证MapReduce</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#15-参考资料"><span class="post-toc-text">15.参考资料</span></a></li></ol>
-        </nav>
-    </aside>
-    
-<article id="post-Hadoop/Hadoop_Pseudo-Distributed_Mode"
-  class="post-article article-type-post fade" itemprop="blogPost">
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
 
-    <div class="post-card">
-        <h1 class="post-card-title">Hadoop伪分布式部署</h1>
-        <div class="post-meta">
-            <time class="post-time" title="2017-10-03 14:16:06" datetime="2017-10-03T06:16:06.000Z"  itemprop="datePublished">2017-10-03</time>
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-10-03T06:16:06.000Z" class="post-list__meta--date date">2017-10-03</time>
+ &#8226; <span class="post-meta__tags tags">分类&nbsp;
+  <a class="tag-link" href="/tags/Hadoop/">Hadoop</a>
 
-            
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
-
-
-
-            
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
 </span>
+    </div>
+    <h1 class="post-title">Hadoop伪分布式部署</h1>
+  </header>
 
-
-        </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <p>本文主要记录Hadoop伪分布式（Pseudo-Distributed Mode）部署的详细步骤：<br>伪分布模式在“单节点集群”上运行Hadoop，其中所有的守护进程都运行在同一台机器上。该模式在单机模式之上增加了代码调试功能，允许你检查内存使用情况，HDFS输入输出，以及其他的守护进程交互。</p>
+  <section class="post">
+    <p>本文主要记录Hadoop伪分布式（Pseudo-Distributed Mode）部署的详细步骤：<br>伪分布模式在“单节点集群”上运行Hadoop，其中所有的守护进程都运行在同一台机器上。该模式在单机模式之上增加了代码调试功能，允许你检查内存使用情况，HDFS输入输出，以及其他的守护进程交互。</p>
 <h2 id="1-基本环境"><a href="#1-基本环境" class="headerlink" title="1.基本环境"></a>1.基本环境</h2><ul>
 <li>CentOS 6.7</li>
 <li>JDK1.7+</li>
@@ -211,279 +159,143 @@
 <blockquote>
 <p>系统原始环境特别说明：<br>系统选择minimal最小系统安装，并自定义选装以下包：<br>Base System中的Base、Compatbillty libraries、Debugging Tools; Development中的 Development tools</p>
 </blockquote>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#关闭防火墙</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># service iptables stop</span></span><br><span class="line">iptables: Setting chains to policy ACCEPT: filter          [  OK  ]</span><br><span class="line">iptables: Flushing firewall rules:                         [  OK  ]</span><br><span class="line">iptables: Unloading modules:                               [  OK  ]</span><br><span class="line">[root@hadoop001 ~]<span class="comment"># chkconfig iptables off</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭SELINUX</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># sed -i 's#SELINUX=enforcing#SELINUX=disabled#g' /etc/selinux/config</span></span><br><span class="line"><span class="comment">#关闭当前的SELINUX状态,如果不用setenforce那么需要重启系统</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># setenforce 0</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># grep SELINUX=disabled /etc/selinux/config</span></span><br><span class="line">SELINUX=disabled</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#关闭防火墙</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># service iptables stop</span></span><br><span class="line">iptables: Setting chains to policy ACCEPT: filter          [  OK  ]</span><br><span class="line">iptables: Flushing firewall rules:                         [  OK  ]</span><br><span class="line">iptables: Unloading modules:                               [  OK  ]</span><br><span class="line">[root@hadoop001 ~]<span class="comment"># chkconfig iptables off</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#关闭SELINUX</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># sed -i 's#SELINUX=enforcing#SELINUX=disabled#g' /etc/selinux/config</span></span><br><span class="line"><span class="comment">#关闭当前的SELINUX状态,如果不用setenforce那么需要重启系统</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># setenforce 0</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># grep SELINUX=disabled /etc/selinux/config</span></span><br><span class="line">SELINUX=disabled</span><br></pre></td></tr></table></figure>
 <h2 id="2-JDK安装"><a href="#2-JDK安装" class="headerlink" title="2.JDK安装"></a>2.JDK安装</h2><p>本文采用JDK1.7.79,详细安装步骤参考本博客的JDK安装的文章:<a href="http://xiejm.com/Linux/CentOS_setup_JDK.html">JDK安装</a></p>
 <h2 id="3-创建Hadoop用户"><a href="#3-创建Hadoop用户" class="headerlink" title="3.创建Hadoop用户"></a>3.创建Hadoop用户</h2><p>增加ID号为1000的hadoopGroup,增加ID为2000的用户并加入hadoopGroup组</p>
 <p>固定用户和组的ID号是为了用户和组的权限一致，我遇到过一次在两台机器上用户名和组名相同，ID号不同结果导致权限有问题</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># groupadd -g 1000 hadoopGroup</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># useradd -u 2000 -g hadoopGroup hadoop</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># groupadd -g 1000 hadoopGroup</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># useradd -u 2000 -g hadoopGroup hadoop</span></span><br></pre></td></tr></table></figure>
 <p>设置hadoop用户的密码为hadoop，下面的这种方法免去了修改密码时的密码确认</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># echo "hadoop"|passwd --stdin hadoop</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># echo "hadoop"|passwd --stdin hadoop</span></span><br></pre></td></tr></table></figure>
 <p>设置hadoop用户sodu权限</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># vi /etc/sudoers</span></span><br><span class="line">hadoop ALL=(ALL)       ALL</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># vi /etc/sudoers</span></span><br><span class="line">hadoop ALL=(ALL)       ALL</span><br></pre></td></tr></table></figure>
 <h2 id="4-上传（下载）解压Hadoop包"><a href="#4-上传（下载）解压Hadoop包" class="headerlink" title="4.上传（下载）解压Hadoop包"></a>4.上传（下载）解压Hadoop包</h2><p>hadoop-2.7.4.tar.gz包使用rz命令上传或通过wget命令去官网下载</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># mkdir -p /opt/software</span></span><br><span class="line"><span class="comment">#将hadoop安装包放到/opt/software</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># cd /opt/software</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># tar -zxvf hadoop-2.7.4.tar.gz</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#设置软连接</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># ln -s /opt/software/hadoop-2.7.4 /opt/software/hadoop</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#设置hadoop目录所有者、所属组</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># chown -R hadoop:hadoopGroup hadoop/*</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># chown -R hadoop:hadoopGroup hadoop-2.7.4</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># chown -R hadoop:hadoopGroup hadoop-2.7.4/*</span></span><br></pre></td></tr></table></figure>
-<h2 id="5-配置环境变量"><a href="#5-配置环境变量" class="headerlink" title="5.配置环境变量"></a>5.配置环境变量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 software]<span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#按组合键shift+g 或大写G 到最后一行，按字母o  插入下列内容</span></span><br><span class="line">    <span class="comment">#SET HADOOP</span></span><br><span class="line">    exprot HADOOP_HOME=/opt/software/hadoop</span><br><span class="line"><span class="comment">#如果JDK环境变量没有配置，请加入下列内容</span></span><br><span class="line">    <span class="comment">#SET JDK</span></span><br><span class="line">    <span class="built_in">export</span> JAVA_HOME=/usr/java/jdk1.7.0_79</span><br><span class="line">    <span class="built_in">export</span> JRE_HOME=<span class="variable">$JAVA_HOME</span>/jre</span><br><span class="line">    <span class="built_in">export</span> CLASS_PATH=.:<span class="variable">$JAVA_HOME</span>/lib:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置PATH</span></span><br><span class="line">    <span class="built_in">export</span> PATH=<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin:<span class="variable">$&#123;JRE_HOME&#125;</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#添加完成后  :wq 保存</span></span><br><span class="line"><span class="comment">#使修改生效：</span></span><br><span class="line">[root@hadoop001 software]<span class="comment">#source !$</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#验证JDK有效性</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">"1.7.0_79"</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.7.0_79-b15)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)</span><br></pre></td></tr></table></figure>
-<h2 id="6-配置SSH"><a href="#6-配置SSH" class="headerlink" title="6.配置SSH"></a>6.配置SSH</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#检查sshd</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># service sshd status</span></span><br><span class="line">openssh-daemon (pid  1844) is running...</span><br><span class="line">[root@hadoop001 software]<span class="comment"># su - hadoop</span></span><br><span class="line"></span><br><span class="line">[hadoop@hadoop001 ~]<span class="comment"># cd /opt/software/hadoop</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#SSH 免密设置</span></span><br><span class="line"><span class="comment">#由于是伪分布式需要用到ssh localhost的情况，所以需要在本机生成公钥</span></span><br><span class="line">[hadoop@hadoop001 hadoop]$ ssh-keygen -t rsa -P <span class="string">''</span> -f ~/.ssh/id_rsa</span><br><span class="line">[hadoop@hadoop001 hadoop]$ cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br><span class="line">[hadoop@hadoop001 hadoop]$ chmod 0600 ~/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证SSH</span></span><br><span class="line">[hadoop@hadoop001 hadoop]<span class="variable">$ssh</span> hadoop001 date</span><br><span class="line">The authenticity of host <span class="string">'hadoop001 (192.168.137.130)'</span> can<span class="string">'t be established.</span></span><br><span class="line"><span class="string">RSA key fingerprint is 09:f6:4a:f1:a0:bd:79:fd:34:e7:75:94:0b:3c:83:5a.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no)? yes   #第一次回车输入yes</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Warning: Permanently added '</span>hadoop001,192.168.137.130<span class="string">' (RSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">Sun Aug 20 14:22:28 CST 2017</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[hadoop@hadoop001 hadoop]$ssh hadoop001 date   #不需要回车输入yes,即SSH配置成功</span></span><br><span class="line"><span class="string">Sun Aug 20 14:22:29 CST 2017</span></span><br></pre></td></tr></table></figure>
-<h2 id="7-配置core-site-xml"><a href="#7-配置core-site-xml" class="headerlink" title="7.配置core-site.xml"></a>7.配置core-site.xml</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ vi etc/hadoop/core-site.xml</span><br><span class="line"><span class="comment">#配置HDFS地址</span></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hdfs://hadoop001:9000&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="8-配置hdfs-site-xml"><a href="#8-配置hdfs-site-xml" class="headerlink" title="8.配置hdfs-site.xml"></a>8.配置hdfs-site.xml</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ vi etc/hadoop/hdfs-site.xml</span><br><span class="line"><span class="comment">#配置HDFS副本数</span></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hadoop001:50090&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.secondary.https-address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hadoop001:50091&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="9-修改mapred-site-xml"><a href="#9-修改mapred-site-xml" class="headerlink" title="9.修改mapred-site.xml"></a>9.修改mapred-site.xml</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ vi etc/hadoop/mapred-site.xml:</span><br><span class="line"><span class="comment">#设置mapreduce框架为yarn</span></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
-<h2 id="10-修改yarn-site-xml"><a href="#10-修改yarn-site-xml" class="headerlink" title="10.修改yarn-site.xml"></a>10.修改yarn-site.xml</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ etc/hadoop/yarn-site.xml:</span><br><span class="line"></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># mkdir -p /opt/software</span></span><br><span class="line"><span class="comment">#将hadoop安装包放到/opt/software</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># cd /opt/software</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># tar -zxvf hadoop-2.7.4.tar.gz</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#设置软连接</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># ln -s /opt/software/hadoop-2.7.4 /opt/software/hadoop</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#设置hadoop目录所有者、所属组</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># chown -R hadoop:hadoopGroup hadoop/*</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># chown -R hadoop:hadoopGroup hadoop-2.7.4</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># chown -R hadoop:hadoopGroup hadoop-2.7.4/*</span></span><br></pre></td></tr></table></figure>
+<h2 id="5-配置环境变量"><a href="#5-配置环境变量" class="headerlink" title="5.配置环境变量"></a>5.配置环境变量</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 software]<span class="comment"># vim /etc/profile</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#按组合键shift+g 或大写G 到最后一行，按字母o  插入下列内容</span></span><br><span class="line">    <span class="comment">#SET HADOOP</span></span><br><span class="line">    exprot HADOOP_HOME=/opt/software/hadoop</span><br><span class="line"><span class="comment">#如果JDK环境变量没有配置，请加入下列内容</span></span><br><span class="line">    <span class="comment">#SET JDK</span></span><br><span class="line">    <span class="built_in">export</span> JAVA_HOME=/usr/java/jdk1.7.0_79</span><br><span class="line">    <span class="built_in">export</span> JRE_HOME=<span class="variable">$JAVA_HOME</span>/jre</span><br><span class="line">    <span class="built_in">export</span> CLASS_PATH=.:<span class="variable">$JAVA_HOME</span>/lib:<span class="variable">$JAVA_HOME</span>/lib/tools.jar</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置PATH</span></span><br><span class="line">    <span class="built_in">export</span> PATH=<span class="variable">$HADOOP_HOME</span>/bin:<span class="variable">$HADOOP_HOME</span>/sbin:<span class="variable">$&#123;JAVA_HOME&#125;</span>/bin:<span class="variable">$&#123;JRE_HOME&#125;</span>/bin:<span class="variable">$PATH</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#添加完成后  :wq 保存</span></span><br><span class="line"><span class="comment">#使修改生效：</span></span><br><span class="line">[root@hadoop001 software]<span class="comment">#source !$</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#验证JDK有效性</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># java -version</span></span><br><span class="line">java version <span class="string">"1.7.0_79"</span></span><br><span class="line">Java(TM) SE Runtime Environment (build 1.7.0_79-b15)</span><br><span class="line">Java HotSpot(TM) 64-Bit Server VM (build 24.79-b02, mixed mode)</span><br></pre></td></tr></table></figure>
+<h2 id="6-配置SSH"><a href="#6-配置SSH" class="headerlink" title="6.配置SSH"></a>6.配置SSH</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#检查sshd</span></span><br><span class="line">[root@hadoop001 software]<span class="comment"># service sshd status</span></span><br><span class="line">openssh-daemon (pid  1844) is running...</span><br><span class="line">[root@hadoop001 software]<span class="comment"># su - hadoop</span></span><br><span class="line"></span><br><span class="line">[hadoop@hadoop001 ~]<span class="comment"># cd /opt/software/hadoop</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#SSH 免密设置</span></span><br><span class="line"><span class="comment">#由于是伪分布式需要用到ssh localhost的情况，所以需要在本机生成公钥</span></span><br><span class="line">[hadoop@hadoop001 hadoop]$ ssh-keygen -t rsa -P <span class="string">''</span> -f ~/.ssh/id_rsa</span><br><span class="line">[hadoop@hadoop001 hadoop]$ cat ~/.ssh/id_rsa.pub &gt;&gt; ~/.ssh/authorized_keys</span><br><span class="line">[hadoop@hadoop001 hadoop]$ chmod 0600 ~/.ssh/authorized_keys</span><br><span class="line"></span><br><span class="line"><span class="comment"># 验证SSH</span></span><br><span class="line">[hadoop@hadoop001 hadoop]<span class="variable">$ssh</span> hadoop001 date</span><br><span class="line">The authenticity of host <span class="string">'hadoop001 (192.168.137.130)'</span> can<span class="string">'t be established.</span></span><br><span class="line"><span class="string">RSA key fingerprint is 09:f6:4a:f1:a0:bd:79:fd:34:e7:75:94:0b:3c:83:5a.</span></span><br><span class="line"><span class="string">Are you sure you want to continue connecting (yes/no)? yes   #第一次回车输入yes</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">Warning: Permanently added '</span>hadoop001,192.168.137.130<span class="string">' (RSA) to the list of known hosts.</span></span><br><span class="line"><span class="string">Sun Aug 20 14:22:28 CST 2017</span></span><br><span class="line"><span class="string"></span></span><br><span class="line"><span class="string">[hadoop@hadoop001 hadoop]$ssh hadoop001 date   #不需要回车输入yes,即SSH配置成功</span></span><br><span class="line"><span class="string">Sun Aug 20 14:22:29 CST 2017</span></span><br></pre></td></tr></table></figure>
+<h2 id="7-配置core-site-xml"><a href="#7-配置core-site-xml" class="headerlink" title="7.配置core-site.xml"></a>7.配置core-site.xml</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ vi etc/hadoop/core-site.xml</span><br><span class="line"><span class="comment">#配置HDFS地址</span></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;fs.defaultFS&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hdfs://hadoop001:9000&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="8-配置hdfs-site-xml"><a href="#8-配置hdfs-site-xml" class="headerlink" title="8.配置hdfs-site.xml"></a>8.配置hdfs-site.xml</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ vi etc/hadoop/hdfs-site.xml</span><br><span class="line"><span class="comment">#配置HDFS副本数</span></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.replication&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;1&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.secondary.http-address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hadoop001:50090&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;dfs.namenode.secondary.https-address&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;hadoop001:50091&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="9-修改mapred-site-xml"><a href="#9-修改mapred-site-xml" class="headerlink" title="9.修改mapred-site.xml"></a>9.修改mapred-site.xml</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ vi etc/hadoop/mapred-site.xml:</span><br><span class="line"><span class="comment">#设置mapreduce框架为yarn</span></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;mapreduce.framework.name&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;yarn&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
+<h2 id="10-修改yarn-site-xml"><a href="#10-修改yarn-site-xml" class="headerlink" title="10.修改yarn-site.xml"></a>10.修改yarn-site.xml</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ etc/hadoop/yarn-site.xml:</span><br><span class="line"></span><br><span class="line">&lt;configuration&gt;</span><br><span class="line">    &lt;property&gt;</span><br><span class="line">        &lt;name&gt;yarn.nodemanager.aux-services&lt;/name&gt;</span><br><span class="line">        &lt;value&gt;mapreduce_shuffle&lt;/value&gt;</span><br><span class="line">    &lt;/property&gt;</span><br><span class="line">&lt;/configuration&gt;</span><br></pre></td></tr></table></figure>
 <h2 id="11-修改slave文件"><a href="#11-修改slave文件" class="headerlink" title="11.修改slave文件"></a>11.修改slave文件</h2><p>将本机的主机名写入slave节点</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">ehco <span class="string">'hadoop001'</span> &gt;/opt/software/hadoop/etc/hadooop/slave</span><br></pre></td></tr></table></figure>
-<h2 id="12-启动HDFS和YARN"><a href="#12-启动HDFS和YARN" class="headerlink" title="12.启动HDFS和YARN"></a>12.启动HDFS和YARN</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#添加环境变量</span></span><br><span class="line">[hadoop@hadoop001 hadoop]$  vi etc/hadoop/hadoop-env.sh</span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/java/jdk1.7.0_79</span><br><span class="line"></span><br><span class="line">[hadoop@hadoop001 hadoop]$ <span class="built_in">which</span> hdfs</span><br><span class="line">/opt/software/hadoop/bin/hdfs</span><br><span class="line">[hadoop@hadoop001 hadoop]$ hdfs namenode -format</span><br><span class="line">........</span><br><span class="line">17/08/20 16:43:19 INFO common.Storage: Storage directory</span><br><span class="line">/tmp/hadoop-hadoop/dfs/name has been successfully formatted.</span><br><span class="line"></span><br><span class="line">[hadoop@hadoop001 hadoop]$ <span class="built_in">which</span> start-dfs.sh</span><br><span class="line">/opt/software/hadoop/sbin/start-dfs.sh</span><br><span class="line">[hadoop@hadoop001 hadoop]$</span><br><span class="line">[hadoop@hadoop001 hadoop]$ start-dfs.sh</span><br><span class="line">[hadoop@hadoop001 hadoop]$ sbin/start-yarn.sh</span><br><span class="line">[hadoop@hadoop001 hadoop]$ sbin/mr-jobhistory-daemon.sh start historyserver</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ehco <span class="string">'hadoop001'</span> &gt;/opt/software/hadoop/etc/hadooop/slave</span><br></pre></td></tr></table></figure>
+<h2 id="12-启动HDFS和YARN"><a href="#12-启动HDFS和YARN" class="headerlink" title="12.启动HDFS和YARN"></a>12.启动HDFS和YARN</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#添加环境变量</span></span><br><span class="line">[hadoop@hadoop001 hadoop]$  vi etc/hadoop/hadoop-env.sh</span><br><span class="line"><span class="built_in">export</span> JAVA_HOME=/usr/java/jdk1.7.0_79</span><br><span class="line"></span><br><span class="line">[hadoop@hadoop001 hadoop]$ <span class="built_in">which</span> hdfs</span><br><span class="line">/opt/software/hadoop/bin/hdfs</span><br><span class="line">[hadoop@hadoop001 hadoop]$ hdfs namenode -format</span><br><span class="line">........</span><br><span class="line">17/08/20 16:43:19 INFO common.Storage: Storage directory</span><br><span class="line">/tmp/hadoop-hadoop/dfs/name has been successfully formatted.</span><br><span class="line"></span><br><span class="line">[hadoop@hadoop001 hadoop]$ <span class="built_in">which</span> start-dfs.sh</span><br><span class="line">/opt/software/hadoop/sbin/start-dfs.sh</span><br><span class="line">[hadoop@hadoop001 hadoop]$</span><br><span class="line">[hadoop@hadoop001 hadoop]$ start-dfs.sh</span><br><span class="line">[hadoop@hadoop001 hadoop]$ sbin/start-yarn.sh</span><br><span class="line">[hadoop@hadoop001 hadoop]$ sbin/mr-jobhistory-daemon.sh start historyserver</span><br></pre></td></tr></table></figure>
 <p>如果要结束进程，使用如下命令</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ sbin/stop-yarn.sh</span><br><span class="line">[hadoop@hadoop001 hadoop]$ stop-dfs.sh</span><br><span class="line">[hadoop@hadoop001 hadoop]$ sbin/mr-jobhistory-daemon.sh stop historyserver</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ sbin/stop-yarn.sh</span><br><span class="line">[hadoop@hadoop001 hadoop]$ stop-dfs.sh</span><br><span class="line">[hadoop@hadoop001 hadoop]$ sbin/mr-jobhistory-daemon.sh stop historyserver</span><br></pre></td></tr></table></figure>
 <h2 id="13-检查启动进程"><a href="#13-检查启动进程" class="headerlink" title="13.检查启动进程"></a>13.检查启动进程</h2><p>通过jps命令查看</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ jps</span><br><span class="line">19536 DataNode</span><br><span class="line">19440 NameNode</span><br><span class="line">19876 Jps</span><br><span class="line">19740 SecondaryNameNode</span><br><span class="line">19888 ResourceManager</span><br><span class="line">19345 NodeManager</span><br><span class="line">4613 JobHistoryServer</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[hadoop@hadoop001 hadoop]$ jps</span><br><span class="line">19536 DataNode</span><br><span class="line">19440 NameNode</span><br><span class="line">19876 Jps</span><br><span class="line">19740 SecondaryNameNode</span><br><span class="line">19888 ResourceManager</span><br><span class="line">19345 NodeManager</span><br><span class="line">4613 JobHistoryServer</span><br></pre></td></tr></table></figure>
 <p>通过WebUI查看</p>
 <blockquote>
 <p>Browse the web interface for the NameNode - <a href="http://hadoop001:50070/" target="_blank" rel="noopener"></a><br>Browse the web interface for the ResourceManager - <a href="http://hadoop001:8088/" target="_blank" rel="noopener"></a></p>
 </blockquote>
 <h2 id="14-验证MapReduce"><a href="#14-验证MapReduce" class="headerlink" title="14.验证MapReduce"></a>14.验证MapReduce</h2><p>我们使用hadoop 的mapreduce-examples  jar包来计算PI</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#Run a MapReduce job.</span></span><br><span class="line">[hadoop@hadoop001 mapreduce]$ <span class="built_in">pwd</span></span><br><span class="line">/opt/software/hadoop/share/hadoop/mapreduce</span><br><span class="line">[hadoop@hadoop002 mapreduce]$</span><br><span class="line"></span><br><span class="line">[hadoop@hadoop002 mapreduce]$ ll</span><br><span class="line">-rw-r--r--. 1 hadoop hadoop  301740 Aug 20 15:12 hadoop-mapreduce-examples-2.7.4.jar</span><br><span class="line">[hadoop@hadoop002 mapreduce]$ hadoop jar hadoop-mapreduce-examples-2.7.4.jar pi 5 10</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#Run a MapReduce job.</span></span><br><span class="line">[hadoop@hadoop001 mapreduce]$ <span class="built_in">pwd</span></span><br><span class="line">/opt/software/hadoop/share/hadoop/mapreduce</span><br><span class="line">[hadoop@hadoop002 mapreduce]$</span><br><span class="line"></span><br><span class="line">[hadoop@hadoop002 mapreduce]$ ll</span><br><span class="line">-rw-r--r--. 1 hadoop hadoop  301740 Aug 20 15:12 hadoop-mapreduce-examples-2.7.4.jar</span><br><span class="line">[hadoop@hadoop002 mapreduce]$ hadoop jar hadoop-mapreduce-examples-2.7.4.jar pi 5 10</span><br></pre></td></tr></table></figure>
 <h2 id="15-参考资料"><a href="#15-参考资料" class="headerlink" title="15.参考资料"></a>15.参考资料</h2><p> <a href="http://hadoop.apache.org/docs/stable/hadoop-project-dist/hadoop-common/SingleCluster.html" target="_blank" rel="noopener">Setting up a Single Node Cluster：</a></p>
 
-        </div>
+  </section>
 
-        <blockquote class="post-copyright">
-    <div class="content">
+</article>
+
+<section class="read-more">
+     
         
-<span class="post-time">
-    最后更新时间：<time datetime="2018-04-17T04:46:06.000Z" itemprop="dateUpdated">2018-04-17 12:46:06</time>
-</span><br>
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/Linux/Extended_VM Disk_In_ VMware.html" title="Linux Extended VM Disk In VMware">Linux Extended VM Disk In VMware</a></h2>
+                <p class="excerpt">
+                
+                前言在做大数据相关开发的测试时候，会用到VM虚拟机。用了时间久了以后，虚拟机磁盘爆满，这时就需要给虚拟机磁盘扩容了。
+由于在当初创建虚拟机时选择了LVM分区，给现在扩容带来了便利。
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-03T11:59:04.000Z" class="post-list__meta--date date">2017-10-03</time>
+ &#8226; <span class="post-list__meta--tags tags">于&nbsp;
+  <a class="tag-link" href="/tags/Linux/">Linux</a>
 
+</span><a class="btn-border-small" href="/Linux/Extended_VM Disk_In_ VMware.html">继续阅读</a></div>
+
+            </div>
+        
 
         
-        原始链接：<a href="/Hadoop/Hadoop_Pseudo-Distributed_Mode.html" target="_blank" rel="external">http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html</a>
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/Hive/Hive--install.html" title="Hive--安装">Hive--安装</a></h2>
+                <p class="excerpt">
+                
+                本文主要是Hive部署的详细步骤
+1.基本环境
+CentOS 6.7
+JDK1.8
+Hadoop-2.6.0-cdh5.7.0
+Hive-1.1.0-cdh5.7.0
+
+Hive是基于Hadoop的，Hadoop的部署本文不在复述。
+2.上传解压tar -zxvf Hive-1.1.0-cdh5.7
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-02T15:44:44.000Z" class="post-list__meta--date date">2017-10-02</time>
+ &#8226; <span class="post-list__meta--tags tags">于&nbsp;
+  <a class="tag-link" href="/tags/Hive/">Hive</a>
+
+</span><a class="btn-border-small" href="/Hive/Hive--install.html">继续阅读</a></div>
+
+            </div>
         
-    </div>
-    <footer>
-        <a href="http://xiejm.com">
-            <img src="/img/avatar.jpg" alt="XieJM">
-            XieJM
-        </a>
-    </footer>
-</blockquote>
-
-        
-
-
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hadoop/">Hadoop</a></li></ul>
-
-
-            
-<div class="page-share-wrap">
-    
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html&title=《Hadoop伪分布式部署》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html&title=《Hadoop伪分布式部署》 — 云筑小站&source=脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hadoop伪分布式部署》 — 云筑小站&url=http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html&via=http://xiejm.com" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
+   
+</section>
 
 
 
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
-    </a>
-</div>
-
-
-
-        </div>
-    </div>
-
-    
-<nav class="post-nav flex-row flex-justify-between">
+<section class="post-comments">
   
-    <div class="waves-block waves-effect prev">
-      <a href="/Linux/Extended_VM Disk_In_ VMware.html" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">Linux Extended VM Disk In VMware</h4>
-      </a>
-    </div>
-  
+<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+var cloudTieConfig = {
+  url: document.location.href, 
+  sourceId: "",
+  productKey: "7e456de65fb945698c448c72191454ce",
+  target: "cloud-tie-wrapper"
+};
+var yunManualLoad = true;
+Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
 
-  
-    <div class="waves-block waves-effect next">
-      <a href="/Hive/Hive--install.html" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">Hive--安装</h4>
-      </a>
-    </div>
-  
-</nav>
-
-
-
-    
-
-
-<section class="comments" id="comments">
-    <div id="disqus_thread"></div>
-    <script>
-    var disqus_shortname = 'true';
-    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </section>
 
 
 
 
 
+            <footer class="footer">
+    <span class="footer__copyright">
+        本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+    </span>
+    <span class="footer__copyright">
+        基于 <a href="http://hexo.io">Hexo</a> 搭建，感谢 <a href="https://pages.github.com/">GitHub Pages</a> 提供免费的托管服务
+    </span>
+    <span class="footer__copyright">
+        &copy; 2018 - 本站由 <a href="/">XieJM</a> 创建,
+        使用<a href="https://github.com/skx926/hexo-theme-vno">hexo-theme-vno</a>主题
+    </span>
+</footer>
 
-
-
-
-
-
-
-
-</article>
-
-
-
-</div>
-
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
-
-
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html&title=《Hadoop伪分布式部署》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html&title=《Hadoop伪分布式部署》 — 云筑小站&source=脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hadoop伪分布式部署》 — 云筑小站&url=http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html&via=http://xiejm.com" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hadoop/Hadoop_Pseudo-Distributed_Mode.html" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACIklEQVR42u3aO27DQAwFQN3/0k4bwLD8SG4CaHdUuZAsjgpi+bmu+HrF1+/7339/+uf3t1x/cWFgYDyWkYeVBPR+T/Kf95/gPjYMDIxzGEkqzO9ZlXCT92JgYGBUSdU0Ov98GBgYGKsSa7UOxcDAwOgVsWs7XdWnltXiGBgYD2TkqfD/f//JfAMDA+NRjFfxSl4/GSo0o8LAwNiakSe4SSiTdlshHgwMjE0Z+XpEdfFrVdD3EZa3PDAwMB7ImIwt5824ZCSQx4CBgbErY9XiVx5QdVEjar1hYGBszchJ83SZk3pNPQwMjF0ZefpLXjYvX3tDBQwMjL0Zq05W1VWw6u9yqw4DA2MjRtJ2r5agvVK5mu4LI0wMDIwtGJMKOC9rkyNg9dhaOJ9iYGA8lpE/lqfI/Kn8IFgoYjEwMLZjTEJPFil6VXV54QMDA+MYxuRQWA2xt7QRFbEYGBgHMCaNs2rbrrcU+2XZAgMDYztGdVS5Ko1Onvp4JwYGxgGM3mJEL1H2itgvPAwMjGMYk3Fjb5x5/5byZAMDA2NrxgR2X6ZOWnWFAysGBsamjFfxmrTeeqm2MMLEwMDYlJFf1WSat9gmBS0GBsY5jGpwvcNcr6DNW28YGBgnMHqJr4qvjhPyaDEwMDDyIPLxQD7UvCY+DAyMIxnVZYjJmmzhE2BgYBzA6A0de6uuzVnr/RgVAwNja0b13NUbOlZXK/L0jYGBsTXjB9QZDctC1k+zAAAAAElFTkSuQmCC" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
-<script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
-
-
-</script>
-
-<script src="/js/main.min.js?v=1.6.13"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
         </div>
-    </a>
-</li>
-</template>
+    </div>
 
-<script src="/js/search.min.js?v=1.6.13" async></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="/js/main.js"></script>
 
-
-
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
+     
 <script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = 'XieJM's Blog';
-            clearTimeout(titleTime);
-        } else {
-            document.title = 'XieJM's Blog';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
-        }
-    });
-})();
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-73055515-1', 'auto');
+	ga('send', 'pageview');
 </script>
-
-
 
 </body>
 </html>

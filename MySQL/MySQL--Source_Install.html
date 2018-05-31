@@ -1,208 +1,156 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    <link rel="canonical" href="http://xiejm.com/MySQL/MySQL--Source_Install.html">
-    
-    
-    <title>MySQL 5.6基于Linux源码编译安装 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <title>MySQL 5.6基于Linux源码编译安装 | 云筑小站</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#00bcd4">
-    
-    
-    <meta name="keywords" content="MySQL">
-    <meta name="description" content="MySQL可以通过YUM或其他安装包快速安装，也可以下载源代码编译安装。从源代码编译安装MySQL是有好处，比如可以指定编译生产参数、优化编译、指定安装位置等。 本文的主要内容：  获取源码 系统配置、编译和安装 配置MySQL">
-<meta name="keywords" content="MySQL">
-<meta property="og:type" content="article">
-<meta property="og:title" content="MySQL 5.6基于Linux源码编译安装">
-<meta property="og:url" content="http://xiejm.com/MySQL/MySQL--Source_Install.html">
-<meta property="og:site_name" content="云筑小站">
-<meta property="og:description" content="MySQL可以通过YUM或其他安装包快速安装，也可以下载源代码编译安装。从源代码编译安装MySQL是有好处，比如可以指定编译生产参数、优化编译、指定安装位置等。 本文的主要内容：  获取源码 系统配置、编译和安装 配置MySQL">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-17T04:44:18.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="MySQL 5.6基于Linux源码编译安装">
-<meta name="twitter:description" content="MySQL可以通过YUM或其他安装包快速安装，也可以下载源代码编译安装。从源代码编译安装MySQL是有好处，比如可以指定编译生产参数、优化编译、指定安装位置等。 本文的主要内容：  获取源码 系统配置、编译和安装 配置MySQL">
-    
-        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
-    <script>window.lazyScripts=[]</script>
 
-    <!-- custom head -->
+    <meta name="description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="MySQL 5.6基于Linux源码编译安装 | 云筑小站">
+    <meta name="twitter:description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="MySQL 5.6基于Linux源码编译安装 | 云筑小站">
+    <meta property="og:description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    
+    <meta name="author" content="XieJM">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/favicon.png">
     
 
+    
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    
+    
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="云筑小站" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://xiejm.com/MySQL/MySQL--Source_Install.html"/>
+
+    
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
+<body class="home-template no-js">
 
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 云筑小站 的主页"><img src="/images/logo.png" width="80" alt="云筑小站 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for 云筑小站">云筑小站</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">分享技术 记录生活</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">文章</a></li>
+            
+              <li class="navigation__item"><a href="/archives">归档</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/xjmhz" title="查看我的GitHub主页" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/img/avatar.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">XieJM</h5>
-          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
-        </hgroup>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+
+<!-- Twitter -->
+
+<!-- instagram -->
+
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
       </div>
+
     </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                归档
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags"  >
-                <i class="icon icon-lg icon-tags"></i>
-                标签
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/categories"  >
-                <i class="icon icon-lg icon-th-list"></i>
-                分类
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/xjmhz" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-      </ul>      
-    </div>
-    <footer class="footer">
-    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
-    <p>        
-        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
-        
-        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
-        
-    </p>
-    <p><span>XieJM &copy; 2017 - 2018</span>
-    </p>
-    <p><span>
-            
-            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
-        </span>
-    </p>
-</footer>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
   </div>
-</aside>
-
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">MySQL 5.6基于Linux源码编译安装</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">MySQL 5.6基于Linux源码编译安装</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-10-04T13:43:52.000Z" itemprop="datePublished" class="page-time">
-  2017-10-04
-</time>
-
-
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/数据库/">数据库</a></li></ul>
-
-            
-        </h5>
-    </div>
-
-    
-
-
 </header>
 
 
-<div class="container body-wrap">
-    
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#1-获取源码"><span class="post-toc-text">1. 获取源码</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-系统配置"><span class="post-toc-text">2.系统配置</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-1-检查系统是否有MySQL"><span class="post-toc-text">2.1 检查系统是否有MySQL</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-2-创建用户和组"><span class="post-toc-text">2.2 创建用户和组</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-3-创建MySQL配置文件"><span class="post-toc-text">2.3 创建MySQL配置文件</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#2-4-配置权限"><span class="post-toc-text">2.4 配置权限</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-5-安装"><span class="post-toc-text">2.5 安装</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-6-配置开机启动"><span class="post-toc-text">2.6 配置开机启动</span></a></li><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#2-7-启动MySQL"><span class="post-toc-text">2.7 启动MySQL</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#3-配置MySQL"><span class="post-toc-text">3.配置MySQL</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#3-1-登录"><span class="post-toc-text">3.1 登录</span></a></li></ol></li></ol>
-        </nav>
-    </aside>
-    
-<article id="post-MySQL/MySQL--Source_Install"
-  class="post-article article-type-post fade" itemprop="blogPost">
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
 
-    <div class="post-card">
-        <h1 class="post-card-title">MySQL 5.6基于Linux源码编译安装</h1>
-        <div class="post-meta">
-            <time class="post-time" title="2017-10-04 21:43:52" datetime="2017-10-04T13:43:52.000Z"  itemprop="datePublished">2017-10-04</time>
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-10-04T13:43:52.000Z" class="post-list__meta--date date">2017-10-04</time>
+ &#8226; <span class="post-meta__tags tags">分类&nbsp;
+  <a class="tag-link" href="/tags/MySQL/">MySQL</a>
 
-            
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/数据库/">数据库</a></li></ul>
-
-
-
-            
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
 </span>
+    </div>
+    <h1 class="post-title">MySQL 5.6基于Linux源码编译安装</h1>
+  </header>
 
-
-        </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <p>MySQL可以通过YUM或其他安装包快速安装，也可以下载源代码编译安装。从源代码编译安装MySQL是有好处，比如可以指定编译生产参数、优化编译、指定安装位置等。</p>
+  <section class="post">
+    <p>MySQL可以通过YUM或其他安装包快速安装，也可以下载源代码编译安装。从源代码编译安装MySQL是有好处，比如可以指定编译生产参数、优化编译、指定安装位置等。</p>
 <p>本文的主要内容：</p>
 <ol>
 <li>获取源码</li>
@@ -214,286 +162,145 @@
 <p><a href="http://dev.mysql.com/downloads/mysql/" target="_blank" rel="noopener">http://dev.mysql.com/downloads/mysql/</a></p>
 <p>MySQL的源文件被打包为.tar.gz或.zip格式。在本例中，我下载的源代码文件为’mysql-5.6.23.tar.gz’。</p>
 <p>可以使用tar命令解压文件：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment">#  tar -zxvf mysql-5.6.23.tar.gz -C /usr/local/</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># cd /usr/local/</span></span><br><span class="line">[root@hadoop001 <span class="built_in">local</span>]<span class="comment"># mv mysql-5.6.23-linux-glibc2.5-x86_64 mysql</span></span><br></pre></td></tr></table></figure>
-<h2 id="2-系统配置"><a href="#2-系统配置" class="headerlink" title="2.系统配置"></a>2.系统配置</h2><h3 id="2-1-检查系统是否有MySQL"><a href="#2-1-检查系统是否有MySQL" class="headerlink" title="2.1 检查系统是否有MySQL"></a>2.1 检查系统是否有MySQL</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># ps -ef|grep mysqld</span></span><br><span class="line">root      2493  2423  0 19:48 pts/3    00:00:00 grep mysqld</span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># rpm -qa |grep -i mysql</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment">#  tar -zxvf mysql-5.6.23.tar.gz -C /usr/local/</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># cd /usr/local/</span></span><br><span class="line">[root@hadoop001 <span class="built_in">local</span>]<span class="comment"># mv mysql-5.6.23-linux-glibc2.5-x86_64 mysql</span></span><br></pre></td></tr></table></figure>
+<h2 id="2-系统配置"><a href="#2-系统配置" class="headerlink" title="2.系统配置"></a>2.系统配置</h2><h3 id="2-1-检查系统是否有MySQL"><a href="#2-1-检查系统是否有MySQL" class="headerlink" title="2.1 检查系统是否有MySQL"></a>2.1 检查系统是否有MySQL</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># ps -ef|grep mysqld</span></span><br><span class="line">root      2493  2423  0 19:48 pts/3    00:00:00 grep mysqld</span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># rpm -qa |grep -i mysql</span></span><br></pre></td></tr></table></figure>
 <p>如果有系统自带的MySQL卸载之</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># rpm -qa |grep mysql</span></span><br><span class="line">mysql-libs-5.1.73-5.el6_6.x86_64</span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># rpm -e --nodeps mysql-libs-5.1.73-5.el6_6.x86_64</span></span><br></pre></td></tr></table></figure>
-<h3 id="2-2-创建用户和组"><a href="#2-2-创建用户和组" class="headerlink" title="2.2 创建用户和组"></a>2.2 创建用户和组</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">Create group and user</span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># groupadd -g 101 dba</span></span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># useradd -u 520 -g dba -G root -md /usr/local/mysql mysqladmin</span></span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># id mysqladmin</span></span><br><span class="line">uid=520(mysqladmin) gid=101(dba) groups=101(dba),0(root)</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置mysqladmin用户密码</span></span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># passwd mysqladmin</span></span><br><span class="line">Changing password <span class="keyword">for</span> user mysqladmin.</span><br><span class="line">New UNIX password:</span><br><span class="line">BAD PASSWORD: it is too simplistic/systematic</span><br><span class="line">Retype new UNIX password:</span><br><span class="line">passwd: all authentication tokens updated successfully.</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># rpm -qa |grep mysql</span></span><br><span class="line">mysql-libs-5.1.73-5.el6_6.x86_64</span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># rpm -e --nodeps mysql-libs-5.1.73-5.el6_6.x86_64</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-2-创建用户和组"><a href="#2-2-创建用户和组" class="headerlink" title="2.2 创建用户和组"></a>2.2 创建用户和组</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">Create group and user</span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># groupadd -g 101 dba</span></span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># useradd -u 520 -g dba -G root -md /usr/local/mysql mysqladmin</span></span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># id mysqladmin</span></span><br><span class="line">uid=520(mysqladmin) gid=101(dba) groups=101(dba),0(root)</span><br><span class="line"></span><br><span class="line"><span class="comment">#设置mysqladmin用户密码</span></span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># passwd mysqladmin</span></span><br><span class="line">Changing password <span class="keyword">for</span> user mysqladmin.</span><br><span class="line">New UNIX password:</span><br><span class="line">BAD PASSWORD: it is too simplistic/systematic</span><br><span class="line">Retype new UNIX password:</span><br><span class="line">passwd: all authentication tokens updated successfully.</span><br></pre></td></tr></table></figure>
 <p>复制用户环境变量的初始配置文件至mysqladmin用户的home目录中</p>
 <p>为了解决切换用户显示-bash-4.1$的问题</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># cp /etc/skel/.* /usr/local/mysql</span></span><br></pre></td></tr></table></figure>
-<h3 id="2-3-创建MySQL配置文件"><a href="#2-3-创建MySQL配置文件" class="headerlink" title="2.3 创建MySQL配置文件"></a>2.3 创建MySQL配置文件</h3><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br><span class="line">64</span><br><span class="line">65</span><br><span class="line">66</span><br><span class="line">67</span><br><span class="line">68</span><br><span class="line">69</span><br><span class="line">70</span><br><span class="line">71</span><br><span class="line">72</span><br><span class="line">73</span><br><span class="line">74</span><br><span class="line">75</span><br><span class="line">76</span><br><span class="line">77</span><br><span class="line">78</span><br><span class="line">79</span><br><span class="line">80</span><br><span class="line">81</span><br><span class="line">82</span><br><span class="line">83</span><br><span class="line">84</span><br><span class="line">85</span><br><span class="line">86</span><br><span class="line">87</span><br><span class="line">88</span><br><span class="line">89</span><br><span class="line">90</span><br><span class="line">91</span><br><span class="line">92</span><br><span class="line">93</span><br><span class="line">94</span><br><span class="line">95</span><br><span class="line">96</span><br><span class="line">97</span><br><span class="line">98</span><br><span class="line">99</span><br><span class="line">100</span><br><span class="line">101</span><br><span class="line">102</span><br></pre></td><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># vim /etc/my.cnf</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#把以下配置文件内容复制到/etc/my.cnf中</span></span><br><span class="line"></span><br><span class="line">[client]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /usr/<span class="built_in">local</span>/mysql/data/mysql.sock</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /usr/<span class="built_in">local</span>/mysql/data/mysql.sock</span><br><span class="line">explicit_defaults_for_timestamp=<span class="literal">true</span></span><br><span class="line">skip-external-locking</span><br><span class="line">key_buffer_size = 256M</span><br><span class="line">sort_buffer_size = 2M</span><br><span class="line">read_buffer_size = 2M</span><br><span class="line">read_rnd_buffer_size = 4M</span><br><span class="line">query_cache_size= 32M</span><br><span class="line">max_allowed_packet = 16M</span><br><span class="line">myisam_sort_buffer_size=128M</span><br><span class="line">tmp_table_size=32M</span><br><span class="line"></span><br><span class="line">table_open_cache = 512</span><br><span class="line">thread_cache_size = 8</span><br><span class="line">wait_timeout = 86400</span><br><span class="line">interactive_timeout = 86400</span><br><span class="line">max_connections = 600</span><br><span class="line"></span><br><span class="line"><span class="comment"># Try number of CPU's*2 for thread_concurrency</span></span><br><span class="line"><span class="comment">#thread_concurrency = 32</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#isolation level and default engine </span></span><br><span class="line">default-storage-engine = INNODB</span><br><span class="line">transaction-isolation = READ-COMMITTED</span><br><span class="line"></span><br><span class="line">server-id  = 1</span><br><span class="line">basedir     = /usr/<span class="built_in">local</span>/mysql</span><br><span class="line">datadir     = /usr/<span class="built_in">local</span>/mysql/data</span><br><span class="line">pid-file     = /usr/<span class="built_in">local</span>/mysql/data/hostname.pid</span><br><span class="line"></span><br><span class="line"><span class="comment">#open performance schema</span></span><br><span class="line"><span class="built_in">log</span>-warnings</span><br><span class="line">sysdate-is-now</span><br><span class="line"></span><br><span class="line">binlog_format = MIXED</span><br><span class="line">log_bin_trust_function_creators=1</span><br><span class="line"><span class="built_in">log</span>-error  = /usr/<span class="built_in">local</span>/mysql/data/hostname.err</span><br><span class="line"><span class="built_in">log</span>-bin=/usr/<span class="built_in">local</span>/mysql/arch/mysql-bin</span><br><span class="line"><span class="comment">#other logs</span></span><br><span class="line"><span class="comment">#general_log =1</span></span><br><span class="line"><span class="comment">#general_log_file  = /usr/local/mysql/data/general_log.err</span></span><br><span class="line"><span class="comment">#slow_query_log=1</span></span><br><span class="line"><span class="comment">#slow_query_log_file=/usr/local/mysql/data/slow_log.err</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#for replication slave</span></span><br><span class="line"><span class="comment">#log-slave-updates </span></span><br><span class="line"><span class="comment">#sync_binlog = 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#for innodb options </span></span><br><span class="line">innodb_data_home_dir = /usr/<span class="built_in">local</span>/mysql/data/</span><br><span class="line">innodb_data_file_path = ibdata1:500M:autoextend</span><br><span class="line">innodb_log_group_home_dir = /usr/<span class="built_in">local</span>/mysql/arch</span><br><span class="line">innodb_log_files_in_group = 2</span><br><span class="line">innodb_log_file_size = 200M</span><br><span class="line"></span><br><span class="line">innodb_buffer_pool_size = 2048M</span><br><span class="line">innodb_additional_mem_pool_size = 50M</span><br><span class="line">innodb_log_buffer_size = 16M</span><br><span class="line"></span><br><span class="line">innodb_lock_wait_timeout = 100</span><br><span class="line"><span class="comment">#innodb_thread_concurrency = 0</span></span><br><span class="line">innodb_flush_log_at_trx_commit = 1</span><br><span class="line">innodb_locks_unsafe_for_binlog=1</span><br><span class="line"></span><br><span class="line"><span class="comment">#innodb io features: add for mysql5.5.8</span></span><br><span class="line">performance_schema</span><br><span class="line">innodb_read_io_threads=4</span><br><span class="line">innodb-write-io-threads=4</span><br><span class="line">innodb-io-capacity=200</span><br><span class="line"><span class="comment">#purge threads change default(0) to 1 for purge</span></span><br><span class="line">innodb_purge_threads=1</span><br><span class="line">innodb_use_native_aio=on</span><br><span class="line"></span><br><span class="line"><span class="comment">#case-sensitive file names and separate tablespace</span></span><br><span class="line">innodb_file_per_table = 1</span><br><span class="line">lower_case_table_names=1</span><br><span class="line"></span><br><span class="line">[mysqldump]</span><br><span class="line">quick</span><br><span class="line">max_allowed_packet = 16M</span><br><span class="line"></span><br><span class="line">[mysql]</span><br><span class="line">no-auto-rehash</span><br><span class="line"></span><br><span class="line">[mysqlhotcopy]</span><br><span class="line">interactive-timeout</span><br><span class="line"></span><br><span class="line">[myisamchk]</span><br><span class="line">key_buffer_size = 256M</span><br><span class="line">sort_buffer_size = 256M</span><br><span class="line">read_buffer = 2M</span><br><span class="line">write_buffer = 2M</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># cp /etc/skel/.* /usr/local/mysql</span></span><br></pre></td></tr></table></figure>
+<h3 id="2-3-创建MySQL配置文件"><a href="#2-3-创建MySQL配置文件" class="headerlink" title="2.3 创建MySQL配置文件"></a>2.3 创建MySQL配置文件</h3><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># vim /etc/my.cnf</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#把以下配置文件内容复制到/etc/my.cnf中</span></span><br><span class="line"></span><br><span class="line">[client]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /usr/<span class="built_in">local</span>/mysql/data/mysql.sock</span><br><span class="line"></span><br><span class="line">[mysqld]</span><br><span class="line">port            = 3306</span><br><span class="line">socket          = /usr/<span class="built_in">local</span>/mysql/data/mysql.sock</span><br><span class="line">explicit_defaults_for_timestamp=<span class="literal">true</span></span><br><span class="line">skip-external-locking</span><br><span class="line">key_buffer_size = 256M</span><br><span class="line">sort_buffer_size = 2M</span><br><span class="line">read_buffer_size = 2M</span><br><span class="line">read_rnd_buffer_size = 4M</span><br><span class="line">query_cache_size= 32M</span><br><span class="line">max_allowed_packet = 16M</span><br><span class="line">myisam_sort_buffer_size=128M</span><br><span class="line">tmp_table_size=32M</span><br><span class="line"></span><br><span class="line">table_open_cache = 512</span><br><span class="line">thread_cache_size = 8</span><br><span class="line">wait_timeout = 86400</span><br><span class="line">interactive_timeout = 86400</span><br><span class="line">max_connections = 600</span><br><span class="line"></span><br><span class="line"><span class="comment"># Try number of CPU's*2 for thread_concurrency</span></span><br><span class="line"><span class="comment">#thread_concurrency = 32</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#isolation level and default engine </span></span><br><span class="line">default-storage-engine = INNODB</span><br><span class="line">transaction-isolation = READ-COMMITTED</span><br><span class="line"></span><br><span class="line">server-id  = 1</span><br><span class="line">basedir     = /usr/<span class="built_in">local</span>/mysql</span><br><span class="line">datadir     = /usr/<span class="built_in">local</span>/mysql/data</span><br><span class="line">pid-file     = /usr/<span class="built_in">local</span>/mysql/data/hostname.pid</span><br><span class="line"></span><br><span class="line"><span class="comment">#open performance schema</span></span><br><span class="line"><span class="built_in">log</span>-warnings</span><br><span class="line">sysdate-is-now</span><br><span class="line"></span><br><span class="line">binlog_format = MIXED</span><br><span class="line">log_bin_trust_function_creators=1</span><br><span class="line"><span class="built_in">log</span>-error  = /usr/<span class="built_in">local</span>/mysql/data/hostname.err</span><br><span class="line"><span class="built_in">log</span>-bin=/usr/<span class="built_in">local</span>/mysql/arch/mysql-bin</span><br><span class="line"><span class="comment">#other logs</span></span><br><span class="line"><span class="comment">#general_log =1</span></span><br><span class="line"><span class="comment">#general_log_file  = /usr/local/mysql/data/general_log.err</span></span><br><span class="line"><span class="comment">#slow_query_log=1</span></span><br><span class="line"><span class="comment">#slow_query_log_file=/usr/local/mysql/data/slow_log.err</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#for replication slave</span></span><br><span class="line"><span class="comment">#log-slave-updates </span></span><br><span class="line"><span class="comment">#sync_binlog = 1</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#for innodb options </span></span><br><span class="line">innodb_data_home_dir = /usr/<span class="built_in">local</span>/mysql/data/</span><br><span class="line">innodb_data_file_path = ibdata1:500M:autoextend</span><br><span class="line">innodb_log_group_home_dir = /usr/<span class="built_in">local</span>/mysql/arch</span><br><span class="line">innodb_log_files_in_group = 2</span><br><span class="line">innodb_log_file_size = 200M</span><br><span class="line"></span><br><span class="line">innodb_buffer_pool_size = 2048M</span><br><span class="line">innodb_additional_mem_pool_size = 50M</span><br><span class="line">innodb_log_buffer_size = 16M</span><br><span class="line"></span><br><span class="line">innodb_lock_wait_timeout = 100</span><br><span class="line"><span class="comment">#innodb_thread_concurrency = 0</span></span><br><span class="line">innodb_flush_log_at_trx_commit = 1</span><br><span class="line">innodb_locks_unsafe_for_binlog=1</span><br><span class="line"></span><br><span class="line"><span class="comment">#innodb io features: add for mysql5.5.8</span></span><br><span class="line">performance_schema</span><br><span class="line">innodb_read_io_threads=4</span><br><span class="line">innodb-write-io-threads=4</span><br><span class="line">innodb-io-capacity=200</span><br><span class="line"><span class="comment">#purge threads change default(0) to 1 for purge</span></span><br><span class="line">innodb_purge_threads=1</span><br><span class="line">innodb_use_native_aio=on</span><br><span class="line"></span><br><span class="line"><span class="comment">#case-sensitive file names and separate tablespace</span></span><br><span class="line">innodb_file_per_table = 1</span><br><span class="line">lower_case_table_names=1</span><br><span class="line"></span><br><span class="line">[mysqldump]</span><br><span class="line">quick</span><br><span class="line">max_allowed_packet = 16M</span><br><span class="line"></span><br><span class="line">[mysql]</span><br><span class="line">no-auto-rehash</span><br><span class="line"></span><br><span class="line">[mysqlhotcopy]</span><br><span class="line">interactive-timeout</span><br><span class="line"></span><br><span class="line">[myisamchk]</span><br><span class="line">key_buffer_size = 256M</span><br><span class="line">sort_buffer_size = 256M</span><br><span class="line">read_buffer = 2M</span><br><span class="line">write_buffer = 2M</span><br></pre></td></tr></table></figure>
 <h2 id="2-4-配置权限"><a href="#2-4-配置权限" class="headerlink" title="2.4 配置权限"></a>2.4 配置权限</h2><p>修改my.cnf文件权限</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># chown mysqladmin:dba /etc/my.cnf</span></span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># chmod 640 !$</span></span><br><span class="line">chmod 640 /etc/my.cnf</span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># ll !$</span></span><br><span class="line">ll /etc/my.cnf</span><br><span class="line">-rw-r----- 1 mysqladmin dba 2218 Sep 25 11:30 /etc/my.cnf</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># chown mysqladmin:dba /etc/my.cnf</span></span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># chmod 640 !$</span></span><br><span class="line">chmod 640 /etc/my.cnf</span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># ll !$</span></span><br><span class="line">ll /etc/my.cnf</span><br><span class="line">-rw-r----- 1 mysqladmin dba 2218 Sep 25 11:30 /etc/my.cnf</span><br></pre></td></tr></table></figure>
 <p>修改mysql目录权限</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">## 创建日志存放目录</span></span><br><span class="line">[root@Master ~]$ mkdir /usr/<span class="built_in">local</span>/mysql/arch</span><br><span class="line"></span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># chown -R mysqladmin:dba /usr/local/mysql/</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">## 创建日志存放目录</span></span><br><span class="line">[root@Master ~]$ mkdir /usr/<span class="built_in">local</span>/mysql/arch</span><br><span class="line"></span><br><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># chown -R mysqladmin:dba /usr/local/mysql/</span></span><br></pre></td></tr></table></figure>
 <h3 id="2-5-安装"><a href="#2-5-安装" class="headerlink" title="2.5 安装"></a>2.5 安装</h3><p>安装glibc</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># yum install -y glibc</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line">[root@Master ~]$ su - mysqladmin</span><br><span class="line">[mysqladmin@Master ~]$ scripts/mysql_install_db  --user=mysqladmin --basedir=/usr/<span class="built_in">local</span>/mysql --datadir=/usr/<span class="built_in">local</span>/mysql/data </span><br><span class="line"></span><br><span class="line">WARNING: The host <span class="string">'Master'</span> could not be looked up with /usr/<span class="built_in">local</span>/mysql/bin/resolveip.</span><br><span class="line">This probably means that your libc libraries are not 100 % compatible</span><br><span class="line">with this binary MySQL version. The MySQL daemon, mysqld, should work</span><br><span class="line">normally with the exception that host name resolving will not work.</span><br><span class="line">This means that you should use IP addresses instead of hostnames</span><br><span class="line">when specifying MySQL privileges !</span><br><span class="line"></span><br><span class="line">Installing MySQL system tables...OK</span><br><span class="line"></span><br><span class="line">Filling <span class="built_in">help</span> tables...OK</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master <span class="built_in">local</span>]<span class="comment"># yum install -y glibc</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master ~]$ su - mysqladmin</span><br><span class="line">[mysqladmin@Master ~]$ scripts/mysql_install_db  --user=mysqladmin --basedir=/usr/<span class="built_in">local</span>/mysql --datadir=/usr/<span class="built_in">local</span>/mysql/data </span><br><span class="line"></span><br><span class="line">WARNING: The host <span class="string">'Master'</span> could not be looked up with /usr/<span class="built_in">local</span>/mysql/bin/resolveip.</span><br><span class="line">This probably means that your libc libraries are not 100 % compatible</span><br><span class="line">with this binary MySQL version. The MySQL daemon, mysqld, should work</span><br><span class="line">normally with the exception that host name resolving will not work.</span><br><span class="line">This means that you should use IP addresses instead of hostnames</span><br><span class="line">when specifying MySQL privileges !</span><br><span class="line"></span><br><span class="line">Installing MySQL system tables...OK</span><br><span class="line"></span><br><span class="line">Filling <span class="built_in">help</span> tables...OK</span><br></pre></td></tr></table></figure>
 <p>退出到root用户操作</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[mysqladmin@Master ~]$ <span class="built_in">exit</span></span><br><span class="line"><span class="built_in">logout</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[mysqladmin@Master ~]$ <span class="built_in">exit</span></span><br><span class="line"><span class="built_in">logout</span></span><br></pre></td></tr></table></figure>
 <h3 id="2-6-配置开机启动"><a href="#2-6-配置开机启动" class="headerlink" title="2.6 配置开机启动"></a>2.6 配置开机启动</h3><p>将服务文件拷贝到init.d下，并重命名为mysql</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Master mysql]<span class="comment"># cp support-files/mysql.server /etc/rc.d/init.d/mysql</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master mysql]<span class="comment"># cp support-files/mysql.server /etc/rc.d/init.d/mysql</span></span><br></pre></td></tr></table></figure>
 <p>修改启动文件的执行权限</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@Master mysql]<span class="comment"># chmod +x /etc/rc.d/init.d/mysql</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master mysql]<span class="comment"># chmod +x /etc/rc.d/init.d/mysql</span></span><br></pre></td></tr></table></figure>
 <p>添加MySQL服务启动级别</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@Master mysql]<span class="comment"># chkconfig --del mysql</span></span><br><span class="line">[root@Master mysql]<span class="comment"># chkconfig --add mysql</span></span><br><span class="line">[root@Master mysql]<span class="comment"># chkconfig |grep mysql</span></span><br><span class="line">mysql          	0:off	1:off	2:on	3:on	4:on	5:on	6:off</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master mysql]<span class="comment"># chkconfig --del mysql</span></span><br><span class="line">[root@Master mysql]<span class="comment"># chkconfig --add mysql</span></span><br><span class="line">[root@Master mysql]<span class="comment"># chkconfig |grep mysql</span></span><br><span class="line">mysql          	0:off	1:off	2:on	3:on	4:on	5:on	6:off</span><br></pre></td></tr></table></figure>
 <h3 id="2-7-启动MySQL"><a href="#2-7-启动MySQL" class="headerlink" title="2.7 启动MySQL"></a>2.7 启动MySQL</h3><p>首先要切换到mysqladmin用户下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@Master mysql]<span class="comment"># su - mysqladmin</span></span><br><span class="line">[mysqladmin@Master ~]$ <span class="built_in">pwd</span></span><br><span class="line">/usr/<span class="built_in">local</span>/mysql</span><br><span class="line">[mysqladmin@Master ~]$ mv my.cnf my.cnf.bak</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master mysql]<span class="comment"># su - mysqladmin</span></span><br><span class="line">[mysqladmin@Master ~]$ <span class="built_in">pwd</span></span><br><span class="line">/usr/<span class="built_in">local</span>/mysql</span><br><span class="line">[mysqladmin@Master ~]$ mv my.cnf my.cnf.bak</span><br></pre></td></tr></table></figure>
 <p>执行启动脚本</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">mysqladmin@Master ~]$ bin/mysqld_safe &amp;</span><br><span class="line">[1] 8966</span><br><span class="line">[mysqladmin@Master ~]$ 170925 16:33:51 mysqld_safe Logging to <span class="string">'/usr/local/mysql/data/hostname.err'</span>.</span><br><span class="line">170925 16:33:51 mysqld_safe Starting mysqld daemon with databases from /usr/<span class="built_in">local</span>/mysql/data</span><br><span class="line"></span><br><span class="line">[mysqladmin@Master ~]$</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysqladmin@Master ~]$ bin/mysqld_safe &amp;</span><br><span class="line">[1] 8966</span><br><span class="line">[mysqladmin@Master ~]$ 170925 16:33:51 mysqld_safe Logging to <span class="string">'/usr/local/mysql/data/hostname.err'</span>.</span><br><span class="line">170925 16:33:51 mysqld_safe Starting mysqld daemon with databases from /usr/<span class="built_in">local</span>/mysql/data</span><br><span class="line"></span><br><span class="line">[mysqladmin@Master ~]$</span><br></pre></td></tr></table></figure>
 <p>验证启动进程</p>
 <p>先切换到root用户下</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">[root@Master ~]<span class="comment"># ps -ef|grep mysqld</span></span><br><span class="line">514        4152   4122  0 13:51 pts/0    00:00:00 /bin/sh bin/mysqld_safe</span><br><span class="line">514        4795   4152  1 13:51 pts/0    00:00:03 /usr/<span class="built_in">local</span>/mysql/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql --datadir=/usr/<span class="built_in">local</span>/mysql/data --plugin-dir=/usr/<span class="built_in">local</span>/mysql/lib/plugin --<span class="built_in">log</span>-error=/usr/<span class="built_in">local</span>/mysql/data/hostname.err --pid-file=/usr/<span class="built_in">local</span>/mysql/data/hostname.pid --socket=/usr/<span class="built_in">local</span>/mysql/data/mysql.sock --port=3306</span><br><span class="line">root       4864   4819  0 13:55 pts/1    00:00:00 grep mysqld</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master ~]<span class="comment"># ps -ef|grep mysqld</span></span><br><span class="line">514        4152   4122  0 13:51 pts/0    00:00:00 /bin/sh bin/mysqld_safe</span><br><span class="line">514        4795   4152  1 13:51 pts/0    00:00:03 /usr/<span class="built_in">local</span>/mysql/bin/mysqld --basedir=/usr/<span class="built_in">local</span>/mysql --datadir=/usr/<span class="built_in">local</span>/mysql/data --plugin-dir=/usr/<span class="built_in">local</span>/mysql/lib/plugin --<span class="built_in">log</span>-error=/usr/<span class="built_in">local</span>/mysql/data/hostname.err --pid-file=/usr/<span class="built_in">local</span>/mysql/data/hostname.pid --socket=/usr/<span class="built_in">local</span>/mysql/data/mysql.sock --port=3306</span><br><span class="line">root       4864   4819  0 13:55 pts/1    00:00:00 grep mysqld</span><br></pre></td></tr></table></figure>
 <p>验证3306端口是否被监听</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Master ~]<span class="comment"># netstat -tulnp | grep mysql</span></span><br><span class="line">tcp        0      0 :::3306                     :::*                        LISTEN      4795/mysqld</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master ~]<span class="comment"># netstat -tulnp | grep mysql</span></span><br><span class="line">tcp        0      0 :::3306                     :::*                        LISTEN      4795/mysqld</span><br></pre></td></tr></table></figure>
 <p>查看mysql服务状态</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">[root@Master ~]<span class="comment"># service mysql status</span></span><br><span class="line"> SUCCESS! MySQL running (4795)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@Master ~]<span class="comment"># service mysql status</span></span><br><span class="line"> SUCCESS! MySQL running (4795)</span><br></pre></td></tr></table></figure>
 <p>至此MySQL就安装成功了。yes! give me five!~~~ haha</p>
 <h2 id="3-配置MySQL"><a href="#3-配置MySQL" class="headerlink" title="3.配置MySQL"></a>3.配置MySQL</h2><h3 id="3-1-登录"><a href="#3-1-登录" class="headerlink" title="3.1 登录"></a>3.1 登录</h3><p>使用mysql命令登录</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br></pre></td><td class="code"><pre><span class="line">[mysqladmin@Master ~]$ mysql</span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 1</span><br><span class="line">Server version: 5.6.23-log MySQL Community Server (GPL)</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.</span><br><span class="line"></span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and/or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line"></span><br><span class="line">Type <span class="string">'help;'</span> or <span class="string">'\h'</span> <span class="keyword">for</span> <span class="built_in">help</span>. Type <span class="string">'\c'</span> to clear the current input statement.</span><br><span class="line"></span><br><span class="line">mysql&gt; use mysql;</span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; update user <span class="built_in">set</span> password=password(<span class="string">'123456'</span>) <span class="built_in">where</span> user=<span class="string">'root'</span>;</span><br><span class="line">Query OK, 4 rows affected (0.00 sec)</span><br><span class="line">Rows matched: 4  Changed: 4  Warnings: 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; delete from user <span class="built_in">where</span> user=<span class="string">''</span>;</span><br><span class="line">Query OK, 2 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; flush privileges;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; select user,host from mysql.user;</span><br><span class="line">+------+-----------+</span><br><span class="line">| user | host      |</span><br><span class="line">+------+-----------+</span><br><span class="line">| root | 127.0.0.1 |</span><br><span class="line">| root | ::1       |</span><br><span class="line">| root | localhost |</span><br><span class="line">| root | master    |</span><br><span class="line">+------+-----------+</span><br><span class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[mysqladmin@Master ~]$ mysql</span><br><span class="line">Welcome to the MySQL monitor.  Commands end with ; or \g.</span><br><span class="line">Your MySQL connection id is 1</span><br><span class="line">Server version: 5.6.23-log MySQL Community Server (GPL)</span><br><span class="line"></span><br><span class="line">Copyright (c) 2000, 2015, Oracle and/or its affiliates. All rights reserved.</span><br><span class="line"></span><br><span class="line">Oracle is a registered trademark of Oracle Corporation and/or its</span><br><span class="line">affiliates. Other names may be trademarks of their respective</span><br><span class="line">owners.</span><br><span class="line"></span><br><span class="line">Type <span class="string">'help;'</span> or <span class="string">'\h'</span> <span class="keyword">for</span> <span class="built_in">help</span>. Type <span class="string">'\c'</span> to clear the current input statement.</span><br><span class="line"></span><br><span class="line">mysql&gt; use mysql;</span><br><span class="line">Database changed</span><br><span class="line">mysql&gt; update user <span class="built_in">set</span> password=password(<span class="string">'123456'</span>) <span class="built_in">where</span> user=<span class="string">'root'</span>;</span><br><span class="line">Query OK, 4 rows affected (0.00 sec)</span><br><span class="line">Rows matched: 4  Changed: 4  Warnings: 0</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; delete from user <span class="built_in">where</span> user=<span class="string">''</span>;</span><br><span class="line">Query OK, 2 rows affected (0.00 sec)</span><br><span class="line"></span><br><span class="line">mysql&gt; flush privileges;</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">mysql&gt; select user,host from mysql.user;</span><br><span class="line">+------+-----------+</span><br><span class="line">| user | host      |</span><br><span class="line">+------+-----------+</span><br><span class="line">| root | 127.0.0.1 |</span><br><span class="line">| root | ::1       |</span><br><span class="line">| root | localhost |</span><br><span class="line">| root | master    |</span><br><span class="line">+------+-----------+</span><br><span class="line">4 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
 
-        </div>
+  </section>
 
-        <blockquote class="post-copyright">
-    <div class="content">
+</article>
+
+<section class="read-more">
+     
         
-<span class="post-time">
-    最后更新时间：<time datetime="2018-04-17T04:44:18.000Z" itemprop="dateUpdated">2018-04-17 12:44:18</time>
-</span><br>
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/Hive/Hive--Overview.html" title="Hive--概述">Hive--概述</a></h2>
+                <p class="excerpt">
+                
+                一.Hive是什么
+Hive是使用一种类似于用SQL的查询语言，直接作用在分布式存储系统之上。
+由Facebook开源，解决海量数据结构化的日志数据统计问题
+构建在Hadoop之上的数据仓库：数据存放在HDFS,计算通过YARN和MR
+引擎：Hive QL —&amp;gt; MapReduce  重点关注
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-06T13:17:22.000Z" class="post-list__meta--date date">2017-10-06</time>
+ &#8226; <span class="post-list__meta--tags tags">于&nbsp;
+  <a class="tag-link" href="/tags/Hive/">Hive</a>
 
+</span><a class="btn-border-small" href="/Hive/Hive--Overview.html">继续阅读</a></div>
+
+            </div>
+        
 
         
-        原始链接：<a href="/MySQL/MySQL--Source_Install.html" target="_blank" rel="external">http://xiejm.com/MySQL/MySQL--Source_Install.html</a>
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/Hive/Hive--load_data.html" title="Hive的几种数据导入方式">Hive的几种数据导入方式</a></h2>
+                <p class="excerpt">
+                
+                在Hive中建好表之后，需要记载数据用于后续查询分析操作。本文介绍向Hive表中加载数据的几种方式。
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-03T14:49:38.000Z" class="post-list__meta--date date">2017-10-03</time>
+ &#8226; <span class="post-list__meta--tags tags">于&nbsp;
+  <a class="tag-link" href="/tags/Hive/">Hive</a>
+
+</span><a class="btn-border-small" href="/Hive/Hive--load_data.html">继续阅读</a></div>
+
+            </div>
         
-    </div>
-    <footer>
-        <a href="http://xiejm.com">
-            <img src="/img/avatar.jpg" alt="XieJM">
-            XieJM
-        </a>
-    </footer>
-</blockquote>
-
-        
-
-
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/MySQL/">MySQL</a></li></ul>
-
-
-            
-<div class="page-share-wrap">
-    
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/MySQL/MySQL--Source_Install.html&title=《MySQL 5.6基于Linux源码编译安装》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/MySQL/MySQL--Source_Install.html&title=《MySQL 5.6基于Linux源码编译安装》 — 云筑小站&source=MySQL可以通过YUM或其他安装包快速安装，也可以下载源代码编译安装。从源代码编译安装MySQL是有好处，比如可以指定编译生产参数、优化编译、指定安装位..." data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/MySQL/MySQL--Source_Install.html" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL 5.6基于Linux源码编译安装》 — 云筑小站&url=http://xiejm.com/MySQL/MySQL--Source_Install.html&via=http://xiejm.com" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/MySQL/MySQL--Source_Install.html" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
+   
+</section>
 
 
 
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
-    </a>
-</div>
-
-
-
-        </div>
-    </div>
-
-    
-<nav class="post-nav flex-row flex-justify-between">
+<section class="post-comments">
   
-    <div class="waves-block waves-effect prev">
-      <a href="/Hive/Hive--Overview.html" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">Hive--概述</h4>
-      </a>
-    </div>
-  
+<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+var cloudTieConfig = {
+  url: document.location.href, 
+  sourceId: "",
+  productKey: "7e456de65fb945698c448c72191454ce",
+  target: "cloud-tie-wrapper"
+};
+var yunManualLoad = true;
+Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
 
-  
-    <div class="waves-block waves-effect next">
-      <a href="/Hive/Hive--load_data.html" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">Hive的几种数据导入方式</h4>
-      </a>
-    </div>
-  
-</nav>
-
-
-
-    
-
-
-<section class="comments" id="comments">
-    <div id="disqus_thread"></div>
-    <script>
-    var disqus_shortname = 'true';
-    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </section>
 
 
 
 
 
+            <footer class="footer">
+    <span class="footer__copyright">
+        本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+    </span>
+    <span class="footer__copyright">
+        基于 <a href="http://hexo.io">Hexo</a> 搭建，感谢 <a href="https://pages.github.com/">GitHub Pages</a> 提供免费的托管服务
+    </span>
+    <span class="footer__copyright">
+        &copy; 2018 - 本站由 <a href="/">XieJM</a> 创建,
+        使用<a href="https://github.com/skx926/hexo-theme-vno">hexo-theme-vno</a>主题
+    </span>
+</footer>
 
-
-
-
-
-
-
-
-</article>
-
-
-
-</div>
-
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
-
-
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/MySQL/MySQL--Source_Install.html&title=《MySQL 5.6基于Linux源码编译安装》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/MySQL/MySQL--Source_Install.html&title=《MySQL 5.6基于Linux源码编译安装》 — 云筑小站&source=MySQL可以通过YUM或其他安装包快速安装，也可以下载源代码编译安装。从源代码编译安装MySQL是有好处，比如可以指定编译生产参数、优化编译、指定安装位..." data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/MySQL/MySQL--Source_Install.html" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《MySQL 5.6基于Linux源码编译安装》 — 云筑小站&url=http://xiejm.com/MySQL/MySQL--Source_Install.html&via=http://xiejm.com" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/MySQL/MySQL--Source_Install.html" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACJ0lEQVR42u3awY4aMRAEUP7/p4mUU6QIqGp7o2C/OaGVYebNobbt7scjvp6/rz8//329Wv/q197/5uMnLgwMjK9lPN9e+WO9Z8/WJ8+GgYFxDyMJ2YT0/gUld8xXYmBgYLwKvjxY94YvBgYGRhu4eRwnRWcb7hgYGHcy8pvNSsaVlZv34hgYGF/ImDUG/s3nH+9vYGBg/PeM58K1silNAr14EgwMjKMZ74/S2lGJXUd4bZMAAwPjBkZbceWtgpVXtmsNBgbGGYz2C3sPy/L2w2OvGwMD40sY60Vevh1NYnf2dwwMjBsYSQS3gZsEa3uE9+GgDQMD41BGHnOzNmR7QNaOjkWNAQwMjC9nLOnLvWT+mtotMQYGxtmMpBxsm467BiyG7QcMDIzjGHk47oLlG9eifMTAwDiakWw+c1JS8M1COaJiYGBcwIi2iOUQRltEti8LAwPjHsZKgs2alLPRinYNBgbGeYxkO7qrHJzxIiQGBsbRjFnB1x6ozVoLw2EODAyMgxjrW818tGtWjBb/MTAwMC5jzNoGs7Gw9r4fRi4wMDCOYyx9LS4QZ42HNlcxMDDOY8xumURwfiSXb3dfvlYMDIyjGbOYaxuZeVi3v4aBgXEPY+9QxcqB2lLgYmBgXMD46b7oemH34ZVhYGBglIVdW5kmsVucF2JgYFzMaGM3ieAWhoGBcTOjHcnKByn2NgMwMDDuZMwaA22Z2D7oykgZBgbGQYxf7UQsuuXeeuEAAAAASUVORK5CYII=" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
-<script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
-
-
-</script>
-
-<script src="/js/main.min.js?v=1.6.13"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
         </div>
-    </a>
-</li>
-</template>
+    </div>
 
-<script src="/js/search.min.js?v=1.6.13" async></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="/js/main.js"></script>
 
-
-
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
+     
 <script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = 'XieJM's Blog';
-            clearTimeout(titleTime);
-        } else {
-            document.title = 'XieJM's Blog';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
-        }
-    });
-})();
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-73055515-1', 'auto');
+	ga('send', 'pageview');
 </script>
-
-
 
 </body>
 </html>

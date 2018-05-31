@@ -1,210 +1,156 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    <link rel="canonical" href="http://xiejm.com/Hive/Hive--DDL.html">
-    
-    
-    <title>Hive--数据库和表 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <title>Hive--数据库和表 | 云筑小站</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#00bcd4">
-    
-    
-    <meta name="keywords" content="Hive">
-    <meta name="description" content="本文介绍Hive的数据存储和一些常用DDL、DML操作">
-<meta name="keywords" content="Hive">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Hive--数据库和表">
-<meta property="og:url" content="http://xiejm.com/Hive/Hive--DDL.html">
-<meta property="og:site_name" content="云筑小站">
-<meta property="og:description" content="本文介绍Hive的数据存储和一些常用DDL、DML操作">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:image" content="http://oss.xiejm.com/Note/Hive/201709181543.jpg">
-<meta property="og:updated_time" content="2018-04-17T04:45:30.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Hive--数据库和表">
-<meta name="twitter:description" content="本文介绍Hive的数据存储和一些常用DDL、DML操作">
-<meta name="twitter:image" content="http://oss.xiejm.com/Note/Hive/201709181543.jpg">
-    
-        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
-    <script>window.lazyScripts=[]</script>
 
-    <!-- custom head -->
+    <meta name="description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Hive--数据库和表 | 云筑小站">
+    <meta name="twitter:description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Hive--数据库和表 | 云筑小站">
+    <meta property="og:description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    
+    <meta name="author" content="XieJM">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/favicon.png">
     
 
+    
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    
+    
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="云筑小站" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://xiejm.com/Hive/Hive--DDL.html"/>
+
+    
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
+<body class="home-template no-js">
 
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 云筑小站 的主页"><img src="/images/logo.png" width="80" alt="云筑小站 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for 云筑小站">云筑小站</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">分享技术 记录生活</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">文章</a></li>
+            
+              <li class="navigation__item"><a href="/archives">归档</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/xjmhz" title="查看我的GitHub主页" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/img/avatar.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">XieJM</h5>
-          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
-        </hgroup>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+
+<!-- Twitter -->
+
+<!-- instagram -->
+
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
       </div>
+
     </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                归档
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags"  >
-                <i class="icon icon-lg icon-tags"></i>
-                标签
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/categories"  >
-                <i class="icon icon-lg icon-th-list"></i>
-                分类
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/xjmhz" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-      </ul>      
-    </div>
-    <footer class="footer">
-    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
-    <p>        
-        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
-        
-        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
-        
-    </p>
-    <p><span>XieJM &copy; 2017 - 2018</span>
-    </p>
-    <p><span>
-            
-            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
-        </span>
-    </p>
-</footer>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
   </div>
-</aside>
-
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">Hive--数据库和表</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">Hive--数据库和表</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-10-08T10:23:30.000Z" itemprop="datePublished" class="page-time">
-  2017-10-08
-</time>
-
-
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
-
-            
-        </h5>
-    </div>
-
-    
-
-
 </header>
 
 
-<div class="container body-wrap">
-    
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#数据存储"><span class="post-toc-text">数据存储</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#Hive的DDL和DML操作"><span class="post-toc-text">Hive的DDL和DML操作</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#DDL概述"><span class="post-toc-text">DDL概述</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#DDL示例"><span class="post-toc-text">DDL示例</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-3"><a class="post-toc-link" href="#数据库DDL"><span class="post-toc-text">数据库DDL</span></a></li></ol></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#表DDL"><span class="post-toc-text">表DDL</span></a></li></ol>
-        </nav>
-    </aside>
-    
-<article id="post-Hive/Hive--DDL"
-  class="post-article article-type-post fade" itemprop="blogPost">
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
 
-    <div class="post-card">
-        <h1 class="post-card-title">Hive--数据库和表</h1>
-        <div class="post-meta">
-            <time class="post-time" title="2017-10-08 18:23:30" datetime="2017-10-08T10:23:30.000Z"  itemprop="datePublished">2017-10-08</time>
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-10-08T10:23:30.000Z" class="post-list__meta--date date">2017-10-08</time>
+ &#8226; <span class="post-meta__tags tags">分类&nbsp;
+  <a class="tag-link" href="/tags/Hive/">Hive</a>
 
-            
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/大数据/">大数据</a></li></ul>
-
-
-
-            
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
 </span>
+    </div>
+    <h1 class="post-title">Hive--数据库和表</h1>
+  </header>
 
-
-        </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <p>本文介绍Hive的<code>数据存储</code>和一些常用<code>DDL</code>、<code>DML</code>操作<br><a id="more"></a></p>
+  <section class="post">
+    <p>本文介绍Hive的<code>数据存储</code>和一些常用<code>DDL</code>、<code>DML</code>操作<br><a id="more"></a></p>
 <h2 id="数据存储"><a href="#数据存储" class="headerlink" title="数据存储"></a>数据存储</h2><p>首先需要清楚Hive中的数据存储的位置，一般生产环境中元数据是存放在MySQL等数据库中，因为这些数据要不断更新、修改，不适合存储在HDFS中。<br>而真正的数据是存在HDFS中，这样更有利于对数据做分布式运算。</p>
 <p>Hive中主要包括四类数据模型：<br>Hive中主要包含以下几种数据模型：<strong>Table(表)</strong>，<strong>External Table(外部表)</strong>，<strong>Partition(分区)</strong>，<strong>Bucket(桶)</strong></p>
 <ul>
@@ -218,13 +164,7 @@
 <p>如果创建一个表：emp，当创建成功后在HDFS中会创建<code>/user/hive/warehouse/emp</code>目录(这里假定hive.metastore.warehouse.dir配置为/user/hive/warehouse),<strong>emp表的所有数据都存在这个目录中</strong>。</p>
 <p>如果创建分区表order_partition，指定分区列event_month=201405 ，当创建成功后在HDFS中对应的目录是<code>/user/hive/warehouse/order_partition/event_month=201405</code></p>
 <p>如果将emp表分散到8个桶中，首先对ID列的值计算Hash，对应的Hash值为0-8的HDFS存储路径：/user/hive/warehouse/emp/part-00000;而hash值为2的数据存储的HDFS 目录为：/user/hive/warehouse/emp/part-00002。</p>
-<figure class="image-bubble">
-                <div class="img-lightbox">
-                    <div class="overlay"></div>
-                    <img src="http://oss.xiejm.com/Note/Hive/201709181543.jpg" alt="Hive表结构" title="">
-                </div>
-                <div class="image-caption">Hive表结构</div>
-            </figure>
+<p><img src="http://oss.xiejm.com/Note/Hive/201709181543.jpg" alt="Hive表结构"></p>
 <h2 id="Hive的DDL和DML操作"><a href="#Hive的DDL和DML操作" class="headerlink" title="Hive的DDL和DML操作"></a>Hive的DDL和DML操作</h2><p>名词解释 <code>DDL</code>：Data Definition Language，数据定义语言</p>
 <p>在关系型数据库中的CREATE、DELETE、ALTER，这些都是DDL</p>
 <p>打开官网的<a href="https://cwiki.apache.org/confluence/display/Hive/LanguageManual+DDL" target="_blank" rel="noopener">Hive wiki</a>。在User Documentation有一个DDL文档。</p>
@@ -241,286 +181,144 @@
 <h3 id="数据库DDL"><a href="#数据库DDL" class="headerlink" title="数据库DDL"></a>数据库DDL</h3><ol>
 <li>create database 基本语法</li>
 </ol>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> (<span class="keyword">DATABASE</span>|<span class="keyword">SCHEMA</span>) [<span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span>] database_name</span><br><span class="line">  [<span class="keyword">COMMENT</span> database_comment]</span><br><span class="line">  [LOCATION hdfs_path]</span><br><span class="line">  [<span class="keyword">WITH</span> DBPROPERTIES (property_name=property_value, ...)];</span><br><span class="line">  说明：</span><br><span class="line">  - IF NOT EXISTS：如果不存在则创建</span><br><span class="line">  - <span class="keyword">COMMENT</span>：注释</span><br><span class="line">  - LOCATION：数据库存放目录</span><br><span class="line">  - <span class="keyword">WITH</span> DBPROPERTIES：拓展信息，<span class="keyword">key</span>/<span class="keyword">value</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> (<span class="keyword">DATABASE</span>|<span class="keyword">SCHEMA</span>) [<span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span>] database_name</span><br><span class="line">  [<span class="keyword">COMMENT</span> database_comment]</span><br><span class="line">  [LOCATION hdfs_path]</span><br><span class="line">  [<span class="keyword">WITH</span> DBPROPERTIES (property_name=property_value, ...)];</span><br><span class="line">  说明：</span><br><span class="line">  - IF NOT EXISTS：如果不存在则创建</span><br><span class="line">  - <span class="keyword">COMMENT</span>：注释</span><br><span class="line">  - LOCATION：数据库存放目录</span><br><span class="line">  - <span class="keyword">WITH</span> DBPROPERTIES：拓展信息，<span class="keyword">key</span>/<span class="keyword">value</span></span><br></pre></td></tr></table></figure>
 <p>我们知道hive的数据存储在HDFS件中，默认情况下，其存储在hive配置文件hive-site.xml参数hive.metastore.warehouse.dir指定的目录下，默认值为/user/hive/warehouse，当然我们也可以在创建数据库时，指定LOCATION值来修改默认的路径</p>
 <ol>
 <li>创建数据库</li>
 </ol>
-<figure class="highlight"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; CREATE DATABASE IF NOT EXISTS tsetdb</span><br><span class="line">    &gt;        COMMENT 'add comment:it is my database'</span><br><span class="line">    &gt;        WITH DBPROPERTIES ('create_time'='2017-09-19','creator'='xiejm');</span><br></pre></td></tr></table></figure>
+<figure class="highlight"><table><tr><td class="code"><pre><span class="line">hive&gt; CREATE DATABASE IF NOT EXISTS tsetdb</span><br><span class="line">    &gt;        COMMENT 'add comment:it is my database'</span><br><span class="line">    &gt;        WITH DBPROPERTIES ('create_time'='2017-09-19','creator'='xiejm');</span><br></pre></td></tr></table></figure>
 <p>通过命令dfs -ls /user/hive/warehouse查看文件是否存在</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; dfs -ls /user/hive/warehouse;</span><br><span class="line">Found 1 items</span><br><span class="line">drwxr-xr-x   - root supergroup          0 2017-09-19 13:39 /user/hive/warehouse/testdb.db</span><br><span class="line"></span><br><span class="line">hive&gt;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hive&gt; dfs -ls /user/hive/warehouse;</span><br><span class="line">Found 1 items</span><br><span class="line">drwxr-xr-x   - root supergroup          0 2017-09-19 13:39 /user/hive/warehouse/testdb.db</span><br><span class="line"></span><br><span class="line">hive&gt;</span><br></pre></td></tr></table></figure>
 <ol>
 <li>创建数据库指定的存放目录（LOCATION参数)</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; CREATE DATABASE IF NOT EXISTS tsetdb_local  </span><br><span class="line">    &gt; COMMENT <span class="string">'tsetdb_local '</span>  </span><br><span class="line">    &gt; LOCATION <span class="string">'/user/hadoop'</span>         </span><br><span class="line">    &gt; WITH DBPROPERTIES (<span class="string">'create_time'</span>=<span class="string">'2017-09-19'</span>);</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hive&gt; CREATE DATABASE IF NOT EXISTS tsetdb_local  </span><br><span class="line">    &gt; COMMENT <span class="string">'tsetdb_local '</span>  </span><br><span class="line">    &gt; LOCATION <span class="string">'/user/hadoop'</span>         </span><br><span class="line">    &gt; WITH DBPROPERTIES (<span class="string">'create_time'</span>=<span class="string">'2017-09-19'</span>);</span><br></pre></td></tr></table></figure>
 <p>通过命令dfs -ls /user/hadoop查看，发现并没有生产tsetdb_local.db目录</p>
 <p>再使用命令DESC database database_name查看数据库的创建脚本，对比添加LOCATION参数不同之处</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; desc database testdb;</span><br><span class="line">OK</span><br><span class="line">testdb  hdfs://hadoop001:9000/user/hive/warehouse/testdb.db	root	USER</span><br><span class="line">Time taken: 0.009 seconds, Fetched: 1 row(s)</span><br><span class="line">hive&gt; desc database tsetdb_local;</span><br><span class="line">OK</span><br><span class="line">tsetdb_local    tsetdb_local    hdfs://hadoop001:9000/user/hadoop   root    USER</span><br><span class="line">Time taken: 0.026 seconds, Fetched: 1 row(s)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hive&gt; desc database testdb;</span><br><span class="line">OK</span><br><span class="line">testdb  hdfs://hadoop001:9000/user/hive/warehouse/testdb.db	root	USER</span><br><span class="line">Time taken: 0.009 seconds, Fetched: 1 row(s)</span><br><span class="line">hive&gt; desc database tsetdb_local;</span><br><span class="line">OK</span><br><span class="line">tsetdb_local    tsetdb_local    hdfs://hadoop001:9000/user/hadoop   root    USER</span><br><span class="line">Time taken: 0.026 seconds, Fetched: 1 row(s)</span><br></pre></td></tr></table></figure>
 <p>我们还可以通过到MySQL命令行查hive的元数据信息，查看刚创建的数据库</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br></pre></td><td class="code"><pre><span class="line">mysql&gt; select * from DBS \G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">          DB_ID: 1</span><br><span class="line">           DESC: Default Hive database</span><br><span class="line">DB_LOCATION_URI: hdfs://hadoop001:9000/user/hive/warehouse</span><br><span class="line">           NAME: default</span><br><span class="line">     OWNER_NAME: public</span><br><span class="line">     OWNER_TYPE: ROLE</span><br><span class="line">*************************** 2. row ***************************</span><br><span class="line">          DB_ID: 6</span><br><span class="line">           DESC: NULL</span><br><span class="line">DB_LOCATION_URI: hdfs://hadoop001:9000/user/hive/warehouse/hive.db</span><br><span class="line">           NAME: hive</span><br><span class="line">     OWNER_NAME: root</span><br><span class="line">     OWNER_TYPE: USER</span><br><span class="line"></span><br><span class="line">*************************** 3. row ***************************</span><br><span class="line">          DB_ID: 17</span><br><span class="line">           DESC: NULL</span><br><span class="line">DB_LOCATION_URI: hdfs://hadoop001:9000/user/hive/warehouse/testdb.db</span><br><span class="line">           NAME: testdb</span><br><span class="line">     OWNER_NAME: root</span><br><span class="line">     OWNER_TYPE: USER</span><br><span class="line">*************************** 4. row ***************************</span><br><span class="line">          DB_ID: 21</span><br><span class="line">           DESC: tsetdb_local </span><br><span class="line">DB_LOCATION_URI: hdfs://hadoop001:9000/user/hadoop</span><br><span class="line">           NAME: tsetdb_local</span><br><span class="line">     OWNER_NAME: root</span><br><span class="line">     OWNER_TYPE: USER</span><br><span class="line">9 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">mysql&gt; select * from DBS \G;</span><br><span class="line">*************************** 1. row ***************************</span><br><span class="line">          DB_ID: 1</span><br><span class="line">           DESC: Default Hive database</span><br><span class="line">DB_LOCATION_URI: hdfs://hadoop001:9000/user/hive/warehouse</span><br><span class="line">           NAME: default</span><br><span class="line">     OWNER_NAME: public</span><br><span class="line">     OWNER_TYPE: ROLE</span><br><span class="line">*************************** 2. row ***************************</span><br><span class="line">          DB_ID: 6</span><br><span class="line">           DESC: NULL</span><br><span class="line">DB_LOCATION_URI: hdfs://hadoop001:9000/user/hive/warehouse/hive.db</span><br><span class="line">           NAME: hive</span><br><span class="line">     OWNER_NAME: root</span><br><span class="line">     OWNER_TYPE: USER</span><br><span class="line"></span><br><span class="line">*************************** 3. row ***************************</span><br><span class="line">          DB_ID: 17</span><br><span class="line">           DESC: NULL</span><br><span class="line">DB_LOCATION_URI: hdfs://hadoop001:9000/user/hive/warehouse/testdb.db</span><br><span class="line">           NAME: testdb</span><br><span class="line">     OWNER_NAME: root</span><br><span class="line">     OWNER_TYPE: USER</span><br><span class="line">*************************** 4. row ***************************</span><br><span class="line">          DB_ID: 21</span><br><span class="line">           DESC: tsetdb_local </span><br><span class="line">DB_LOCATION_URI: hdfs://hadoop001:9000/user/hadoop</span><br><span class="line">           NAME: tsetdb_local</span><br><span class="line">     OWNER_NAME: root</span><br><span class="line">     OWNER_TYPE: USER</span><br><span class="line">9 rows <span class="keyword">in</span> <span class="built_in">set</span> (0.00 sec)</span><br></pre></td></tr></table></figure>
 <ol>
 <li>显示现有数据库</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; show databases;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hive&gt; show databases;</span><br></pre></td></tr></table></figure>
 <p>通过上述操作我们发现，default为默认数据库，它在HDFS中的存储路径是<code>/user/hive/warehouse</code>,也就是我们配置文件中指定的默认路径。</p>
 <ol>
 <li>根据条件查询现有数据库</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; show databases like <span class="string">'test*'</span>;</span><br><span class="line">OK</span><br><span class="line">testdb</span><br><span class="line">testdb_anthinfo</span><br><span class="line">testdb_comment</span><br><span class="line">testdb_local</span><br><span class="line">Time taken: 0.005 seconds, Fetched: 4 row(s)</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hive&gt; show databases like <span class="string">'test*'</span>;</span><br><span class="line">OK</span><br><span class="line">testdb</span><br><span class="line">testdb_anthinfo</span><br><span class="line">testdb_comment</span><br><span class="line">testdb_local</span><br><span class="line">Time taken: 0.005 seconds, Fetched: 4 row(s)</span><br></pre></td></tr></table></figure>
 <ol>
 <li>修改数据库</li>
 </ol>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line">ALTER (DATABASE|SCHEMA) database_name SET DBPROPERTIES (property_name=property_value, ...);</span><br><span class="line">ALTER (DATABASE|SCHEMA) database_name SET OWNER [USER|ROLE] user_or_role;</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">ALTER (DATABASE|SCHEMA) database_name SET DBPROPERTIES (property_name=property_value, ...);</span><br><span class="line">ALTER (DATABASE|SCHEMA) database_name SET OWNER [USER|ROLE] user_or_role;</span><br></pre></td></tr></table></figure>
 <p>修改数据的create_time属性</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">hive&gt; alter database testdb <span class="built_in">set</span> dbproperties (<span class="string">'create_time'</span> =<span class="string">'2017-9-11'</span>);</span><br><span class="line">OK</span><br><span class="line">Time taken: 0.046 seconds</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">hive&gt; alter database testdb <span class="built_in">set</span> dbproperties (<span class="string">'create_time'</span> =<span class="string">'2017-9-11'</span>);</span><br><span class="line">OK</span><br><span class="line">Time taken: 0.046 seconds</span><br></pre></td></tr></table></figure>
 <p>7.删除数据库</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">DROP (DATABASE|SCHEMA) [IF EXISTS] database_name [RESTRICT|CASCADE];</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">DROP (DATABASE|SCHEMA) [IF EXISTS] database_name [RESTRICT|CASCADE];</span><br></pre></td></tr></table></figure>
 <p>当删除database_name数据库，默认情况下只能删除空数据库，当数据库为非空时，可以使用drop database databse_name cascade 级联删除。<strong>实际生产中不建议使用cascade参数进行暴力删除</strong></p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment"># 删除空数据库</span></span><br><span class="line">hive&gt; drop database tsetdb_local;</span><br><span class="line">OK</span><br><span class="line">Time taken: 0.507 seconds</span><br><span class="line"></span><br><span class="line"><span class="comment">#删除非空表报错</span></span><br><span class="line">hive&gt; drop database user;</span><br><span class="line">FAILED: Execution Error, <span class="built_in">return</span> code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. InvalidOperationException(message:Database user is not empty. One or more tables exist.)</span><br><span class="line"></span><br><span class="line"><span class="comment">#暴力删除表 加上cascade参数。</span></span><br><span class="line">hive&gt; drop database user cascade;</span><br><span class="line">OK</span><br><span class="line">Time taken: 1.441 seconds</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment"># 删除空数据库</span></span><br><span class="line">hive&gt; drop database tsetdb_local;</span><br><span class="line">OK</span><br><span class="line">Time taken: 0.507 seconds</span><br><span class="line"></span><br><span class="line"><span class="comment">#删除非空表报错</span></span><br><span class="line">hive&gt; drop database user;</span><br><span class="line">FAILED: Execution Error, <span class="built_in">return</span> code 1 from org.apache.hadoop.hive.ql.exec.DDLTask. InvalidOperationException(message:Database user is not empty. One or more tables exist.)</span><br><span class="line"></span><br><span class="line"><span class="comment">#暴力删除表 加上cascade参数。</span></span><br><span class="line">hive&gt; drop database user cascade;</span><br><span class="line">OK</span><br><span class="line">Time taken: 1.441 seconds</span><br></pre></td></tr></table></figure>
 <h2 id="表DDL"><a href="#表DDL" class="headerlink" title="表DDL"></a>表DDL</h2><p>语法基本结构</p>
-<figure class="highlight sql"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">EXTERNAL</span>] <span class="keyword">TABLE</span> [<span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span>] [db_name.]table_name</span><br><span class="line">  [(col_name data_type [<span class="keyword">COMMENT</span> col_comment], ...)]</span><br><span class="line">  [<span class="keyword">COMMENT</span> table_comment]</span><br><span class="line">  [PARTITIONED <span class="keyword">BY</span> (col_name data_type [<span class="keyword">COMMENT</span> col_comment], ...)]</span><br><span class="line">  [</span><br><span class="line">   [<span class="keyword">ROW</span> <span class="keyword">FORMAT</span> row_format]</span><br><span class="line">   [<span class="keyword">STORED</span> <span class="keyword">AS</span> file_format]</span><br><span class="line">  ]</span><br><span class="line">  [LOCATION hdfs_path]</span><br><span class="line">  [<span class="keyword">AS</span> select_statement];</span><br><span class="line">  说明：</span><br><span class="line">  - EXTERNAL：外部表</span><br><span class="line">  - IF NOT EXISTS：表不存在创建</span><br><span class="line">  - db_name：表所属数据库</span><br><span class="line">  - <span class="keyword">COMMENT</span> col_comment：列注释</span><br><span class="line">  - <span class="keyword">COMMENT</span> table_comment：表注释</span><br><span class="line">  - PARTITIONED <span class="keyword">BY</span>：分区字段</span><br><span class="line">  - <span class="keyword">ROW</span> <span class="keyword">FORMAT</span> row_format:行的数据格式</span><br><span class="line">  - <span class="keyword">STORED</span> <span class="keyword">AS</span> file_format:文件存储格式</span><br><span class="line">  - LOCATION hdfs_path：存放路径</span><br><span class="line">  - <span class="keyword">AS</span> select_statement：查询语句为结果集</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> [<span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span>] [db_name.]table_name</span><br><span class="line">  <span class="keyword">LIKE</span> existing_table_or_view_name</span><br><span class="line">  [LOCATION hdfs_path];</span><br><span class="line">  说明：</span><br><span class="line">  - IF NOT EXISTS：表不存在创建</span><br><span class="line">  - db_name：表所属数据库</span><br><span class="line">  - existing_table_or_view_name：结果集为存在的表或者师徒</span><br><span class="line">  - LOCATION hdfs_path：存放路径</span><br></pre></td></tr></table></figure>
+<figure class="highlight sql"><table><tr><td class="code"><pre><span class="line"><span class="keyword">CREATE</span> [<span class="keyword">EXTERNAL</span>] <span class="keyword">TABLE</span> [<span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span>] [db_name.]table_name</span><br><span class="line">  [(col_name data_type [<span class="keyword">COMMENT</span> col_comment], ...)]</span><br><span class="line">  [<span class="keyword">COMMENT</span> table_comment]</span><br><span class="line">  [PARTITIONED <span class="keyword">BY</span> (col_name data_type [<span class="keyword">COMMENT</span> col_comment], ...)]</span><br><span class="line">  [</span><br><span class="line">   [<span class="keyword">ROW</span> <span class="keyword">FORMAT</span> row_format]</span><br><span class="line">   [<span class="keyword">STORED</span> <span class="keyword">AS</span> file_format]</span><br><span class="line">  ]</span><br><span class="line">  [LOCATION hdfs_path]</span><br><span class="line">  [<span class="keyword">AS</span> select_statement];</span><br><span class="line">  说明：</span><br><span class="line">  - EXTERNAL：外部表</span><br><span class="line">  - IF NOT EXISTS：表不存在创建</span><br><span class="line">  - db_name：表所属数据库</span><br><span class="line">  - <span class="keyword">COMMENT</span> col_comment：列注释</span><br><span class="line">  - <span class="keyword">COMMENT</span> table_comment：表注释</span><br><span class="line">  - PARTITIONED <span class="keyword">BY</span>：分区字段</span><br><span class="line">  - <span class="keyword">ROW</span> <span class="keyword">FORMAT</span> row_format:行的数据格式</span><br><span class="line">  - <span class="keyword">STORED</span> <span class="keyword">AS</span> file_format:文件存储格式</span><br><span class="line">  - LOCATION hdfs_path：存放路径</span><br><span class="line">  - <span class="keyword">AS</span> select_statement：查询语句为结果集</span><br><span class="line"></span><br><span class="line"><span class="keyword">CREATE</span> <span class="keyword">TABLE</span> [<span class="keyword">IF</span> <span class="keyword">NOT</span> <span class="keyword">EXISTS</span>] [db_name.]table_name</span><br><span class="line">  <span class="keyword">LIKE</span> existing_table_or_view_name</span><br><span class="line">  [LOCATION hdfs_path];</span><br><span class="line">  说明：</span><br><span class="line">  - IF NOT EXISTS：表不存在创建</span><br><span class="line">  - db_name：表所属数据库</span><br><span class="line">  - existing_table_or_view_name：结果集为存在的表或者师徒</span><br><span class="line">  - LOCATION hdfs_path：存放路径</span><br></pre></td></tr></table></figure>
 
-        </div>
+  </section>
 
-        <blockquote class="post-copyright">
-    <div class="content">
+</article>
+
+<section class="read-more">
+     
         
-<span class="post-time">
-    最后更新时间：<time datetime="2018-04-17T04:45:30.000Z" itemprop="dateUpdated">2018-04-17 12:45:30</time>
-</span><br>
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/Hive/Hive--partition.html" title="Hive的分区表">Hive的分区表</a></h2>
+                <p class="excerpt">
+                
+                本文主要是对Hive分区表的总结，Hive分区表有三种类型：静态单级分区表、静态多级分区表、动态分区表在实际工作中Hive的分区表应用非常多，特别是动态分区表。
+直接上干货！
+静态分区表的使用单级分区表创建新建一个分区表，并导入数据。
+create table order_partition(ord
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-09T07:53:44.000Z" class="post-list__meta--date date">2017-10-09</time>
+ &#8226; <span class="post-list__meta--tags tags">于&nbsp;
+  <a class="tag-link" href="/tags/Hive/">Hive</a>
 
+</span><a class="btn-border-small" href="/Hive/Hive--partition.html">继续阅读</a></div>
+
+            </div>
+        
 
         
-        原始链接：<a href="/Hive/Hive--DDL.html" target="_blank" rel="external">http://xiejm.com/Hive/Hive--DDL.html</a>
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/Hive/Hive--ManagerTableAndExtendTable.html" title="hive内部表与外部表区别详细介绍">hive内部表与外部表区别详细介绍</a></h2>
+                <p class="excerpt">
+                
+                本文记录了Hive的内部表与外部表区别
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-08T06:42:30.000Z" class="post-list__meta--date date">2017-10-08</time>
+ &#8226; <span class="post-list__meta--tags tags">于&nbsp;
+  <a class="tag-link" href="/tags/Hive/">Hive</a>
+
+</span><a class="btn-border-small" href="/Hive/Hive--ManagerTableAndExtendTable.html">继续阅读</a></div>
+
+            </div>
         
-    </div>
-    <footer>
-        <a href="http://xiejm.com">
-            <img src="/img/avatar.jpg" alt="XieJM">
-            XieJM
-        </a>
-    </footer>
-</blockquote>
-
-        
-
-
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Hive/">Hive</a></li></ul>
-
-
-            
-<div class="page-share-wrap">
-    
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--DDL.html&title=《Hive--数据库和表》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--DDL.html&title=《Hive--数据库和表》 — 云筑小站&source=本文介绍Hive的数据存储和一些常用DDL、DML操作" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--DDL.html" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive--数据库和表》 — 云筑小站&url=http://xiejm.com/Hive/Hive--DDL.html&via=http://xiejm.com" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--DDL.html" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
+   
+</section>
 
 
 
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
-    </a>
-</div>
-
-
-
-        </div>
-    </div>
-
-    
-<nav class="post-nav flex-row flex-justify-between">
+<section class="post-comments">
   
-    <div class="waves-block waves-effect prev">
-      <a href="/Hive/Hive--partition.html" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">Hive的分区表</h4>
-      </a>
-    </div>
-  
+<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+var cloudTieConfig = {
+  url: document.location.href, 
+  sourceId: "",
+  productKey: "7e456de65fb945698c448c72191454ce",
+  target: "cloud-tie-wrapper"
+};
+var yunManualLoad = true;
+Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
 
-  
-    <div class="waves-block waves-effect next">
-      <a href="/Hive/Hive--ManagerTableAndExtendTable.html" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">hive内部表与外部表区别详细介绍</h4>
-      </a>
-    </div>
-  
-</nav>
-
-
-
-    
-
-
-<section class="comments" id="comments">
-    <div id="disqus_thread"></div>
-    <script>
-    var disqus_shortname = 'true';
-    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </section>
 
 
 
 
 
+            <footer class="footer">
+    <span class="footer__copyright">
+        本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+    </span>
+    <span class="footer__copyright">
+        基于 <a href="http://hexo.io">Hexo</a> 搭建，感谢 <a href="https://pages.github.com/">GitHub Pages</a> 提供免费的托管服务
+    </span>
+    <span class="footer__copyright">
+        &copy; 2018 - 本站由 <a href="/">XieJM</a> 创建,
+        使用<a href="https://github.com/skx926/hexo-theme-vno">hexo-theme-vno</a>主题
+    </span>
+</footer>
 
-
-
-
-
-
-
-
-</article>
-
-
-
-</div>
-
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
-
-
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Hive/Hive--DDL.html&title=《Hive--数据库和表》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Hive/Hive--DDL.html&title=《Hive--数据库和表》 — 云筑小站&source=本文介绍Hive的数据存储和一些常用DDL、DML操作" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Hive/Hive--DDL.html" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Hive--数据库和表》 — 云筑小站&url=http://xiejm.com/Hive/Hive--DDL.html&via=http://xiejm.com" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Hive/Hive--DDL.html" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAAB0ElEQVR42u3awa6CMBAFUP7/p3lbEx94p9MWTU5XRhQOXUw6tz2OeJwv4/2b1+9fr97f5+o3EwYuLm6be96O98cnn8eu3htwcXH3c68qRqeQJVdzAy4u7vdzx5YySaHExcX9LW61GN23N7i4uN/PTZqfJM7IH7y8V8PFxW1w85Ry3ecl+S4uLu4Q92yPzjyVn4WLi7uFWy061WB0bJv2w3Tg4uJu4SYtSsIajDmKES0uLu5qbr4JOrfk5XHJkd8CFxd3Gbe6/ZlXyrwIXk4HLi7uRm51oVONOZI2KZomXFzcR7n5siYvZ2Nl7jK/wcXF3cLNW53+iyVl7kMhw8XFXcbtLHfG/ltdME1bneHi4ja41dI261zYYCHDxcVdwJ27NVJtk+65heYHFxd3KjePR/vHqvJN1mirFRcXdxm3cyizyuqco/hnkxUXF3cZt1PIklda0gjh4uIu5p7FkYcjScxRaHiSW+Pi4k7ijhWX6iPz30S9Gi4u7hZu53hEdQ46wQouLu5+bvUARE4fe71CvouLi/soNwlQOiHp0XkPXFzch7idxmZs2zU6foGLi7uMmzc/eWiSHPJIFkytXg0XF3eI22pF2mWr2krh4uIu5v4BJG1Xrt0YqUoAAAAASUVORK5CYII=" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
-<script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
-
-
-</script>
-
-<script src="/js/main.min.js?v=1.6.13"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
         </div>
-    </a>
-</li>
-</template>
+    </div>
 
-<script src="/js/search.min.js?v=1.6.13" async></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="/js/main.js"></script>
 
-
-
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
+     
 <script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = 'XieJM's Blog';
-            clearTimeout(titleTime);
-        } else {
-            document.title = 'XieJM's Blog';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
-        }
-    });
-})();
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-73055515-1', 'auto');
+	ga('send', 'pageview');
 </script>
-
-
 
 </body>
 </html>

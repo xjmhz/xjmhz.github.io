@@ -1,209 +1,157 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    <link rel="canonical" href="http://xiejm.com/Python/Python-Base.html">
-    
-    
-    <title>Python 基础 | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <title>Python 基础 | 云筑小站</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#00bcd4">
-    
-    
-    <meta name="keywords" content="Python">
-    <meta name="description" content="Python 基础：定义函数、常用数据结构、条件判断语句、for循环、字符串处理、异常处理、模块引入">
-<meta name="keywords" content="Python">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Python 基础">
-<meta property="og:url" content="http://xiejm.com/Python/Python-Base.html">
-<meta property="og:site_name" content="云筑小站">
-<meta property="og:description" content="Python 基础：定义函数、常用数据结构、条件判断语句、for循环、字符串处理、异常处理、模块引入">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2017-09-14T02:04:14.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Python 基础">
-<meta name="twitter:description" content="Python 基础：定义函数、常用数据结构、条件判断语句、for循环、字符串处理、异常处理、模块引入">
-    
-        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
-    <script>window.lazyScripts=[]</script>
 
-    <!-- custom head -->
+    <meta name="description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Python 基础 | 云筑小站">
+    <meta name="twitter:description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Python 基础 | 云筑小站">
+    <meta property="og:description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    
+    <meta name="author" content="XieJM">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/favicon.png">
     
 
+    
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    
+    
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="云筑小站" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://xiejm.com/Python/Python-Base.html"/>
+
+    
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
+<body class="home-template no-js">
 
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 云筑小站 的主页"><img src="/images/logo.png" width="80" alt="云筑小站 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for 云筑小站">云筑小站</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">分享技术 记录生活</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">文章</a></li>
+            
+              <li class="navigation__item"><a href="/archives">归档</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/xjmhz" title="查看我的GitHub主页" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/img/avatar.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">XieJM</h5>
-          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
-        </hgroup>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+
+<!-- Twitter -->
+
+<!-- instagram -->
+
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
       </div>
+
     </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                归档
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags"  >
-                <i class="icon icon-lg icon-tags"></i>
-                标签
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/categories"  >
-                <i class="icon icon-lg icon-th-list"></i>
-                分类
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/xjmhz" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-      </ul>      
-    </div>
-    <footer class="footer">
-    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
-    <p>        
-        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
-        
-        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
-        
-    </p>
-    <p><span>XieJM &copy; 2017 - 2018</span>
-    </p>
-    <p><span>
-            
-            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
-        </span>
-    </p>
-</footer>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
   </div>
-</aside>
-
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">Python 基础</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">Python 基础</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-09-14T02:04:14.000Z" itemprop="datePublished" class="page-time">
-  2017-09-14
-</time>
-
-
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/tech/">技术</a></li></ul>
-
-            
-        </h5>
-    </div>
-
-    
-
-
 </header>
 
 
-<div class="container body-wrap">
-    
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#1-定义函数："><span class="post-toc-text">1. 定义函数：</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#2-常用数据结构"><span class="post-toc-text">2.常用数据结构</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#3-条件判断语句"><span class="post-toc-text">3.条件判断语句</span></a></li><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#4-for循环"><span class="post-toc-text">4.for循环</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#4-字符串处理"><span class="post-toc-text">4.字符串处理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#5-异常处理"><span class="post-toc-text">5.异常处理</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#6-模块引入"><span class="post-toc-text">6.模块引入</span></a></li></ol></li></ol>
-        </nav>
-    </aside>
-    
-<article id="post-Python/Python-Base"
-  class="post-article article-type-post fade" itemprop="blogPost">
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
 
-    <div class="post-card">
-        <h1 class="post-card-title">Python 基础</h1>
-        <div class="post-meta">
-            <time class="post-time" title="2017-09-14 10:04:14" datetime="2017-09-14T02:04:14.000Z"  itemprop="datePublished">2017-09-14</time>
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-09-14T02:04:14.000Z" class="post-list__meta--date date">2017-09-14</time>
+ &#8226; <span class="post-meta__tags tags">分类&nbsp;
+  <a class="tag-link" href="/tags/Python/">Python</a>
 
-            
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/tech/">技术</a></li></ul>
-
-
-
-            
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
 </span>
+    </div>
+    <h1 class="post-title">Python 基础</h1>
+  </header>
 
-
-        </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <p>Python 基础：定义函数、常用数据结构、条件判断语句、for循环、字符串处理、异常处理、模块引入<br><a id="more"></a></p>
-<h1 id="1-定义函数："><a href="#1-定义函数：" class="headerlink" title="1. 定义函数："></a>1. 定义函数：</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#函数定义格式：def 函数名(参数)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_your_name</span><span class="params">(name)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"badou hadoop study!, your name"</span>, name</span><br><span class="line">    <span class="keyword">return</span> (<span class="string">"%s, is good student"</span> % name)</span><br><span class="line"></span><br><span class="line"><span class="comment">#函数调用格式： 函数名(参数)</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'================='</span></span><br><span class="line"><span class="keyword">print</span> print_your_name(<span class="string">'zhangsan'</span>)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'================='</span></span><br><span class="line"><span class="keyword">print</span> print_your_name(<span class="string">'lisi'</span>)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'================='</span></span><br></pre></td></tr></table></figure>
+  <section class="post">
+    <p>Python 基础：定义函数、常用数据结构、条件判断语句、for循环、字符串处理、异常处理、模块引入<br><a id="more"></a></p>
+<h1 id="1-定义函数："><a href="#1-定义函数：" class="headerlink" title="1. 定义函数："></a>1. 定义函数：</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#!/usr/bin/python</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#函数定义格式：def 函数名(参数)</span></span><br><span class="line"><span class="function"><span class="keyword">def</span> <span class="title">print_your_name</span><span class="params">(name)</span>:</span></span><br><span class="line">    <span class="keyword">print</span> <span class="string">"badou hadoop study!, your name"</span>, name</span><br><span class="line">    <span class="keyword">return</span> (<span class="string">"%s, is good student"</span> % name)</span><br><span class="line"></span><br><span class="line"><span class="comment">#函数调用格式： 函数名(参数)</span></span><br><span class="line"><span class="keyword">print</span> <span class="string">'================='</span></span><br><span class="line"><span class="keyword">print</span> print_your_name(<span class="string">'zhangsan'</span>)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'================='</span></span><br><span class="line"><span class="keyword">print</span> print_your_name(<span class="string">'lisi'</span>)</span><br><span class="line"><span class="keyword">print</span> <span class="string">'================='</span></span><br></pre></td></tr></table></figure>
 <hr>
 <h1 id="2-常用数据结构"><a href="#2-常用数据结构" class="headerlink" title="2.常用数据结构"></a>2.常用数据结构</h1><p>哈希表：hashmap,数组：array,集合：set</p>
 <p>python中：</p>
@@ -212,263 +160,118 @@
 <li>array -&gt; list</li>
 <li>set -&gt; set</li>
 </ul>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#字典代码演示</span></span><br><span class="line"><span class="comment">#dict</span></span><br><span class="line"> color = &#123;<span class="string">"red"</span>:<span class="number">0.2</span>,<span class="string">"green"</span>:<span class="number">0.4</span>,<span class="string">"blue"</span>:<span class="number">0.4</span>&#125;</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">print</span> color [<span class="string">'red'</span>]</span><br><span class="line"> <span class="keyword">print</span> color [<span class="string">'green'</span>]</span><br><span class="line"> </span><br><span class="line"> <span class="comment">#输出结果</span></span><br><span class="line"> <span class="number">0.2</span></span><br><span class="line"> <span class="number">0.4</span></span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#数组代码演示</span></span><br><span class="line"><span class="comment">#list</span></span><br><span class="line">color_list = [<span class="string">'red'</span>,<span class="string">'blue'</span>,<span class="string">'green'</span>,<span class="string">'yellow'</span>]</span><br><span class="line"><span class="keyword">print</span> color_list[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出结果</span></span><br><span class="line">blue</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#集合代码演示</span></span><br><span class="line"><span class="comment">#set</span></span><br><span class="line"><span class="comment">#使用前需声明</span></span><br><span class="line">a_set = set()</span><br><span class="line">a_set.add(<span class="string">'111'</span>)</span><br><span class="line">a_set.add(<span class="string">'222'</span>)</span><br><span class="line">a_set.add(<span class="string">'333'</span>)</span><br><span class="line">a_set.add(<span class="string">'111'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> a_set</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出结果</span></span><br><span class="line">set([<span class="string">'111'</span>,<span class="string">'222'</span>,<span class="string">'333'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#set()的特性：在元素内不会出现重复元素</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#字典代码演示</span></span><br><span class="line"><span class="comment">#dict</span></span><br><span class="line"> color = &#123;<span class="string">"red"</span>:<span class="number">0.2</span>,<span class="string">"green"</span>:<span class="number">0.4</span>,<span class="string">"blue"</span>:<span class="number">0.4</span>&#125;</span><br><span class="line"> </span><br><span class="line"> <span class="keyword">print</span> color [<span class="string">'red'</span>]</span><br><span class="line"> <span class="keyword">print</span> color [<span class="string">'green'</span>]</span><br><span class="line"> </span><br><span class="line"> <span class="comment">#输出结果</span></span><br><span class="line"> <span class="number">0.2</span></span><br><span class="line"> <span class="number">0.4</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#数组代码演示</span></span><br><span class="line"><span class="comment">#list</span></span><br><span class="line">color_list = [<span class="string">'red'</span>,<span class="string">'blue'</span>,<span class="string">'green'</span>,<span class="string">'yellow'</span>]</span><br><span class="line"><span class="keyword">print</span> color_list[<span class="number">2</span>]</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出结果</span></span><br><span class="line">blue</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#集合代码演示</span></span><br><span class="line"><span class="comment">#set</span></span><br><span class="line"><span class="comment">#使用前需声明</span></span><br><span class="line">a_set = set()</span><br><span class="line">a_set.add(<span class="string">'111'</span>)</span><br><span class="line">a_set.add(<span class="string">'222'</span>)</span><br><span class="line">a_set.add(<span class="string">'333'</span>)</span><br><span class="line">a_set.add(<span class="string">'111'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> a_set</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出结果</span></span><br><span class="line">set([<span class="string">'111'</span>,<span class="string">'222'</span>,<span class="string">'333'</span>])</span><br><span class="line"></span><br><span class="line"><span class="comment">#set()的特性：在元素内不会出现重复元素</span></span><br></pre></td></tr></table></figure>
 <hr>
-<h1 id="3-条件判断语句"><a href="#3-条件判断语句" class="headerlink" title="3.条件判断语句"></a>3.条件判断语句</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#if</span></span><br><span class="line"></span><br><span class="line">a=<span class="number">1</span></span><br><span class="line"><span class="keyword">if</span> a &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'a gt 0'</span></span><br><span class="line"><span class="keyword">elif</span> a == <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'a eq 0'</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'a lt 0'</span></span><br><span class="line">    </span><br><span class="line"><span class="comment"># gt: 大于，greater than缩写</span></span><br><span class="line"><span class="comment"># eq: 等于，equality 缩写</span></span><br><span class="line"><span class="comment"># lt: 小于，less-than 缩写</span></span><br></pre></td></tr></table></figure>
+<h1 id="3-条件判断语句"><a href="#3-条件判断语句" class="headerlink" title="3.条件判断语句"></a>3.条件判断语句</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#if</span></span><br><span class="line"></span><br><span class="line">a=<span class="number">1</span></span><br><span class="line"><span class="keyword">if</span> a &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'a gt 0'</span></span><br><span class="line"><span class="keyword">elif</span> a == <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'a eq 0'</span></span><br><span class="line"><span class="keyword">else</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'a lt 0'</span></span><br><span class="line">    </span><br><span class="line"><span class="comment"># gt: 大于，greater than缩写</span></span><br><span class="line"><span class="comment"># eq: 等于，equality 缩写</span></span><br><span class="line"><span class="comment"># lt: 小于，less-than 缩写</span></span><br></pre></td></tr></table></figure>
 <hr>
-<h1 id="4-for循环"><a href="#4-for循环" class="headerlink" title="4.for循环"></a>4.for循环</h1><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br><span class="line">22</span><br><span class="line">23</span><br><span class="line">24</span><br><span class="line">25</span><br><span class="line">26</span><br><span class="line">27</span><br><span class="line">28</span><br><span class="line">29</span><br><span class="line">30</span><br><span class="line">31</span><br><span class="line">32</span><br><span class="line">33</span><br><span class="line">34</span><br><span class="line">35</span><br><span class="line">36</span><br><span class="line">37</span><br><span class="line">38</span><br><span class="line">39</span><br><span class="line">40</span><br><span class="line">41</span><br><span class="line">42</span><br><span class="line">43</span><br><span class="line">44</span><br><span class="line">45</span><br><span class="line">46</span><br><span class="line">47</span><br><span class="line">48</span><br><span class="line">49</span><br><span class="line">50</span><br><span class="line">51</span><br><span class="line">52</span><br><span class="line">53</span><br><span class="line">54</span><br><span class="line">55</span><br><span class="line">56</span><br><span class="line">57</span><br><span class="line">58</span><br><span class="line">59</span><br><span class="line">60</span><br><span class="line">61</span><br><span class="line">62</span><br><span class="line">63</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#for</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#数组</span></span><br><span class="line">a_list = []</span><br><span class="line">a_list.append[<span class="string">'111'</span>]</span><br><span class="line">a_list.append[<span class="string">'222'</span>]</span><br><span class="line">a_list.append[<span class="string">'333'</span>]</span><br><span class="line">a_list.append[<span class="string">'444'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> a_list:</span><br><span class="line">    <span class="keyword">print</span> value</span><br><span class="line">    </span><br><span class="line"><span class="comment">#输出结果</span></span><br><span class="line"><span class="number">111</span></span><br><span class="line"><span class="number">222</span></span><br><span class="line"><span class="number">333</span></span><br><span class="line"><span class="number">444</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#集合 set</span></span><br><span class="line">a_set = set()</span><br><span class="line">a_set.add(<span class="string">'a'</span>)</span><br><span class="line">a_set.add(<span class="string">'b'</span>)</span><br><span class="line">a_set.add(<span class="string">'d'</span>)</span><br><span class="line">a_set.add(<span class="string">'d'</span>)</span><br><span class="line">a_set.add(<span class="string">'e'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> a_set:</span><br><span class="line">    <span class="keyword">print</span> value</span><br><span class="line">    </span><br><span class="line"><span class="comment">#输出结果： set内部通过hash排序，所以输出顺序与追加的item顺序不一致</span></span><br><span class="line"></span><br><span class="line">a</span><br><span class="line">c</span><br><span class="line">b</span><br><span class="line">e</span><br><span class="line">d</span><br><span class="line"></span><br><span class="line"><span class="comment">#字典 dict</span></span><br><span class="line">b_dict = &#123;&#125;</span><br><span class="line">b_dict[<span class="string">'aaa'</span>] = <span class="number">1</span></span><br><span class="line">b_dict[<span class="string">'bbb'</span>] = <span class="number">2</span></span><br><span class="line">b_dict[<span class="string">'ccc'</span>] = <span class="number">3</span></span><br><span class="line">b_dict[<span class="string">'ddd'</span>] = <span class="number">4</span></span><br><span class="line">b_dict[<span class="string">'eee'</span>] = <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#字段 读取需要用到key,value</span></span><br><span class="line"><span class="keyword">for</span> key, value int b_dict.items():</span><br><span class="line">    <span class="keyword">print</span> key + <span class="string">" ===&gt;"</span> + str(value)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#输出结果 :字典内部顺序通过hashmap排序</span></span><br><span class="line">eee ===&gt; 5</span><br><span class="line">aaa ===&gt; 1</span><br><span class="line">bbb ===&gt; 2</span><br><span class="line">ccc ===&gt; 3</span><br><span class="line">ddd ===&gt; 4</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sum = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">11</span>):</span><br><span class="line">    sum += value</span><br><span class="line"><span class="keyword">print</span> sum</span><br></pre></td></tr></table></figure>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#while</span></span><br><span class="line"></span><br><span class="line">cnt = <span class="number">2</span></span><br><span class="line"><span class="keyword">while</span> cnt &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'i love python'</span></span><br><span class="line">    cnt -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># print dual</span></span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> i &lt; <span class="number">10</span>:</span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">2</span> &gt; <span class="number">0</span>:</span><br><span class="line">	<span class="keyword">continue</span> </span><br><span class="line">    <span class="keyword">print</span> i</span><br></pre></td></tr></table></figure>
+<h1 id="4-for循环"><a href="#4-for循环" class="headerlink" title="4.for循环"></a>4.for循环</h1><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#for</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#数组</span></span><br><span class="line">a_list = []</span><br><span class="line">a_list.append[<span class="string">'111'</span>]</span><br><span class="line">a_list.append[<span class="string">'222'</span>]</span><br><span class="line">a_list.append[<span class="string">'333'</span>]</span><br><span class="line">a_list.append[<span class="string">'444'</span>]</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> a_list:</span><br><span class="line">    <span class="keyword">print</span> value</span><br><span class="line">    </span><br><span class="line"><span class="comment">#输出结果</span></span><br><span class="line"><span class="number">111</span></span><br><span class="line"><span class="number">222</span></span><br><span class="line"><span class="number">333</span></span><br><span class="line"><span class="number">444</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#集合 set</span></span><br><span class="line">a_set = set()</span><br><span class="line">a_set.add(<span class="string">'a'</span>)</span><br><span class="line">a_set.add(<span class="string">'b'</span>)</span><br><span class="line">a_set.add(<span class="string">'d'</span>)</span><br><span class="line">a_set.add(<span class="string">'d'</span>)</span><br><span class="line">a_set.add(<span class="string">'e'</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> a_set:</span><br><span class="line">    <span class="keyword">print</span> value</span><br><span class="line">    </span><br><span class="line"><span class="comment">#输出结果： set内部通过hash排序，所以输出顺序与追加的item顺序不一致</span></span><br><span class="line"></span><br><span class="line">a</span><br><span class="line">c</span><br><span class="line">b</span><br><span class="line">e</span><br><span class="line">d</span><br><span class="line"></span><br><span class="line"><span class="comment">#字典 dict</span></span><br><span class="line">b_dict = &#123;&#125;</span><br><span class="line">b_dict[<span class="string">'aaa'</span>] = <span class="number">1</span></span><br><span class="line">b_dict[<span class="string">'bbb'</span>] = <span class="number">2</span></span><br><span class="line">b_dict[<span class="string">'ccc'</span>] = <span class="number">3</span></span><br><span class="line">b_dict[<span class="string">'ddd'</span>] = <span class="number">4</span></span><br><span class="line">b_dict[<span class="string">'eee'</span>] = <span class="number">5</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#字段 读取需要用到key,value</span></span><br><span class="line"><span class="keyword">for</span> key, value int b_dict.items():</span><br><span class="line">    <span class="keyword">print</span> key + <span class="string">" ===&gt;"</span> + str(value)</span><br><span class="line"></span><br><span class="line"></span><br><span class="line"><span class="comment">#输出结果 :字典内部顺序通过hashmap排序</span></span><br><span class="line">eee ===&gt; 5</span><br><span class="line">aaa ===&gt; 1</span><br><span class="line">bbb ===&gt; 2</span><br><span class="line">ccc ===&gt; 3</span><br><span class="line">ddd ===&gt; 4</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">sum = <span class="number">0</span></span><br><span class="line"><span class="keyword">for</span> value <span class="keyword">in</span> range(<span class="number">1</span>,<span class="number">11</span>):</span><br><span class="line">    sum += value</span><br><span class="line"><span class="keyword">print</span> sum</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#while</span></span><br><span class="line"></span><br><span class="line">cnt = <span class="number">2</span></span><br><span class="line"><span class="keyword">while</span> cnt &gt; <span class="number">0</span>:</span><br><span class="line">    <span class="keyword">print</span> <span class="string">'i love python'</span></span><br><span class="line">    cnt -= <span class="number">1</span></span><br><span class="line"></span><br><span class="line"><span class="comment"># print dual</span></span><br><span class="line">i = <span class="number">1</span></span><br><span class="line"><span class="keyword">while</span> i &lt; <span class="number">10</span>:</span><br><span class="line">    i += <span class="number">1</span></span><br><span class="line">    <span class="keyword">if</span> i % <span class="number">2</span> &gt; <span class="number">0</span>:</span><br><span class="line">	<span class="keyword">continue</span> </span><br><span class="line">    <span class="keyword">print</span> i</span><br></pre></td></tr></table></figure>
 <hr>
-<h2 id="4-字符串处理"><a href="#4-字符串处理" class="headerlink" title="4.字符串处理"></a>4.字符串处理</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#string</span></span><br><span class="line"></span><br><span class="line">str = <span class="string">'qwert'</span></span><br><span class="line"><span class="keyword">print</span> len(str)</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出第二到第五个字符</span></span><br><span class="line"><span class="comment">#string 取字符</span></span><br><span class="line"><span class="keyword">print</span> str[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line">str <span class="string">'AbcDEf'</span></span><br><span class="line"><span class="comment">#全部字符转换为小写</span></span><br><span class="line"><span class="keyword">print</span> str.lower()</span><br></pre></td></tr></table></figure>
+<h2 id="4-字符串处理"><a href="#4-字符串处理" class="headerlink" title="4.字符串处理"></a>4.字符串处理</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#string</span></span><br><span class="line"></span><br><span class="line">str = <span class="string">'qwert'</span></span><br><span class="line"><span class="keyword">print</span> len(str)</span><br><span class="line"></span><br><span class="line"><span class="comment">#输出第二到第五个字符</span></span><br><span class="line"><span class="comment">#string 取字符</span></span><br><span class="line"><span class="keyword">print</span> str[<span class="number">2</span>:<span class="number">5</span>]</span><br><span class="line"></span><br><span class="line">str <span class="string">'AbcDEf'</span></span><br><span class="line"><span class="comment">#全部字符转换为小写</span></span><br><span class="line"><span class="keyword">print</span> str.lower()</span><br></pre></td></tr></table></figure>
 <hr>
 <h2 id="5-异常处理"><a href="#5-异常处理" class="headerlink" title="5.异常处理"></a>5.异常处理</h2><hr>
-<figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#exception</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#try... catch</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#try:</span></span><br><span class="line">a=<span class="number">6</span></span><br><span class="line">b=a/<span class="number">0</span></span><br><span class="line">exception Exception e:</span><br><span class="line">    <span class="keyword">print</span> Exception,<span class="string">":"</span> e</span><br></pre></td></tr></table></figure>
+<figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="comment">#exception</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#try... catch</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#try:</span></span><br><span class="line">a=<span class="number">6</span></span><br><span class="line">b=a/<span class="number">0</span></span><br><span class="line">exception Exception e:</span><br><span class="line">    <span class="keyword">print</span> Exception,<span class="string">":"</span> e</span><br></pre></td></tr></table></figure>
 <hr>
-<h2 id="6-模块引入"><a href="#6-模块引入" class="headerlink" title="6.模块引入"></a>6.模块引入</h2><figure class="highlight python"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="keyword">import</span> math <span class="comment">#引入模块</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> math.pow(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"><span class="keyword">print</span> round(<span class="number">4</span>,<span class="number">9</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">item = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line">random.shuffle(items)</span><br><span class="line"><span class="keyword">print</span> items</span><br><span class="line"></span><br><span class="line">a = random.randint(<span class="number">1</span>,<span class="number">3</span>)</span><br><span class="line"><span class="keyword">print</span> a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">s_list = random.sample(<span class="string">'abcdefg'</span>,<span class="number">3</span>)</span><br><span class="line"><span class="keyword">print</span> s_list</span><br></pre></td></tr></table></figure>
+<h2 id="6-模块引入"><a href="#6-模块引入" class="headerlink" title="6.模块引入"></a>6.模块引入</h2><figure class="highlight python"><table><tr><td class="code"><pre><span class="line"><span class="keyword">import</span> math <span class="comment">#引入模块</span></span><br><span class="line"></span><br><span class="line"><span class="keyword">print</span> math.pow(<span class="number">2</span>,<span class="number">3</span>)</span><br><span class="line"><span class="keyword">print</span> round(<span class="number">4</span>,<span class="number">9</span>)</span><br><span class="line"></span><br><span class="line"><span class="keyword">import</span> random</span><br><span class="line">item = [<span class="number">1</span>,<span class="number">2</span>,<span class="number">3</span>,<span class="number">4</span>,<span class="number">5</span>,<span class="number">6</span>]</span><br><span class="line">random.shuffle(items)</span><br><span class="line"><span class="keyword">print</span> items</span><br><span class="line"></span><br><span class="line">a = random.randint(<span class="number">1</span>,<span class="number">3</span>)</span><br><span class="line"><span class="keyword">print</span> a</span><br><span class="line"></span><br><span class="line"></span><br><span class="line">s_list = random.sample(<span class="string">'abcdefg'</span>,<span class="number">3</span>)</span><br><span class="line"><span class="keyword">print</span> s_list</span><br></pre></td></tr></table></figure>
 
-        </div>
+  </section>
 
-        <blockquote class="post-copyright">
-    <div class="content">
+</article>
+
+<section class="read-more">
+     
         
-<span class="post-time">
-    最后更新时间：<time datetime="2017-09-14T02:04:14.000Z" itemprop="dateUpdated">2017-09-14 10:04:14</time>
-</span><br>
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/Hadoop/Hadoop--HDFSdesign.html" title="Hadoop--HDFS架构">Hadoop--HDFS架构</a></h2>
+                <p class="excerpt">
+                
+                本文主要介绍HDFS架构概要
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-02T15:42:22.000Z" class="post-list__meta--date date">2017-10-02</time>
+ &#8226; <span class="post-list__meta--tags tags">于&nbsp;
+  <a class="tag-link" href="/tags/Hadoop/">Hadoop</a>
 
+</span><a class="btn-border-small" href="/Hadoop/Hadoop--HDFSdesign.html">继续阅读</a></div>
 
-        
-        原始链接：<a href="/Python/Python-Base.html" target="_blank" rel="external">http://xiejm.com/Python/Python-Base.html</a>
-        
-    </div>
-    <footer>
-        <a href="http://xiejm.com">
-            <img src="/img/avatar.jpg" alt="XieJM">
-            XieJM
-        </a>
-    </footer>
-</blockquote>
-
+            </div>
         
 
+        
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/Hadoop/Hadoop--HDFSreplication.html" title="Hadoop--HDFS之机架感知和副本策略">Hadoop--HDFS之机架感知和副本策略</a></h2>
+                <p class="excerpt">
+                
+                本文主要介绍Hadoop HDFS的机架感知和副本策略
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-09-14T02:02:32.000Z" class="post-list__meta--date date">2017-09-14</time>
+ &#8226; <span class="post-list__meta--tags tags">于&nbsp;
+  <a class="tag-link" href="/tags/HDFS/">HDFS</a>, <a class="tag-link" href="/tags/Hadoop/">Hadoop</a>
 
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Python/">Python</a></li></ul>
+</span><a class="btn-border-small" href="/Hadoop/Hadoop--HDFSreplication.html">继续阅读</a></div>
 
-
-            
-<div class="page-share-wrap">
-    
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Python/Python-Base.html&title=《Python 基础》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Python/Python-Base.html&title=《Python 基础》 — 云筑小站&source=Python 基础：定义函数、常用数据结构、条件判断语句、for循环、字符串处理、异常处理、模块引入" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Python/Python-Base.html" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Python 基础》 — 云筑小站&url=http://xiejm.com/Python/Python-Base.html&via=http://xiejm.com" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Python/Python-Base.html" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
+            </div>
+        
+   
+</section>
 
 
 
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
-    </a>
-</div>
-
-
-
-        </div>
-    </div>
-
-    
-<nav class="post-nav flex-row flex-justify-between">
+<section class="post-comments">
   
-    <div class="waves-block waves-effect prev">
-      <a href="/Hadoop/Hadoop--HDFSdesign.html" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">Hadoop--HDFS架构</h4>
-      </a>
-    </div>
-  
+<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+var cloudTieConfig = {
+  url: document.location.href, 
+  sourceId: "",
+  productKey: "7e456de65fb945698c448c72191454ce",
+  target: "cloud-tie-wrapper"
+};
+var yunManualLoad = true;
+Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
 
-  
-    <div class="waves-block waves-effect next">
-      <a href="/Hadoop/Hadoop--HDFSreplication.html" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">Hadoop--HDFS之机架感知和副本策略</h4>
-      </a>
-    </div>
-  
-</nav>
-
-
-
-    
-
-
-<section class="comments" id="comments">
-    <div id="disqus_thread"></div>
-    <script>
-    var disqus_shortname = 'true';
-    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </section>
 
 
 
 
 
+            <footer class="footer">
+    <span class="footer__copyright">
+        本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+    </span>
+    <span class="footer__copyright">
+        基于 <a href="http://hexo.io">Hexo</a> 搭建，感谢 <a href="https://pages.github.com/">GitHub Pages</a> 提供免费的托管服务
+    </span>
+    <span class="footer__copyright">
+        &copy; 2018 - 本站由 <a href="/">XieJM</a> 创建,
+        使用<a href="https://github.com/skx926/hexo-theme-vno">hexo-theme-vno</a>主题
+    </span>
+</footer>
 
-
-
-
-
-
-
-
-</article>
-
-
-
-</div>
-
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
-
-
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Python/Python-Base.html&title=《Python 基础》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Python/Python-Base.html&title=《Python 基础》 — 云筑小站&source=Python 基础：定义函数、常用数据结构、条件判断语句、for循环、字符串处理、异常处理、模块引入" data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Python/Python-Base.html" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Python 基础》 — 云筑小站&url=http://xiejm.com/Python/Python-Base.html&via=http://xiejm.com" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Python/Python-Base.html" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAK4AAACuCAAAAACKZ2kyAAABuUlEQVR42u3aSW7DMBAEQP//0w6Qa2KlZxHtAMWTYMhSUYfBLHw84vX8Xj+vX915fU/ynNHCxcUdc5+X65p7ff/k95fbxsXFPchNglcSpBJEHhxxcXE/n5snKNcbu6bj4uL+L24SmKoJDS4u7idzq5Te7/nGFmo1XFzcAXfSMN26PtTfxcXFHU8lekFtK2365e24uLhHuNWWR6+Y2S2HcHFxT3KrL8tbpfMBDC4u7nluHs5y6KRREr0XFxf3Nm61jOk1NLeaqri4uGe4SZKRBLUeOtn8H3kZLi7uDdxmy7I4CEm+2cI0GBcXd4nbbEkUQZPRCy4u7udw82CXD0iqT3ipwsXFvZlbTWi2xiH5B8LFxX0vt9yyXDqWkYxjcXFxT3K3Dk7lo9OFMQwuLu7N3F4pUuVOjl/g4uK+iztHJC3U3sLFxX0XtzpkzdOgXslU+AMuLu4N3GpAyYNaoQ26dPALFxd3l5sHrzyJ2R3NNh+Ni4s75labGvlBjV4CtBBTcXFxD1YK1USnl9wsBDJcXNyD3K1GavVwBi4u7nnupFCZh7PC5nFxcY9w5xVHHoyS9kp1Y7i4uKvcLygGTdRFv6d8AAAAAElFTkSuQmCC" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
-<script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
-
-
-</script>
-
-<script src="/js/main.min.js?v=1.6.13"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
         </div>
-    </a>
-</li>
-</template>
+    </div>
 
-<script src="/js/search.min.js?v=1.6.13" async></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="/js/main.js"></script>
 
-
-
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
+     
 <script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = 'XieJM's Blog';
-            clearTimeout(titleTime);
-        } else {
-            document.title = 'XieJM's Blog';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
-        }
-    });
-})();
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-73055515-1', 'auto');
+	ga('send', 'pageview');
 </script>
-
-
 
 </body>
 </html>

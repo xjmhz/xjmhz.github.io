@@ -1,471 +1,273 @@
 <!DOCTYPE html>
 <html>
 <head>
+    <meta charset="utf-8"/>
+    <meta http-equiv="X-UA-Compatible" content="IE=edge"/>
     
-
-    
-
-    
-
-
-
-    <meta charset="utf-8">
-    
-    
-    <link rel="canonical" href="http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html">
-    
-    
-    <title>Linux Extended VM Disk In VMware | 云筑小站 | 脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</title>
+    <title>Linux Extended VM Disk In VMware | 云筑小站</title>
+    <meta name="renderer" content="webkit">
+    <meta name="HandheldFriendly" content="True">
+    <meta name="MobileOptimized" content="320">
+    <meta name="apple-mobile-web-app-capable" content="yes">
+    <meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
     <meta name="viewport" content="width=device-width, initial-scale=1, maximum-scale=1">
-    
-    <meta name="theme-color" content="#00bcd4">
-    
-    
-    <meta name="keywords" content="Linux">
-    <meta name="description" content="前言在做大数据相关开发的测试时候，会用到VM虚拟机。用了时间久了以后，虚拟机磁盘爆满，这时就需要给虚拟机磁盘扩容了。 由于在当初创建虚拟机时选择了LVM分区，给现在扩容带来了便利。">
-<meta name="keywords" content="Linux">
-<meta property="og:type" content="article">
-<meta property="og:title" content="Linux Extended VM Disk In VMware">
-<meta property="og:url" content="http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html">
-<meta property="og:site_name" content="云筑小站">
-<meta property="og:description" content="前言在做大数据相关开发的测试时候，会用到VM虚拟机。用了时间久了以后，虚拟机磁盘爆满，这时就需要给虚拟机磁盘扩容了。 由于在当初创建虚拟机时选择了LVM分区，给现在扩容带来了便利。">
-<meta property="og:locale" content="zh-CN">
-<meta property="og:updated_time" content="2018-04-17T04:43:47.000Z">
-<meta name="twitter:card" content="summary">
-<meta name="twitter:title" content="Linux Extended VM Disk In VMware">
-<meta name="twitter:description" content="前言在做大数据相关开发的测试时候，会用到VM虚拟机。用了时间久了以后，虚拟机磁盘爆满，这时就需要给虚拟机磁盘扩容了。 由于在当初创建虚拟机时选择了LVM分区，给现在扩容带来了便利。">
-    
-        <link rel="alternate" type="application/atom+xml" title="云筑小站" href="/atom.xml">
-    
-    <link rel="shortcut icon" href="/favicon.ico">
-    <link rel="stylesheet" href="/css/style.css?v=1.6.13">
-    <script>window.lazyScripts=[]</script>
 
-    <!-- custom head -->
+    <meta name="description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    <meta name="twitter:card" content="summary">
+    <meta name="twitter:title" content="Linux Extended VM Disk In VMware | 云筑小站">
+    <meta name="twitter:description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    <meta property="og:type" content="article">
+    <meta property="og:title" content="Linux Extended VM Disk In VMware | 云筑小站">
+    <meta property="og:description" content="脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。">
+
+    
+    <meta name="author" content="XieJM">
+    
+    <link rel="stylesheet" href="/css/vno.css">
+    <link rel="stylesheet" href="//netdna.bootstrapcdn.com/font-awesome/4.1.0/css/font-awesome.min.css">
+
+    
+    <link rel="icon" href="/images/favicon.png">
     
 
+    
+    <link rel="apple-touch-icon" href="/images/apple-touch-icon.png">
+    
+    
+    <meta name="generator" content="hexo"/>
+    
+    <link rel="alternate" type="application/rss+xml" title="云筑小站" href="/atom.xml">
+    
+
+    <link rel="canonical" href="http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html"/>
+
+    
 </head>
 
-<body>
-    <div id="loading" class="active"></div>
+<body class="home-template no-js">
 
-    <aside id="menu" class="hide" >
-  <div class="inner flex-row-vertical">
-    <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menu-off">
-        <i class="icon icon-lg icon-close"></i>
+    <span class="mobile btn-mobile-menu">
+        <i class="fa fa-list btn-mobile-menu__icon"></i>
+        <i class="fa fa-angle-up btn-mobile-close__icon hidden"></i>
+    </span>
+
+    
+<header class="panel-cover panel-cover--collapsed" style="background-image: url(/images/background-cover.jpg)">
+  <div class="panel-main">
+    <div class="panel-main__inner panel-inverted">
+    <div class="panel-main__content">
+
+        <a href="/" title="前往 云筑小站 的主页"><img src="/images/logo.png" width="80" alt="云筑小站 logo" class="panel-cover__logo logo" /></a>
+        <h1 class="panel-cover__title panel-title"><a href="/" title="link to homepage for 云筑小站">云筑小站</a></h1>
+        
+        <span class="panel-cover__subtitle panel-subtitle">分享技术 记录生活</span>
+        
+        <hr class="panel-cover__divider" />
+        <p class="panel-cover__description">脚踏实地、仰望星空;低头走路，抬头看天;既练轻功，也练内功。</p>
+        <hr class="panel-cover__divider panel-cover__divider--secondary" />
+        
+        <div class="navigation-wrapper">
+          <div>
+          <nav class="cover-navigation cover-navigation--primary">
+            <ul class="navigation">
+              <li class="navigation__item"><a href="/#blog" title="访问博客" class="blog-button">文章</a></li>
+            
+              <li class="navigation__item"><a href="/archives">归档</a></li>
+            
+            </ul>
+          </nav>
+          </div>
+          <div>
+          <nav class="cover-navigation navigation--social">
+  <ul class="navigation">
+
+  <!-- Weibo-->
+  
+
+  <!-- Github -->
+  
+  <li class="navigation__item">
+    <a href="https://github.com/xjmhz" title="查看我的GitHub主页" target="_blank">
+      <i class='social fa fa-github'></i>
+      <span class="label">Github</span>
     </a>
-    <div class="brand-wrap" style="background-image:url(/img/brand.jpg)">
-      <div class="brand">
-        <a href="/" class="avatar waves-effect waves-circle waves-light">
-          <img src="/img/avatar.jpg">
-        </a>
-        <hgroup class="introduce">
-          <h5 class="nickname">XieJM</h5>
-          <a href="mailto:xiejumiao@163.com" title="xiejumiao@163.com" class="mail">xiejumiao@163.com</a>
-        </hgroup>
+  </li>
+
+
+<!-- Stack Overflow -->
+        
+
+  <!-- Google Plus -->
+  
+
+<!-- Facebook -->
+
+
+<!-- Twitter -->
+
+<!-- instagram -->
+
+
+  <li class="navigation__item">
+    <a href="/atom.xml" title="RSS" target="_blank">
+      <i class='social fa fa-rss'></i>
+      <span class="label">RSS</span>
+    </a>
+  </li>
+
+
+
+  </ul>
+</nav>
+
+          </div>
+        </div>
+
       </div>
+
     </div>
-    <div class="scroll-wrap flex-col">
-      <ul class="nav">
-        
-            <li class="waves-block waves-effect">
-              <a href="/"  >
-                <i class="icon icon-lg icon-home"></i>
-                主页
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/archives"  >
-                <i class="icon icon-lg icon-archives"></i>
-                归档
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/tags"  >
-                <i class="icon icon-lg icon-tags"></i>
-                标签
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="/categories"  >
-                <i class="icon icon-lg icon-th-list"></i>
-                分类
-              </a>
-            </li>
-        
-            <li class="waves-block waves-effect">
-              <a href="https://github.com/xjmhz" target="_blank" >
-                <i class="icon icon-lg icon-github"></i>
-                Github
-              </a>
-            </li>
-        
-      </ul>      
-    </div>
-    <footer class="footer">
-    <p>欢迎加入我们的大数据交流群：<br>群1：258669058 群2：126181630</p>   
-    <p>        
-        <span><a rel="license" href="https://creativecommons.org/licenses/by-nc-sa/4.0/deed.zh"><img src="/img/cc.png"></a></span>
-        
-        <span><a href="/atom.xml" target="_blank" class="rss" title="rss"><i class="icon icon-2x icon-rss-square"></i></a></span>
-        
-    </p>
-    <p><span>XieJM &copy; 2017 - 2018</span>
-    </p>
-    <p><span>
-            
-            Power by <a href="http://hexo.io/" target="_blank">Hexo</a> Theme <a href="https://github.com/yscoder/hexo-theme-indigo" target="_blank">indigo</a>
-        </span>
-    </p>
-</footer>
+
+    <div class="panel-cover--overlay cover-disabled"></div>
   </div>
-</aside>
-
-    <main id="main">
-        <header class="top-header" id="header">
-    <div class="flex-row">
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light on" id="menu-toggle">
-          <i class="icon icon-lg icon-navicon"></i>
-        </a>
-        <div class="flex-col header-title ellipsis">Linux Extended VM Disk In VMware</div>
-        
-        <div class="search-wrap" id="search-wrap">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="back">
-                <i class="icon icon-lg icon-chevron-left"></i>
-            </a>
-            <input type="text" id="key" class="search-input" autocomplete="off" placeholder="输入感兴趣的关键字">
-            <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="search">
-                <i class="icon icon-lg icon-search"></i>
-            </a>
-        </div>
-        
-        
-        <a href="javascript:;" class="header-icon waves-effect waves-circle waves-light" id="menuShare">
-            <i class="icon icon-lg icon-share-alt"></i>
-        </a>
-        
-    </div>
-</header>
-<header class="content-header post-header">
-
-    <div class="container fade-scale">
-        <h1 class="title">Linux Extended VM Disk In VMware</h1>
-        <h5 class="subtitle">
-            
-                <time datetime="2017-10-03T11:59:04.000Z" itemprop="datePublished" class="page-time">
-  2017-10-03
-</time>
-
-
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
-
-            
-        </h5>
-    </div>
-
-    
-
-
 </header>
 
 
-<div class="container body-wrap">
-    
-    <aside class="post-widget">
-        <nav class="post-toc-wrap" id="post-toc">
-            <h4>TOC</h4>
-            <ol class="post-toc"><li class="post-toc-item post-toc-level-1"><a class="post-toc-link" href="#前言"><span class="post-toc-text">前言</span></a><ol class="post-toc-child"><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#查看本地磁盘使用情况"><span class="post-toc-text">查看本地磁盘使用情况</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#查看分区情况"><span class="post-toc-text">查看分区情况</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#对新盘再分区"><span class="post-toc-text">对新盘再分区</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#重启并格式化"><span class="post-toc-text">重启并格式化</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#添加新的LVM实现扩容"><span class="post-toc-text">添加新的LVM实现扩容</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#刷新磁盘容量"><span class="post-toc-text">刷新磁盘容量</span></a></li><li class="post-toc-item post-toc-level-2"><a class="post-toc-link" href="#再次查看磁盘分区情况"><span class="post-toc-text">再次查看磁盘分区情况</span></a></li></ol></li></ol>
-        </nav>
-    </aside>
-    
-<article id="post-Linux/Extended_VM Disk_In_ VMware"
-  class="post-article article-type-post fade" itemprop="blogPost">
+    <div class="content-wrapper">
+        <div class="content-wrapper__inner">
+            <article class="post-container post-container--single">
 
-    <div class="post-card">
-        <h1 class="post-card-title">Linux Extended VM Disk In VMware</h1>
-        <div class="post-meta">
-            <time class="post-time" title="2017-10-03 19:59:04" datetime="2017-10-03T11:59:04.000Z"  itemprop="datePublished">2017-10-03</time>
+  <header class="post-header">
+    <div class="post-meta">
+      <time datetime="2017-10-03T11:59:04.000Z" class="post-list__meta--date date">2017-10-03</time>
+ &#8226; <span class="post-meta__tags tags">分类&nbsp;
+  <a class="tag-link" href="/tags/Linux/">Linux</a>
 
-            
-	<ul class="article-category-list"><li class="article-category-list-item"><a class="article-category-list-link" href="/categories/Linux/">Linux</a></li></ul>
-
-
-
-            
-<span id="busuanzi_container_page_pv" title="文章总阅读量" style='display:none'>
-    <i class="icon icon-eye icon-pr"></i><span id="busuanzi_value_page_pv"></span>
 </span>
+    </div>
+    <h1 class="post-title">Linux Extended VM Disk In VMware</h1>
+  </header>
 
-
-        </div>
-        <div class="post-content" id="post-content" itemprop="postContent">
-            <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在做大数据相关开发的测试时候，会用到VM虚拟机。<br>用了时间久了以后，虚拟机磁盘爆满，这时就需要给虚拟机磁盘扩容了。</p>
+  <section class="post">
+    <h1 id="前言"><a href="#前言" class="headerlink" title="前言"></a>前言</h1><p>在做大数据相关开发的测试时候，会用到VM虚拟机。<br>用了时间久了以后，虚拟机磁盘爆满，这时就需要给虚拟机磁盘扩容了。</p>
 <p>由于在当初创建虚拟机时选择了LVM分区，给现在扩容带来了便利。</p>
 <a id="more"></a>
 <h2 id="查看本地磁盘使用情况"><a href="#查看本地磁盘使用情况" class="headerlink" title="查看本地磁盘使用情况"></a>查看本地磁盘使用情况</h2><p>磁盘使用情况如下：</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># df -Th</span></span><br><span class="line">Filesystem           Type   Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/vg_master-lvm_root</span><br><span class="line">                     ext4    18G  2.3G   15G  14% /</span><br><span class="line">tmpfs                tmpfs  932M     0  932M   0% /dev/shm</span><br><span class="line">/dev/sda1            ext4   190M   41M  140M  23% /boot</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># df -Th</span></span><br><span class="line">Filesystem           Type   Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/vg_master-lvm_root</span><br><span class="line">                     ext4    18G  2.3G   15G  14% /</span><br><span class="line">tmpfs                tmpfs  932M     0  932M   0% /dev/shm</span><br><span class="line">/dev/sda1            ext4   190M   41M  140M  23% /boot</span><br></pre></td></tr></table></figure>
 <h2 id="查看分区情况"><a href="#查看分区情况" class="headerlink" title="查看分区情况"></a>查看分区情况</h2><p>原磁盘为20G，先扩充到40G</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># fdisk /dev/sda</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): p</span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 42.9 GB, 42949672960 bytes</span><br><span class="line">255 heads, 63 sectors/track, 5221 cylinders</span><br><span class="line">Units = cylinders of 16065 * 512 = 8225280 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk identifier: 0x00012968</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sda1   *           1          26      204800   83  Linux</span><br><span class="line">Partition 1 does not end on cylinder boundary.</span><br><span class="line">/dev/sda2              26         281     2048000   82  Linux swap / Solaris</span><br><span class="line">Partition 2 does not end on cylinder boundary.</span><br><span class="line">/dev/sda3             281        2611    18717696   8e  Linux LVM</span><br></pre></td></tr></table></figure>
-<h2 id="对新盘再分区"><a href="#对新盘再分区" class="headerlink" title="对新盘再分区"></a>对新盘再分区</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># fdisk /dev/sda</span></span><br><span class="line"></span><br><span class="line">WARNING: DOS-compatible mode is deprecated. It<span class="string">'s strongly recommended to</span></span><br><span class="line"><span class="string">         switch off the mode (command '</span>c<span class="string">') and change display units to</span></span><br><span class="line"><span class="string">         sectors (command '</span>u<span class="string">').</span></span><br><span class="line"><span class="string">Command (m for help):</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># fdisk /dev/sda</span></span><br><span class="line"></span><br><span class="line"></span><br><span class="line">Command (m <span class="keyword">for</span> <span class="built_in">help</span>): p</span><br><span class="line"></span><br><span class="line">Disk /dev/sda: 42.9 GB, 42949672960 bytes</span><br><span class="line">255 heads, 63 sectors/track, 5221 cylinders</span><br><span class="line">Units = cylinders of 16065 * 512 = 8225280 bytes</span><br><span class="line">Sector size (logical/physical): 512 bytes / 512 bytes</span><br><span class="line">I/O size (minimum/optimal): 512 bytes / 512 bytes</span><br><span class="line">Disk identifier: 0x00012968</span><br><span class="line"></span><br><span class="line">   Device Boot      Start         End      Blocks   Id  System</span><br><span class="line">/dev/sda1   *           1          26      204800   83  Linux</span><br><span class="line">Partition 1 does not end on cylinder boundary.</span><br><span class="line">/dev/sda2              26         281     2048000   82  Linux swap / Solaris</span><br><span class="line">Partition 2 does not end on cylinder boundary.</span><br><span class="line">/dev/sda3             281        2611    18717696   8e  Linux LVM</span><br></pre></td></tr></table></figure>
+<h2 id="对新盘再分区"><a href="#对新盘再分区" class="headerlink" title="对新盘再分区"></a>对新盘再分区</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># fdisk /dev/sda</span></span><br><span class="line"></span><br><span class="line">WARNING: DOS-compatible mode is deprecated. It<span class="string">'s strongly recommended to</span></span><br><span class="line"><span class="string">         switch off the mode (command '</span>c<span class="string">') and change display units to</span></span><br><span class="line"><span class="string">         sectors (command '</span>u<span class="string">').</span></span><br><span class="line"><span class="string">Command (m for help):</span></span><br></pre></td></tr></table></figure>
 <p>请安步骤输入下面操作</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br><span class="line">17</span><br><span class="line">18</span><br><span class="line">19</span><br><span class="line">20</span><br><span class="line">21</span><br></pre></td><td class="code"><pre><span class="line"></span><br><span class="line">p　　　　　　　查看已分区数量（我看到有两个 /dev/sda1 /dev/sda2）</span><br><span class="line">n　　　　　　　新增加一个分区</span><br><span class="line"></span><br><span class="line">p　　　　　　　分区类型我们选择为主分区</span><br><span class="line"></span><br><span class="line">4　　　　　　　分区号选3（因为1,2已经用过了，见上）</span><br><span class="line"></span><br><span class="line">回车　　　　　　默认（起始扇区）</span><br><span class="line"></span><br><span class="line">回车　　　　　　默认（结束扇区）</span><br><span class="line"></span><br><span class="line">t　　　　　　　修改分区类型</span><br><span class="line"></span><br><span class="line">4　　　　　　　选分区3</span><br><span class="line"></span><br><span class="line">8e　　　　　　修改为LVM（8e就是LVM）</span><br><span class="line"></span><br><span class="line">w　　　　　　写分区表(可能直接退出了，没有关系的)</span><br><span class="line"></span><br><span class="line">q　　　　　　完成，退出fdisk命令</span><br></pre></td></tr></table></figure>
-<h2 id="重启并格式化"><a href="#重启并格式化" class="headerlink" title="重启并格式化"></a>重启并格式化</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># reboot</span></span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"></span><br><span class="line">p　　　　　　　查看已分区数量（我看到有两个 /dev/sda1 /dev/sda2）</span><br><span class="line">n　　　　　　　新增加一个分区</span><br><span class="line"></span><br><span class="line">p　　　　　　　分区类型我们选择为主分区</span><br><span class="line"></span><br><span class="line">4　　　　　　　分区号选3（因为1,2已经用过了，见上）</span><br><span class="line"></span><br><span class="line">回车　　　　　　默认（起始扇区）</span><br><span class="line"></span><br><span class="line">回车　　　　　　默认（结束扇区）</span><br><span class="line"></span><br><span class="line">t　　　　　　　修改分区类型</span><br><span class="line"></span><br><span class="line">4　　　　　　　选分区3</span><br><span class="line"></span><br><span class="line">8e　　　　　　修改为LVM（8e就是LVM）</span><br><span class="line"></span><br><span class="line">w　　　　　　写分区表(可能直接退出了，没有关系的)</span><br><span class="line"></span><br><span class="line">q　　　　　　完成，退出fdisk命令</span><br></pre></td></tr></table></figure>
+<h2 id="重启并格式化"><a href="#重启并格式化" class="headerlink" title="重启并格式化"></a>重启并格式化</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># reboot</span></span><br></pre></td></tr></table></figure>
 <p>格式 /dev/sda4</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># ll /dev/sda4</span></span><br><span class="line">brw-rw----. 1 root disk 8, 4 Sep 23 08:19 /dev/sda4</span><br><span class="line">[root@hadoop001 ~]<span class="comment"># mkfs.ext4 /dev/sda4</span></span><br></pre></td></tr></table></figure>
-<h2 id="添加新的LVM实现扩容"><a href="#添加新的LVM实现扩容" class="headerlink" title="添加新的LVM实现扩容"></a>添加新的LVM实现扩容</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br><span class="line">8</span><br><span class="line">9</span><br><span class="line">10</span><br><span class="line">11</span><br><span class="line">12</span><br><span class="line">13</span><br><span class="line">14</span><br><span class="line">15</span><br><span class="line">16</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#进入lvm管理</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># lvm</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建PV 这是初始化刚才的分区，必须的</span></span><br><span class="line">lvm&gt; pvcreate /dev/sda4</span><br><span class="line"></span><br><span class="line"><span class="comment">#将初始化过的分区加入到虚拟卷组vg_master(卷组名根据系统内的实际卷组名为准)</span></span><br><span class="line">lvm&gt; vgextend vg_master /dev/sda3</span><br><span class="line"></span><br><span class="line"><span class="comment">#扩展已有卷的容量</span></span><br><span class="line">lvm&gt;lvextend -l +100% /dev/mapper/vg_master-lvm_root</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看卷容量，这时你会看到一个很大的卷了</span></span><br><span class="line">lvm&gt;pvdisplay</span><br><span class="line"></span><br><span class="line">lvm&gt;quit</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># ll /dev/sda4</span></span><br><span class="line">brw-rw----. 1 root disk 8, 4 Sep 23 08:19 /dev/sda4</span><br><span class="line">[root@hadoop001 ~]<span class="comment"># mkfs.ext4 /dev/sda4</span></span><br></pre></td></tr></table></figure>
+<h2 id="添加新的LVM实现扩容"><a href="#添加新的LVM实现扩容" class="headerlink" title="添加新的LVM实现扩容"></a>添加新的LVM实现扩容</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#进入lvm管理</span></span><br><span class="line">[root@hadoop001 ~]<span class="comment"># lvm</span></span><br><span class="line"></span><br><span class="line"><span class="comment">#创建PV 这是初始化刚才的分区，必须的</span></span><br><span class="line">lvm&gt; pvcreate /dev/sda4</span><br><span class="line"></span><br><span class="line"><span class="comment">#将初始化过的分区加入到虚拟卷组vg_master(卷组名根据系统内的实际卷组名为准)</span></span><br><span class="line">lvm&gt; vgextend vg_master /dev/sda3</span><br><span class="line"></span><br><span class="line"><span class="comment">#扩展已有卷的容量</span></span><br><span class="line">lvm&gt;lvextend -l +100% /dev/mapper/vg_master-lvm_root</span><br><span class="line"></span><br><span class="line"><span class="comment">#查看卷容量，这时你会看到一个很大的卷了</span></span><br><span class="line">lvm&gt;pvdisplay</span><br><span class="line"></span><br><span class="line">lvm&gt;quit</span><br></pre></td></tr></table></figure>
 <p>备注：lvextend扩展命令这一步，还可以选择扩容大小</p>
-<figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br></pre></td><td class="code"><pre><span class="line"><span class="comment">#扩展已有卷的容量（只扩充10G）</span></span><br><span class="line">lvm&gt;lvextend -L +10G /dev/mapper/vg_master-lvm_root</span><br></pre></td></tr></table></figure>
-<h2 id="刷新磁盘容量"><a href="#刷新磁盘容量" class="headerlink" title="刷新磁盘容量"></a>刷新磁盘容量</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br><span class="line">7</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># resize2fs /dev/mapper/vg_master-lvm_root</span></span><br><span class="line"></span><br><span class="line">resize2fs 1.41.12 (17-May-2010)</span><br><span class="line">Filesystem at /dev/mapper/vg_master-lvm_root is mounted on /; on-line resizing required</span><br><span class="line">old desc_blocks = 2, new_desc_blocks = 3</span><br><span class="line">Performing an on-line resize of /dev/mapper/vg_master-lvm_root to 9919488 (4k) blocks.</span><br><span class="line">The filesystem on /dev/mapper/vg_master-lvm_root is now 9919488 blocks long.</span><br></pre></td></tr></table></figure>
-<h2 id="再次查看磁盘分区情况"><a href="#再次查看磁盘分区情况" class="headerlink" title="再次查看磁盘分区情况"></a>再次查看磁盘分区情况</h2><figure class="highlight bash"><table><tr><td class="gutter"><pre><span class="line">1</span><br><span class="line">2</span><br><span class="line">3</span><br><span class="line">4</span><br><span class="line">5</span><br><span class="line">6</span><br></pre></td><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># df -Th</span></span><br><span class="line">Filesystem           Type   Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/vg_master-lvm_root</span><br><span class="line">                     ext4    38G  2.4G   33G   7% /</span><br><span class="line">tmpfs                tmpfs  932M     0  932M   0% /dev/shm</span><br><span class="line">/dev/sda1            ext4   190M   41M  140M  23% /boot</span><br></pre></td></tr></table></figure>
+<figure class="highlight bash"><table><tr><td class="code"><pre><span class="line"><span class="comment">#扩展已有卷的容量（只扩充10G）</span></span><br><span class="line">lvm&gt;lvextend -L +10G /dev/mapper/vg_master-lvm_root</span><br></pre></td></tr></table></figure>
+<h2 id="刷新磁盘容量"><a href="#刷新磁盘容量" class="headerlink" title="刷新磁盘容量"></a>刷新磁盘容量</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># resize2fs /dev/mapper/vg_master-lvm_root</span></span><br><span class="line"></span><br><span class="line">resize2fs 1.41.12 (17-May-2010)</span><br><span class="line">Filesystem at /dev/mapper/vg_master-lvm_root is mounted on /; on-line resizing required</span><br><span class="line">old desc_blocks = 2, new_desc_blocks = 3</span><br><span class="line">Performing an on-line resize of /dev/mapper/vg_master-lvm_root to 9919488 (4k) blocks.</span><br><span class="line">The filesystem on /dev/mapper/vg_master-lvm_root is now 9919488 blocks long.</span><br></pre></td></tr></table></figure>
+<h2 id="再次查看磁盘分区情况"><a href="#再次查看磁盘分区情况" class="headerlink" title="再次查看磁盘分区情况"></a>再次查看磁盘分区情况</h2><figure class="highlight bash"><table><tr><td class="code"><pre><span class="line">[root@hadoop001 ~]<span class="comment"># df -Th</span></span><br><span class="line">Filesystem           Type   Size  Used Avail Use% Mounted on</span><br><span class="line">/dev/mapper/vg_master-lvm_root</span><br><span class="line">                     ext4    38G  2.4G   33G   7% /</span><br><span class="line">tmpfs                tmpfs  932M     0  932M   0% /dev/shm</span><br><span class="line">/dev/sda1            ext4   190M   41M  140M  23% /boot</span><br></pre></td></tr></table></figure>
 <p>扩容后<code>/dev/mapper/vg_master-lvm_root</code>的大小是38G了</p>
 <p>至此扩容完成！</p>
 
-        </div>
+  </section>
 
-        <blockquote class="post-copyright">
-    <div class="content">
+</article>
+
+<section class="read-more">
+     
         
-<span class="post-time">
-    最后更新时间：<time datetime="2018-04-17T04:43:47.000Z" itemprop="dateUpdated">2018-04-17 12:43:47</time>
-</span><br>
+            <div class="read-more-item">
+                <span class="read-more-item-dim">最近的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/Hadoop/Hadoop_source_code_building.html" title="Hadoop 源码编译安装">Hadoop 源码编译安装</a></h2>
+                <p class="excerpt">
+                
+                本文主要记录Hadoop2.x源码编译的详细步骤：
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-03T12:58:16.000Z" class="post-list__meta--date date">2017-10-03</time>
+ &#8226; <span class="post-list__meta--tags tags">于&nbsp;
+  <a class="tag-link" href="/tags/Hadoop/">Hadoop</a>, <a class="tag-link" href="/tags/Maven/">Maven</a>
 
+</span><a class="btn-border-small" href="/Hadoop/Hadoop_source_code_building.html">继续阅读</a></div>
 
-        
-        原始链接：<a href="/Linux/Extended_VM Disk_In_ VMware.html" target="_blank" rel="external">http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html</a>
-        
-    </div>
-    <footer>
-        <a href="http://xiejm.com">
-            <img src="/img/avatar.jpg" alt="XieJM">
-            XieJM
-        </a>
-    </footer>
-</blockquote>
-
+            </div>
         
 
+        
+            <div class="read-more-item">
+                <span class="read-more-item-dim">更早的文章</span>
+                <h2 class="post-list__post-title post-title"><a href="/Hadoop/Hadoop_Pseudo-Distributed_Mode.html" title="Hadoop伪分布式部署">Hadoop伪分布式部署</a></h2>
+                <p class="excerpt">
+                
+                本文主要记录Hadoop伪分布式（Pseudo-Distributed Mode）部署的详细步骤：伪分布模式在“单节点集群”上运行Hadoop，其中所有的守护进程都运行在同一台机器上。该模式在单机模式之上增加了代码调试功能，允许你检查内存使用情况，HDFS输入输出，以及其他的守护进程交互。
+1.基本
+                &hellip;
+                </p>
+                <div class="post-list__meta"><time datetime="2017-10-03T06:16:06.000Z" class="post-list__meta--date date">2017-10-03</time>
+ &#8226; <span class="post-list__meta--tags tags">于&nbsp;
+  <a class="tag-link" href="/tags/Hadoop/">Hadoop</a>
 
-        <div class="post-footer">
-            
-	<ul class="article-tag-list"><li class="article-tag-list-item"><a class="article-tag-list-link" href="/tags/Linux/">Linux</a></li></ul>
+</span><a class="btn-border-small" href="/Hadoop/Hadoop_Pseudo-Distributed_Mode.html">继续阅读</a></div>
 
-
-            
-<div class="page-share-wrap">
-    
-
-<div class="page-share" id="pageShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html&title=《Linux Extended VM Disk In VMware》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html&title=《Linux Extended VM Disk In VMware》 — 云筑小站&source=前言在做大数据相关开发的测试时候，会用到VM虚拟机。用了时间久了以后，虚拟机磁盘爆满，这时就需要给虚拟机磁盘扩容了。
-由于在当初创建虚拟机时选择了LVM分..." data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Linux Extended VM Disk In VMware》 — 云筑小站&url=http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html&via=http://xiejm.com" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
+            </div>
+        
+   
+</section>
 
 
 
-    <a href="javascript:;" id="shareFab" class="page-share-fab waves-effect waves-circle">
-        <i class="icon icon-share-alt icon-lg"></i>
-    </a>
-</div>
-
-
-
-        </div>
-    </div>
-
-    
-<nav class="post-nav flex-row flex-justify-between">
+<section class="post-comments">
   
-    <div class="waves-block waves-effect prev">
-      <a href="/Hadoop/Hadoop_source_code_building.html" id="post-prev" class="post-nav-link">
-        <div class="tips"><i class="icon icon-angle-left icon-lg icon-pr"></i> Prev</div>
-        <h4 class="title">Hadoop 源码编译安装</h4>
-      </a>
-    </div>
-  
+<div id="cloud-tie-wrapper" class="cloud-tie-wrapper"></div>
+<script src="https://img1.cache.netease.com/f2e/tie/yun/sdk/loader.js"></script>
+<script>
+var cloudTieConfig = {
+  url: document.location.href, 
+  sourceId: "",
+  productKey: "7e456de65fb945698c448c72191454ce",
+  target: "cloud-tie-wrapper"
+};
+var yunManualLoad = true;
+Tie.loader("aHR0cHM6Ly9hcGkuZ2VudGllLjE2My5jb20vcGMvbGl2ZXNjcmlwdC5odG1s", true);
+</script>
 
-  
-    <div class="waves-block waves-effect next">
-      <a href="/Hadoop/Hadoop_Pseudo-Distributed_Mode.html" id="post-next" class="post-nav-link">
-        <div class="tips">Next <i class="icon icon-angle-right icon-lg icon-pl"></i></div>
-        <h4 class="title">Hadoop伪分布式部署</h4>
-      </a>
-    </div>
-  
-</nav>
-
-
-
-    
-
-
-<section class="comments" id="comments">
-    <div id="disqus_thread"></div>
-    <script>
-    var disqus_shortname = 'true';
-    lazyScripts.push('//' + disqus_shortname + '.disqus.com/embed.js')
-    </script>
-    <noscript>Please enable JavaScript to view the <a href="https://disqus.com/?ref_noscript">comments powered by Disqus.</a></noscript>
 </section>
 
 
 
 
 
+            <footer class="footer">
+    <span class="footer__copyright">
+        本站点采用<a href="http://creativecommons.org/licenses/by-nc-sa/4.0/">知识共享署名-非商业性使用-相同方式共享 4.0 国际许可协议</a>
+    </span>
+    <span class="footer__copyright">
+        基于 <a href="http://hexo.io">Hexo</a> 搭建，感谢 <a href="https://pages.github.com/">GitHub Pages</a> 提供免费的托管服务
+    </span>
+    <span class="footer__copyright">
+        &copy; 2018 - 本站由 <a href="/">XieJM</a> 创建,
+        使用<a href="https://github.com/skx926/hexo-theme-vno">hexo-theme-vno</a>主题
+    </span>
+</footer>
 
-
-
-
-
-
-
-
-</article>
-
-
-
-</div>
-
-    </main>
-    <div class="mask" id="mask"></div>
-<a href="javascript:;" id="gotop" class="waves-effect waves-circle waves-light"><span class="icon icon-lg icon-chevron-up"></span></a>
-
-
-
-<div class="global-share" id="globalShare">
-    <ul class="reset share-icons">
-      <li>
-        <a class="weibo share-sns" target="_blank" href="http://service.weibo.com/share/share.php?url=http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html&title=《Linux Extended VM Disk In VMware》 — 云筑小站&pic=http://xiejm.com/img/avatar.jpg" data-title="微博">
-          <i class="icon icon-weibo"></i>
-        </a>
-      </li>
-      <li>
-        <a class="weixin share-sns wxFab" href="javascript:;" data-title="微信">
-          <i class="icon icon-weixin"></i>
-        </a>
-      </li>
-      <li>
-        <a class="qq share-sns" target="_blank" href="http://connect.qq.com/widget/shareqq/index.html?url=http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html&title=《Linux Extended VM Disk In VMware》 — 云筑小站&source=前言在做大数据相关开发的测试时候，会用到VM虚拟机。用了时间久了以后，虚拟机磁盘爆满，这时就需要给虚拟机磁盘扩容了。
-由于在当初创建虚拟机时选择了LVM分..." data-title=" QQ">
-          <i class="icon icon-qq"></i>
-        </a>
-      </li>
-      <li>
-        <a class="facebook share-sns" target="_blank" href="https://www.facebook.com/sharer/sharer.php?u=http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html" data-title=" Facebook">
-          <i class="icon icon-facebook"></i>
-        </a>
-      </li>
-      <li>
-        <a class="twitter share-sns" target="_blank" href="https://twitter.com/intent/tweet?text=《Linux Extended VM Disk In VMware》 — 云筑小站&url=http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html&via=http://xiejm.com" data-title=" Twitter">
-          <i class="icon icon-twitter"></i>
-        </a>
-      </li>
-      <li>
-        <a class="google share-sns" target="_blank" href="https://plus.google.com/share?url=http://xiejm.com/Linux/Extended_VM Disk_In_ VMware.html" data-title=" Google+">
-          <i class="icon icon-google-plus"></i>
-        </a>
-      </li>
-    </ul>
- </div>
-
-
-<div class="page-modal wx-share" id="wxShare">
-    <a class="close" href="javascript:;"><i class="icon icon-close"></i></a>
-    <p>扫一扫，分享到微信</p>
-    <img src="data:image/png;base64,iVBORw0KGgoAAAANSUhEUgAAAMYAAADGCAAAAACs8KCBAAACMklEQVR42u3awWrEMAxF0fn/n06hq0Ib5z4pKUS+XpVOcHSmoMqSPx+8ju9Fnvm5fv9+vfP6yRuWDBkyXss4luvsZWc7rAMipLN9zmKTIUPGPow0FXLYmkTei/4ByJAhQwYOdE1dl33rHWTIkCGDJ1wSKEnWJBHLkCFDRpo6eWmYplHy3tvO4jJkyHghIx0M/OfPD843ZMiQ8RLGEa60cOynXRSVDBkyRjPW25GjIy/XyFAzLUlRcDJkyBjE4Bcj0osXKawYmwwZMoYyOu2zp5v+xcmGDBkyxjF4/6pPqo1FW804GTJkjGBwWe3iBQfzxPrHW2TIkDGawcu7tAVGdkjLwYu2oAwZMoYy0rFlmhZ50qwVoDJkyNiBwRtkwSixdBgm77rAy5AhYygjTYudJlptnIkSugwZMjZj8ANtWjh2UvZFUpYhQ8Y2DBJirWVWGyQEwwYZMmRsw+BlX+3IygtK/jXJkCFjB0ZatPFBQjoQDcJdXw6TIUPGBozOgZa3zI7GkiFDxm6MfhM/TYv9cWnwd5AhQ8YgRpoW770clr739LaIDBkyhjJI24s/Qw6itVEoSugyZMgYyqgdIEmqfaJADCpcGTJkDGLw1bkkUSsZ0wGDDBkyZjM6I8l+8q2182TIkLEngyS+u464/bou+FiGDBmbMe46uPIvqzgYkCFDxvaM/jNpCy+ex8qQIWMog6c5Hkp6aYwcYi8SrgwZMoYyOhcdyBiyE2hcIMqQIWMa4wsYEEHP/0WOzQAAAABJRU5ErkJggg==" alt="微信分享二维码">
-</div>
-
-
-
-
-    <script src="//cdn.bootcss.com/node-waves/0.7.4/waves.min.js"></script>
-<script>
-var BLOG = { ROOT: '/', SHARE: true, REWARD: false };
-
-
-</script>
-
-<script src="/js/main.min.js?v=1.6.13"></script>
-
-
-<div class="search-panel" id="search-panel">
-    <ul class="search-result" id="search-result"></ul>
-</div>
-<template id="search-tpl">
-<li class="item">
-    <a href="{path}" class="waves-block waves-effect">
-        <div class="title ellipsis" title="{title}">{title}</div>
-        <div class="flex-row flex-middle">
-            <div class="tags ellipsis">
-                {tags}
-            </div>
-            <time class="flex-col time">{date}</time>
         </div>
-    </a>
-</li>
-</template>
+    </div>
 
-<script src="/js/search.min.js?v=1.6.13" async></script>
+    <script src="https://code.jquery.com/jquery-2.1.4.min.js"></script>
+    <script src="/js/main.js"></script>
 
-
-
-
-
-
-<script async src="//dn-lbstatics.qbox.me/busuanzi/2.3/busuanzi.pure.mini.js"></script>
-
-
-
+     
 <script>
-(function() {
-    var OriginTitile = document.title, titleTime;
-    document.addEventListener('visibilitychange', function() {
-        if (document.hidden) {
-            document.title = 'XieJM's Blog';
-            clearTimeout(titleTime);
-        } else {
-            document.title = 'XieJM's Blog';
-            titleTime = setTimeout(function() {
-                document.title = OriginTitile;
-            },2000);
-        }
-    });
-})();
+	(function(i,s,o,g,r,a,m){i['GoogleAnalyticsObject']=r;i[r]=i[r]||function(){
+	(i[r].q=i[r].q||[]).push(arguments)},i[r].l=1*new Date();a=s.createElement(o),
+	m=s.getElementsByTagName(o)[0];a.async=1;a.src=g;m.parentNode.insertBefore(a,m)
+	})(window,document,'script','//www.google-analytics.com/analytics.js','ga');
+
+	ga('create', 'UA-73055515-1', 'auto');
+	ga('send', 'pageview');
 </script>
-
-
 
 </body>
 </html>
